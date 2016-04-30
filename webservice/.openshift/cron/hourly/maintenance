@@ -1,0 +1,4 @@
+#!/bin/bash
+
+node $OPENSHIFT_REPO_DIR/src/main/scrips/daily_game_maintenance.js
+node $OPENSHIFT_REPO_DIR/src/main/scrips/daily_user_maintenance.js

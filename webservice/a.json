@@ -1,0 +1,280 @@
+{
+    "data": {
+        "user": {
+            "_id": "563d33420d5ea9dc07afb790",
+            "username": "pepe1",
+            "alias": "Antoñete",
+            "leader": true,
+            "avatar": "http://findicons.com/files/icons/1072/face_avatars/300/j01.png",
+            "game": {
+                "gamedata": {
+                    "_id": "563d33420d5ea9dc07afb78b",
+                    "repeat": true,
+                    "notifications": [
+                        {
+                            "message": "orem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id augue odio. Integer luctus, lacus nec facilisis euismod, diam nisl auctor lorem, eleifend imperdiet urna nunc et velit. Maecenas mollis in urna vitae accumsan. Pellentesque viverra odio id nisl lacinia, nec pharetra nunc ullamcorper. Ut laoreet, nibh eu accumsan lacinia, tellus sem lacinia ante, id bibendum ante metus ut nunc.",
+                            "timestamp": 1446851391109,
+                            "_id": "563d33420d5ea9dc07afb78f"
+                        },
+                        {
+                            "message": "orem ipsum dolor sit er luctus, lacus nec facilend imperdiet urna nunc et velit. Maecenas mollis in urna vitae accumsan. Pellentesque viverra odio id nisl lacinia, nec pharetra nunc ullamcorper. Ut laoreet, nibh eu accumsan lacinia, tellus sem lacinia ante, id bibendum ante metus ut nunc.",
+                            "timestamp": 1446851382109,
+                            "_id": "563d33420d5ea9dc07afb78e"
+                        },
+                        {
+                            "message": "orem ipsum dolor sit amet, consecteer luctus, lacus ne auctor lorem, eleifend imperdiet urna nunc et velit. Maecenas mollis in urna vitae accumsan. Pellentesque viverra odio id nisl lacinia, nec pharetra nunc ullamcorper. Ut laoreet, nibh eu accumsan lacinia, tellus sem lacinia ante, id bibendum ante metus ut nunc.",
+                            "timestamp": 1446851382109,
+                            "_id": "563d33420d5ea9dc07afb78d"
+                        },
+                        {
+                            "message": "orem elit. Morbi id augue odio. Integer luctus, lei vitae accumsan. Pellentesque viverra odio id nisl lacinia, nec pharetra nunc ullamcorper. Ut laoreet, nibh eu accumsan lacinia, tellus sem lacinia ante, id bibendum ante metus ut nunc.",
+                            "timestamp": 1446851382109,
+                            "_id": "563d33420d5ea9dc07afb78c"
+                        }
+                    ],
+                    "players": [
+                        "563d33420d5ea9dc07afb790",
+                        "563d33420d5ea9dc07afb7a0",
+                        "563d33420d5ea9dc07afb7b0",
+                        "563d33420d5ea9dc07afb7c0",
+                        "563d33420d5ea9dc07afb7d0"
+                    ],
+                    "caller": null,
+                    "status": 0
+                },
+                "level": 2,
+                "tostolares": 1000,
+                "afk": false,
+                "last_activity": 1446851381109,
+                "last_order": {
+                    "meal": null,
+                    "drink": null,
+                    "ito": false
+                },
+                "order": {
+                    "meal": {
+                        "_id": "563d33420d5ea9dc07afb77e",
+                        "name": "Pulga de pollo queso",
+                        "ito": true
+                    },
+                    "drink": {
+                        "_id": "563d33420d5ea9dc07afb783",
+                        "name": "Té americano",
+                        "ito": true
+                    },
+                    "ito": true
+                },
+                "inventory": {
+                    "stones": 23,
+                    "armors": [
+                        {
+                            "id": "a001",
+                            "name": "Al Capa Ra",
+                            "frecuency": "common",
+                            "equipped": false,
+                            "_id": "563d33420d5ea9dc07afb791",
+                            "skills": [
+                                {
+                                    "id": "s002",
+                                    "name": "Escudito in the back",
+                                    "element": "earth",
+                                    "level": 2,
+                                    "source": "armor",
+                                    "uses": 3,
+                                    "cost": 1,
+                                    "_id": "563d33420d5ea9dc07afb792",
+                                    "blocked": false,
+                                    "stats": {
+                                        "parry": 5,
+                                        "protection": 10,
+                                        "precision": 0,
+                                        "damage": 0,
+                                        "fury": 0,
+                                        "life": 0
+                                    }
+                                }
+                            ],
+                            "materials": {
+                                "rune": "r003",
+                                "tostem": "t003"
+                            }
+                        }
+                    ],
+                    "weapons": [
+                        {
+                            "id": "w001",
+                            "name": "Ten Hedor",
+                            "frecuency": "common",
+                            "equipped": true,
+                            "_id": "563d33420d5ea9dc07afb795",
+                            "skills": [
+                                {
+                                    "id": "s001",
+                                    "name": "Papachiro in the face",
+                                    "element": "fire",
+                                    "level": 1,
+                                    "source": "weapon",
+                                    "uses": 3,
+                                    "cost": 2,
+                                    "_id": "563d33420d5ea9dc07afb796",
+                                    "blocked": false,
+                                    "stats": {
+                                        "parry": 0,
+                                        "protection": 0,
+                                        "precision": 0,
+                                        "damage": 20,
+                                        "fury": 0,
+                                        "life": 0
+                                    }
+                                }
+                            ],
+                            "materials": {
+                                "rune": "r001",
+                                "tostem": "t001"
+                            }
+                        },
+                        {
+                            "id": "w002",
+                            "name": "Sal Chicha",
+                            "frecuency": "legendary",
+                            "equipped": false,
+                            "_id": "563d33420d5ea9dc07afb793",
+                            "skills": [
+                                {
+                                    "id": "s003",
+                                    "name": "Ataquito in the ice",
+                                    "element": "water",
+                                    "level": 1,
+                                    "source": "weapon",
+                                    "uses": 1,
+                                    "cost": 3,
+                                    "_id": "563d33420d5ea9dc07afb794",
+                                    "blocked": false,
+                                    "stats": {
+                                        "parry": 0,
+                                        "protection": 0,
+                                        "precision": 0,
+                                        "damage": 60,
+                                        "fury": 0,
+                                        "life": 0
+                                    }
+                                }
+                            ],
+                            "materials": {
+                                "rune": "r002",
+                                "tostem": "t002"
+                            }
+                        }
+                    ],
+                    "runes": [
+                        {
+                            "id": "r001",
+                            "type": "wood",
+                            "frecuency": "common",
+                            "equipped": true,
+                            "_id": "563d33420d5ea9dc07afb79a",
+                            "stats": {
+                                "damage": 12,
+                                "precision": 33,
+                                "protection": 56,
+                                "parry": 45
+                            }
+                        },
+                        {
+                            "id": "r002",
+                            "type": "iron",
+                            "frecuency": "common",
+                            "equipped": false,
+                            "_id": "563d33420d5ea9dc07afb799",
+                            "stats": {
+                                "damage": 12,
+                                "precision": 33,
+                                "protection": 56,
+                                "parry": 45
+                            }
+                        },
+                        {
+                            "id": "r003",
+                            "type": "steel",
+                            "frecuency": "masterwork",
+                            "equipped": false,
+                            "_id": "563d33420d5ea9dc07afb798",
+                            "stats": {
+                                "damage": 12,
+                                "precision": 33,
+                                "protection": 56,
+                                "parry": 45
+                            }
+                        },
+                        {
+                            "id": "r004",
+                            "type": "mithril",
+                            "frecuency": "common",
+                            "equipped": false,
+                            "_id": "563d33420d5ea9dc07afb797",
+                            "stats": {
+                                "damage": 12,
+                                "precision": 33,
+                                "protection": 56,
+                                "parry": 45
+                            }
+                        }
+                    ],
+                    "tostems": [
+                        {
+                            "id": "t001",
+                            "type": "fire",
+                            "level": 2,
+                            "equipped": true,
+                            "_id": "563d33420d5ea9dc07afb79f"
+                        },
+                        {
+                            "id": "t002",
+                            "type": "water",
+                            "level": 3,
+                            "equipped": false,
+                            "_id": "563d33420d5ea9dc07afb79e"
+                        },
+                        {
+                            "id": "t003",
+                            "type": "earth",
+                            "level": 4,
+                            "equipped": false,
+                            "_id": "563d33420d5ea9dc07afb79d"
+                        },
+                        {
+                            "id": "t004",
+                            "type": "water",
+                            "level": 5,
+                            "equipped": false,
+                            "_id": "563d33420d5ea9dc07afb79c"
+                        },
+                        {
+                            "id": "t005",
+                            "type": "light",
+                            "level": 6,
+                            "equipped": false,
+                            "_id": "563d33420d5ea9dc07afb79b"
+                        }
+                    ]
+                },
+                "equipment": {
+                    "armor": null,
+                    "weapon": "w001"
+                },
+                "stats": {
+                    "life": 100,
+                    "fury": 76,
+                    "fury_mode": false,
+                    "reputation": 23,
+                    "action_points": 12
+                }
+            }
+        }
+    },
+    "session": {
+        "access_token": "cGVwZTEjN2FmNmMyNDhlNDZmZjMyOTlhYTk2MDM5M2EwN2VmYTBlOTA2YmM1YTZlMDQ0MjEyYzcxZWNjYzE3NmVhZWFiZTA2ZjY0MTYwNGI4OGI1NzE3NmRiZjA3NGYzNDEyNTRhYTEzY2ViZDMxZWM2YjZjOTQyMTIwOGQ4Zjg4NzQ5OTE",
+        "expire": 2592000000
+    },
+    "error": ""
+}

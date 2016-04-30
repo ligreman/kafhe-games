@@ -1,0 +1,13 @@
+- Desde un scope hijo se puede acceder/modificar objetos del padre. Pero si la variable no es un objeto:
+	padre -> $scope.variable = 123;
+	hijo -> $scope.variable = 678;
+	
+	lo que haces es crear una variable nueva no modificar la del padre.
+
+- JSON-SELECT
+	var selector = ':has(:root > .equipped:expr(x=true))';
+	selector = ':has(:root > .id:val("' + $scope.global.user.game.equipment.weapon + '"))';
+	resultObj = JSONSelect.match(selector, $scope.global.user);
+
+	JSONSelect.forEach('.tostems', $scope.global.user, function (resultObj) {});
+

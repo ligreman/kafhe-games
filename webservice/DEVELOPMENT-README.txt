@@ -1,0 +1,2 @@
+- SyntaxError: Unexpected token R -> falta algún módulo por hacer require (por ejemplo Q)
+- Error en servicio al guardar en Mongo. Para usar el .save de los objetos mongoose se tiene que dejar devolver el _id.

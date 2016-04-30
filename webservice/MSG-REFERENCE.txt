@@ -1,0 +1,14 @@
+nEquipArmor - Equipas una armadura
+nEquipWeapon - Equipas un arma
+nEquipDestroyArmor - Destruyes una pieza de armadura
+nEquipDestroyWeapon - Destruyes una pieza de arma
+
+nFurnaceTostemSuccess
+nFurnaceTostemFailure
+nFurnaceRuneSuccess
+nFurnaceRuneFailure
+
+nForgeWeapon
+nForgeArmor
+nFuryMode
+nFuryModeGame

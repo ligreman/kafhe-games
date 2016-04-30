@@ -1,0 +1,21 @@
+{
+  "name": "the-kafhe-games",
+  "private": true,
+  "dependencies": {
+    "angular-messages": "^1.5.5",
+    "jshashes": "^1.0.5",
+    "normalize-css": "^4.1.1",
+    "jquery": "^2.2.3",
+    "ngDraggable": "^0.1.8",
+    "angular-translate-interpolation-messageformat": "^2.11.0",
+    "angular-timeline": "^1.6.2",
+    "angular": "^1.5.5",
+    "angular-route": "^1.5.5",
+    "angular-resource": "^1.5.5",
+    "angular-cookies": "^1.5.5",
+    "angular-translate": "^2.11.0",
+    "angular-translate-storage-cookie": "^2.11.0",
+    "angular-growl-v2": "^0.7.9",
+    "angular-material": "^1.0.7"
+  }
+}
