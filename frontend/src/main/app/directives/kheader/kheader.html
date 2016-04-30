@@ -1,0 +1,55 @@
+<header>
+    <md-toolbar class="md-whiteframe-1dp md-primary" flex="none">
+        <div class="md-toolbar-tools" layout-align="start center">
+            <div flex="5" layout="row" layout-align="center center" class="logotipo">
+                <img src="../../../assets/img/k256.png" flex="none"/>
+            </div>
+
+            <div flex layout-fill layout="row" layout-align="center center" class="button"
+                 ng-class="{'active': isCurrentPage('home')}" ng-click="goToPage('home')">
+                <span><md-icon>bubble_chart</md-icon><span hide show-gt-sm> {{ 'menuGames' | translate }}</span></span>
+                <md-tooltip md-delay="1000" hide-gt-sm>{{ 'menuGames' | translate }}</md-tooltip>
+            </div>
+            <div flex layout-fill layout="row" layout-align="center center" class="button"
+                 ng-class="{'active': isCurrentPage('explore')}" ng-click="goToPage('explore')">
+                <span><md-icon>explore</md-icon><span hide show-gt-sm> {{ 'menuExplore' | translate }}</span></span>
+                <md-tooltip md-delay="1000" hide-gt-sm>{{ 'menuExplore' | translate }}</md-tooltip>
+            </div>
+            <div flex layout-fill layout="row" layout-align="center center" class="button"
+                 ng-class="{'active': isCurrentPage('team')}" ng-click="goToPage('team')">
+                <span><md-icon>people</md-icon><span hide show-gt-sm> {{ 'menuTeam' | translate }}</span></span>
+                <md-tooltip md-delay="1000" hide-gt-sm>{{ 'menuTeam' | translate }}</md-tooltip>
+            </div>
+            <!--<div flex layout-fill layout="row" layout-align="center center" class="button"
+            ng-class="{'active': isCurrentPage('storage')}" ng-click="goToPage('storage')">
+                <span><md-icon>android</md-icon><span hide show-gt-sm> {{ 'menuStorage' | translate }}</span></span>
+                           <md-tooltip md-delay="1000" hide-gt-sm>{{ 'menuStorage' | translate }}</md-tooltip>
+ </div>
+            <div flex layout-fill layout="row" layout-align="center center" class="button"
+            ng-class="{'active': isCurrentPage('shop')}" ng-click="goToPage('shop')">
+                <span><md-icon>android</md-icon><span hide show-gt-sm> {{ 'menuShop' | translate }}</span></span>
+                          <md-tooltip md-delay="1000" hide-gt-sm>{{ 'menuShop' | translate }}</md-tooltip>
+  </div>-->
+            <div flex layout-fill layout="row" layout-align="center center" class="button"
+                 ng-class="{'active': isCurrentPage('breakfast')}" ng-click="goToPage('breakfast')">
+                <span><md-icon>local_cafe</md-icon>
+                    <span hide show-gt-sm> {{ 'menuBreakfast' | translate }}</span></span>
+                <md-tooltip md-delay="1000" hide-gt-sm>{{ 'menuBreakfast' | translate }}</md-tooltip>
+            </div>
+            <div flex layout-fill layout="row" layout-align="center center" class="button"
+                 ng-class="{'active': isCurrentPage('profile')}" ng-click="goToPage('profile')">
+                <span><md-icon>account_circle</md-icon>
+                    <span hide show-gt-sm> {{ 'menuProfile' | translate }}</span></span>
+                <md-tooltip md-delay="1000" hide-gt-sm>{{ 'menuProfile' | translate }}</md-tooltip>
+            </div>
+
+            <div flex="10" layout="row" layout-align="center center">
+                <md-button class="md-icon-button" ng-click="">
+                    <md-icon>exit_to_app</md-icon>
+                    <md-tooltip md-delay="1000">Desconectar</md-tooltip>
+                </md-button>
+            </div>
+        </div>
+    </md-toolbar>
+</header>
+

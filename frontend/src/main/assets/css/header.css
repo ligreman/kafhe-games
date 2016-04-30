@@ -1,0 +1,21 @@
+header .logotipo {
+    padding: 5px;
+    min-width: 24px;
+}
+
+header .button md-icon {
+    vertical-align: bottom;
+}
+
+header .button:hover {
+    background: #43A047;
+    cursor: pointer;
+}
+
+header .button.active {
+    background: #43A047;
+}
+
+header .md-toolbar-tools {
+    padding: 0;
+}

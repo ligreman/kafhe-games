@@ -1,0 +1,269 @@
+body {
+    overflow-x: hidden;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.vertical-bottom {
+    vertical-align: text-bottom;
+}
+
+.relative {
+    position: relative;
+}
+
+#main-container {
+    z-index: 10;
+    background: #424242;
+}
+
+#content, md-content.grey {
+    /*background-color: #e5e5e5;*/
+}
+
+.align-stretch {
+    align-self: stretch;
+}
+
+.align-self-right {
+    align-self: flex-end;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.no-padding {
+    padding: 0 !important;
+}
+
+md-tooltip {
+    color: #000;
+}
+
+/* Colores */
+.kafhe-primary {
+    color: #2E7D32 !important;
+}
+
+.kafhe-primary-hue-1 {
+    color: #C8E6C9 !important;
+}
+
+.kafhe-primary-hue-2 {
+    color: #4CAF50 !important;
+}
+
+.kafhe-primary-hue-3 {
+    color: #1B5E20 !important;
+}
+
+.kafhe-purple {
+    color: #673AB7 !important;
+}
+
+.kafhe-white-background {
+    background-color: #f5f5f5 !important;
+}
+
+.kafhe-warn {
+    color: #F44336 !important;
+}
+
+.white {
+    color: #FFF;
+}
+
+.no-background {
+    background: none;
+}
+
+.btn-mini {
+    min-width: auto;
+}
+
+/***************************** HOME ******************************/
+
+.shopTitle {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+md-icon.big {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+}
+
+md-icon.w50 {
+    transition: all .25s ease-out;
+    width: 50%;
+    height: 50%;
+}
+
+.hoverable:hover md-icon.hoverzone {
+    width: 60%;
+    height: 60%;
+    transform: rotate(15deg);
+}
+
+.timeline li timeline-badge.system {
+    background-color: #00897B !important;
+}
+
+.timeline li timeline-badge.breakfast {
+    background-color: #adaf21 !important;
+}
+
+.timeline li timeline-badge.skill {
+    background-color: rgb(83, 109, 254) !important;
+}
+
+.timeline li timeline-badge.forge, .timeline li timeline-badge.furnace {
+    background-color: #b64926 !important;
+}
+
+.timeline li timeline-badge.equipment {
+    background-color: #0ca620 !important;
+}
+
+.timeline li timeline-badge.fury {
+    background-color: #db0305 !important;
+}
+
+.timeline timeline-event.inverted li timeline-panel {
+    float: right;
+}
+
+.timeline timeline-event.inverted li timeline-panel:before {
+    border-left-width: 0;
+    border-right-width: 15px;
+    left: -15px;
+    right: auto;
+}
+
+.timeline timeline-event.inverted li timeline-panel:after {
+    border-left-width: 0;
+    border-right-width: 14px;
+    left: -14px;
+    right: auto;
+}
+
+timeline-heading h4 {
+    font-style: italic;
+    font-weight: normal;
+    text-align: right;
+    font-size: .9em;
+}
+
+.timeline li timeline-panel {
+    -webkit-box-shadow: none;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .12);
+    border-radius: 0;
+    border: none;
+}
+
+.stock {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.soldout {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 100%;
+    height: 100%;
+    color: red;
+    transform: rotate(-45deg);
+    font-size: 2.5em;
+}
+
+/*****************************************************************************/
+
+/* ELEMENTOS */
+.element-fire {
+    color: #D84315;
+}
+
+.element-water {
+    color: #1565C0;
+}
+
+.element-air {
+    color: #90A4AE;
+}
+
+.element-earth {
+    color: #5D4037;
+}
+
+.material-madera {
+    color: #795548;
+}
+
+/*
+
+Madera
+Hierro
+Piedra
+Plomo
+Bronce
+Latón
+Cobre
+Zinc
+
+
+Níquel
+Plata
+Acero
+Cobalto
+Tungsteno
+
+
+Iridio
+Paladio
+Mithril
+Titanio
+
+
+Oro
+Platino
+
+
+Adamantio
+
+*/
+
+/* ANIMACIONEs */
+.rotate360 {
+    -webkit-animation: rotating 2s linear infinite;
+    -moz-animation: rotating 2s linear infinite;
+    -ms-animation: rotating 2s linear infinite;
+    -o-animation: rotating 2s linear infinite;
+    animation: rotating 2s linear infinite;
+}
+
+@keyframes rotating {
+    from {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}

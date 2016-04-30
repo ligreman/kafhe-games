@@ -1,0 +1,80 @@
+<md-content flex ng-cloak class="grey scrollbar-content">
+    <!-- Durante la batalla muestor las notificaciones -->
+    <div ng-show="global.user.game.gamedata.status === 1" layout-padding layout-margin>
+        <div layout="row" layout-align="center center">
+            <timeline ng-init="side='left'" flex="70" flex-sm="100" flex-md="90">
+                <timeline-event ng-repeat="notification in global.notifications"
+                                ng-class="{'inverted':isMine(notification)}">
+                    <timeline-badge class="{{notification.type}} md-whiteframe-2dp">
+                        <md-icon class="big white">{{iconize(notification.type)}}</md-icon>
+                    </timeline-badge>
+                    <timeline-panel class="{{notification.type}}">
+                        <timeline-heading>
+                            <h4>{{notification.timestamp | date : 'dd-MM-yyyy HH:mm:ss'}}</h4>
+                        </timeline-heading>
+                        <p>{{notification.key | translate:notification.params}}</p>
+                    </timeline-panel>
+                </timeline-event>
+            </timeline>
+        </div>
+    </div>
+
+    <!-- Durante negociaciones muestro la tienda -->
+    <div ng-show="global.user.game.gamedata.status === 2" layout-padding>
+        <h2 class="shopTitle">Bazar <span>{{global.print.tostolares}} tostólares</span></h2>
+
+        <p ng-show="itemList.length === 0">No hay objetos que comprar</p>
+
+        <md-grid-list ng-show="itemList.length > 0"
+                      md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+                      md-row-height-gt-md="1:1" md-row-height="1:1"
+                      md-gutter="1px" md-gutter-gt-sm="15px">
+            <md-grid-tile ng-repeat="item in itemList" md-rowspan="1" md-colspan="1" class="hoverable">
+                <md-grid-tile-header>
+                    <h3>
+                        {{item.info.key}}
+                    </h3>
+                </md-grid-tile-header>
+                <md-tooltip md-direction="top">{{item.info.key + 'Description' | translate}}</md-tooltip>
+
+                <span class="soldout" ng-if="item.stock_amount <= 0">Vendido</span>
+                <md-icon class="w50 hoverzone" md-svg-icon="../../../assets/img/{{item.info.icon}}.svg"></md-icon>
+
+                <md-grid-tile-footer class="width100 no-background">
+                    <div layout="row" layout-align="space-between end">
+                        <p flex="30" class="text-center stock kafhe-primary">x{{item.stock_amount}}
+                            <md-tooltip>Stock</md-tooltip>
+                        </p>
+                        <md-button class="md-raised md-primary btn-mini" ng-disabled="!item.stock" flex="none"
+                                   ng-click="confirmBuyItem(item)">
+                            <md-icon>attach_money</md-icon>
+                            <md-tooltip>{{'textShopButtonBuy' | translate:{cost:item.info.price} }}</md-tooltip>
+                        </md-button>
+                    </div>
+                </md-grid-tile-footer>
+            </md-grid-tile>
+        </md-grid-list>
+    </div>
+
+    <!-- Durante estado cerrado muestro el resultado del lanzamiento si hay -->
+    <div ng-show="global.user.game.gamedata.status === 3">
+        <p>3</p>
+    </div>
+</md-content>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.scrollbar-content').mCustomScrollbar({
+            axis: "y",
+            scrollInertia: 300,
+            autoHideScrollbar: false,
+            mouseWheel: {
+                axis: "y"
+            },
+            scrollButtons: {
+                enable: false
+            },
+            theme: "dark-thick"
+        });
+    });
+</script>

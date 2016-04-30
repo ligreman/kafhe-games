@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>Los Juegos del Kafhe</title>
+
+    <link type="icon" rel="shortcut icon" href="assets/img/favicon.gif"/>
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Third party CSS -->
+    <!-- build:css assets/css/vendor.css -->
+    <link href="../../bower_components/normalize-css/normalize.css" type="text/css" rel="stylesheet"/>
+    <link href="../../bower_components/angular-timeline/dist/angular-timeline.css" rel="stylesheet">
+    <link href="../../bower_components/angular-material/angular-material.min.css" type="text/css" rel="stylesheet"
+          media="screen,projection"/>
+    <link href="../../bower_components/angular-growl-v2/build/angular-growl.min.css" rel="stylesheet">
+    <link href="app/vendor/customscrollbar/jquery.mCustomScrollbar.min.css" rel="stylesheet">
+    <!-- endbuild -->
+
+    <!-- Own CSS -->
+    <!-- build:css assets/css/styles.css -->
+    <link href="assets/css/reset.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="assets/css/main.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="assets/css/growl.css" type="text/css" rel="stylesheet"/>
+    <!--<link href="assets/css/navMenu.css" type="text/css" rel="stylesheet"/>-->
+    <!--<link href="assets/css/profileMenu.css" type="text/css" rel="stylesheet"/>-->
+    <link href="assets/css/header.css" type="text/css" rel="stylesheet"/>
+    <link href="assets/css/footer.css" type="text/css" rel="stylesheet"/>
+    <!--<link href="assets/css/targetSelect.css" type="text/css" rel="stylesheet"/>-->
+    <!--<link href="assets/css/transformations.css" type="text/css" rel="stylesheet"/>-->
+    <!--<link href="assets/css/breakfast.css" type="text/css" rel="stylesheet"/>-->
+    <!--<link href="assets/css/forge.css" type="text/css" rel="stylesheet"/>-->
+    <!-- endbuild -->
+
+    <style type="text/css">
+        /** Hide when Angular is not yet loaded and initialized*/
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+    </style>
+
+</head>
+<body ng-app="kafhe" ng-controller="GlobalController" ng-cloak layout="column">
+
+    <!-- Cabecera -->
+    <k-header ng-if="$root.kUserLogged"></k-header>
+
+    <div id="main-container" flex layout="row" class="md-whiteframe-1dp ng-view"></div>
+
+    <!-- Pie para la página login -->
+    <k-footer ng-if="!$root.kUserLogged"></k-footer>
+
+    <!-- Third party scripts -->
+    <!-- build:js js/vendor.js -->
+    <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../../bower_components/angular/angular.min.js"></script>
+    <script src="../../bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="../../bower_components/angular-aria/angular-aria.min.js"></script>
+    <script src="../../bower_components/angular-material/angular-material.min.js"></script>
+    <script src="../../bower_components/angular-route/angular-route.min.js"></script>
+    <script src="../../bower_components/angular-messages/angular-messages.min.js"></script>
+    <script src="../../bower_components/angular-resource/angular-resource.min.js"></script>
+    <script src="../../bower_components/angular-cookies/angular-cookies.min.js"></script>
+    <script src="../../bower_components/angular-growl-v2/build/angular-growl.min.js"></script>
+    <script src="../../bower_components/angular-translate/angular-translate.min.js"></script>
+    <script src="../../bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js"></script>
+    <script src="../../bower_components/angular-translate-storage-local/angular-translate-storage-local.min.js"></script>
+
+    <script src="../../bower_components/messageformat/messageformat.js"></script>
+    <!--<script src="../../bower_components/messageformat/locale/es.js"></script>-->
+    <script src="../../bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.min.js"></script>
+
+    <script src="../../bower_components/jshashes/hashes.min.js"></script>
+    <!--<script src="../../bower_components/ngDraggable/ngDraggable.js"></script>-->
+    <script src="../../bower_components/angular-timeline/dist/angular-timeline.js"></script>
+    <!--<script src="app/vendor/customscrollbar/jquery.mCustomScrollbar.concat.min.js"></script>-->
+    <script src="app/vendor/jsonselect.min.js"></script>
+    <!-- endbuild -->
+
+    <!-- Own scripts -->
+    <!-- build:js js/scripts.js -->
+    <script src="app/app.js"></script>
+
+    <script src="app/config/config.js"></script>
+    <script src="app/config/routeDefinition.js"></script>
+
+    <script src="app/routes/routes.js"></script>
+    <script src="app/routes/globalController.js"></script>
+    <script src="app/routes/login/loginController.js"></script>
+    <script src="app/routes/home/homeController.js"></script>
+    <script src="app/routes/error/errorController.js"></script>
+    <script src="app/routes/breakfast/breakfastController.js"></script>
+    <script src="app/routes/forge/forgeController.js"></script>
+
+    <script src="app/services/api.js"></script>
+    <script src="app/services/session.js"></script>
+    <script src="app/services/game.js"></script>
+    <script src="app/services/interceptors.js"></script>
+    <script src="app/services/filters.js"></script>
+    <script src="app/services/utils/share.js"></script>
+
+    <script src="app/directives/kheader/kheader.js"></script>
+    <script src="app/directives/kfooter/kfooter.js"></script>
+    <script src="app/directives/kfooterbattle/kfooterbattle.js"></script>
+    <script src="app/directives/kfooterbreakfast/kfooterbreakfast.js"></script>
+    <script src="app/directives/kfooterforge/kfooterforge.js"></script>
+    <script src="app/directives/kfootershop/kfootershop.js"></script>
+    <script src="app/directives/knavmenu/knavmenu.js"></script>
+    <script src="app/directives/kprofilemenu/kprofilemenu.js"></script>
+
+    <script src="app/components/dialogs/targetSelect/targetSelect.js"></script>
+    <script src="app/components/dialogs/leaderPanel/leaderPanel.js"></script>
+
+    <script src="app/lang/es.js"></script>
+    <!-- endbuild -->
+
+    <div growl class="md-whiteframe-1dp"></div>
+</body>
+</html>

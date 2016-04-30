@@ -8,7 +8,7 @@
         'ngCookies',
         'ngMaterial',
         'ngMessages',
-        'ngDraggable',
+        // 'ngDraggable',
         'kafhe.config',
         'kafhe.controllers',
         'kafhe.services',
@@ -53,7 +53,7 @@
             .useSanitizeValueStrategy('escape')
             .preferredLanguage(CONFIG.defaultLanguage)
             .fallbackLanguage(CONFIG.fallbackLanguage)
-            .useCookieStorage();
+            .useLocalStorage();
 
         // Otra itnerpolación para plurarles y genero
         $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
@@ -76,7 +76,7 @@
 
     // Configuración de color
     app.config(['$mdThemingProvider', function ($mdThemingProvider) {
-        var accent = $mdThemingProvider.extendPalette('green', {
+        var accent = $mdThemingProvider.extendPalette('grey', {
             'A700': 'FDD835'
         });
         var warn = $mdThemingProvider.extendPalette('red', {
@@ -88,10 +88,11 @@
         $mdThemingProvider.definePalette('myWarn', warn);
 
         $mdThemingProvider.theme('default')
-            .primaryPalette('grey', {
+            .dark()
+            .primaryPalette('green', {
                 'default': '800',
                 'hue-1': '100',
-                'hue-2': '500',
+                'hue-2': '600',
                 'hue-3': '900'
             })
             .accentPalette('myAccent', {
