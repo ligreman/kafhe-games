@@ -1,16 +1,17 @@
 'use strict';
 
 //Cargo los módulos que voy a usar y los inicializo
-var express   = require('express'),
-    cors      = require('cors'),
-    app       = express(),
+var express = require('express'),
+    cors = require('cors'),
+    app = express(),
     validator = require('validator'),
-    mongoose  = require('mongoose'),
-    Q         = require('q');
+    mongoose = require('mongoose'),
+    Q = require('q'),
+    morgan = require('morgan');
 
 var serverPort = process.env.OPENSHIFT_NODEJS_PORT || 8080,
     serverHost = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
-    mongoHost  = process.env.OPENSHIFT_MONGODB_DB_URL + process.env.OPENSHIFT_APP_NAME || 'mongodb://localhost/kafhe';
+    mongoHost = process.env.OPENSHIFT_MONGODB_DB_URL + process.env.OPENSHIFT_APP_NAME || 'mongodb://localhost/kafhe';
 
 // CORS
 var corsOptions = {
@@ -38,11 +39,14 @@ app.use(cors(corsOptions));
 
 
 // LOGS
-var scribe  = require('scribe-js')(), //loads Scribe
+var scribe = require('scribe-js')(), //loads Scribe
     console = process.console;
 app.use(scribe.express.logger()); //Log each request
 // TODO deshabilitar en producción
 app.use('/logs', scribe.webPanel()); //Log web console
+
+// Morgan
+app.use(morgan('combined'));
 
 Q.longStackSupport = true;
 /*
