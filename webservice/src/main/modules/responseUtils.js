@@ -17,8 +17,10 @@ var censureUser = function (user) {
         return user;
     }
 
+    return user;
+
     // Censuro la reputación
-    user.game.stats.reputation = null;
+    // user.game.stats.reputation = null;
 
     // Cambio de valores de las runas en el inventario
     user.game.inventory.runes.forEach(function (runa) {

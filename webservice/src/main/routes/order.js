@@ -3,15 +3,15 @@
 module.exports = function (app) {
     var console = process.console;
 
-    var express       = require('express'),
-        passport      = require('passport'),
-        utils         = require('../modules/utils'),
+    var express = require('express'),
+        passport = require('passport'),
+        utils = require('../modules/utils'),
         responseUtils = require('../modules/responseUtils'),
-        orderRouter   = express.Router(),
-        bodyParser    = require('body-parser'),
-        Q             = require('q'),
-        mongoose      = require('mongoose'),
-        models        = require('../models/models')(mongoose);
+        orderRouter = express.Router(),
+        bodyParser = require('body-parser'),
+        Q = require('q'),
+        mongoose = require('mongoose'),
+        models = require('../models/models')(mongoose);
 
     //**************** ORDER ROUTER **********************
     //Middleware para estas rutas
@@ -163,7 +163,7 @@ module.exports = function (app) {
      * meal: id del meal; drink:idDrink; ito: boolean
      */
     orderRouter.post('/', function (req, res, next) {
-        var user  = req.user,
+        var user = req.user,
             order = req.body;
 
         // Compruebo el estado de la partida, si es 1 ó 2. Si no, error
@@ -276,5 +276,5 @@ module.exports = function (app) {
     });
 
     // Asigno los router a sus rutas
-    app.use('/order', orderRouter);
+    app.use('/api/order', orderRouter);
 };

@@ -123,5 +123,5 @@ module.exports = function (app) {
     });
 
     // Asigno los router a sus rutas
-    app.use('/team', teamRouter);
+    app.use('/api/team', teamRouter);
 };

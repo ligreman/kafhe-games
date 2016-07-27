@@ -69,5 +69,5 @@ module.exports = function (app) {
     });
 
     // Asigno los router a sus rutas
-    app.use('/user', userRouter);
+    app.use('/api/user', userRouter);
 };

@@ -46,18 +46,23 @@ module.exports = function (mongoose) {
                     weapons: [{
                         id: String,
                         name: {type: String, default: null},
+                        damage: {type: Number, default: 1},
+                        precision: {type: Number, default: 1},
+                        shots: {type: Number, default: 1},
                         'type': {type: String, default: null},
                         in_use: Boolean
                     }],
                     armors: [{
                         id: String,
                         name: {type: String, default: null},
+                        protection: {type: Number, default: 1},
                         'type': {type: String, default: null},
                         in_use: Boolean
                     }],
                     utilities: [{
                         id: String,
                         name: {type: String, default: null},
+                        value: {type: Number, default: 1},
                         'type': {type: String, default: null},
                         in_use: Boolean
                     }]

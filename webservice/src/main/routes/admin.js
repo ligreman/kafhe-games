@@ -222,5 +222,5 @@ module.exports = function (app) {
 
 
     // Asigno los router a sus rutas
-    app.use('/admin', adminRouter);
+    app.use('/api/admin', adminRouter);
 };

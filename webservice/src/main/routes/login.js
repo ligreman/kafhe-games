@@ -3,12 +3,12 @@
 module.exports = function (app) {
     var console = process.console;
 
-    var express      = require('express'),
-        passport     = require('passport'),
-        bodyParser   = require('body-parser'),
-        Q            = require('q'),
+    var express = require('express'),
+        passport = require('passport'),
+        bodyParser = require('body-parser'),
+        Q = require('q'),
         sessionUtils = require('../modules/sessionUtils'),
-        loginRouter  = express.Router(),
+        loginRouter = express.Router(),
         logoutRouter = express.Router();
 
 
@@ -69,6 +69,6 @@ module.exports = function (app) {
     });
 
     // Asigno los router a sus rutas
-    app.use('/login', loginRouter);
-    app.use('/logout', logoutRouter);
+    app.use('/api/login', loginRouter);
+    app.use('/api/logout', logoutRouter);
 };
