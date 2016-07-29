@@ -5,30 +5,8 @@ module.exports = function (mongoose) {
     var skillSchema = require('./skillSchema')(mongoose);
     var notificationSchema = require('./notificationSchema')(mongoose);
 
-    /*
-     id
-     log
-     stats
-     score: puntuación que consigue en los juegos
-     talents: copia de la plantilla modificada con lo que va el jugador subiendo etc.
-     skill_slots
-     skills
-         skill_id
-         uses
-     inventory_slots
-     inventory
-         object_id
-         uses
-     weapon
-         name
-         ammo
-         damage
-         accuracy
-         level
-     */
-
     //Modelo para los usuarios, coleccion Users
-    var CharacterSchema = mongoose.Schema({
+    var UserSchema = mongoose.Schema({
         username: {type: String, unique: true, required: true},
         password: {type: String, select: false, required: true},
         alias: String,
@@ -107,5 +85,5 @@ module.exports = function (mongoose) {
     }, {versionKey: false});
 
     //Declaro y devuelvo el modelo
-    return mongoose.model('Character', CharacterSchema);
+    return mongoose.model('User', UserSchema);
 };
