@@ -2,88 +2,76 @@
 
 //Módulo para un modelo de Mongoose. Hay que pasarle el objeto mongoose ya creado antes.
 module.exports = function (mongoose) {
-    var skillSchema = require('./skillSchema')(mongoose);
-    var notificationSchema = require('./notificationSchema')(mongoose);
+    // los *_id se cargan al entrar en el juego para no andar mandándo todo en cada petición. Se puede guardar en el storage
+    // local con la versión de los datos (versión del juego)
 
-    //Modelo para los usuarios, coleccion Users
-    var UserSchema = mongoose.Schema({
-        username: {type: String, unique: true, required: true},
-        password: {type: String, select: false, required: true},
-        alias: String,
-        leader: Boolean,
-        times: Number,
-        calls: Number,
-        avatar: String,
-        game: {
-            gamedata: {type: mongoose.Schema.Types.ObjectId, ref: 'Game'},
-            rank: Number,
-            tostolares: {type: Number, default: 0},
-            fame: {type: Number, default: 0},
-            team: {
-                name: {type: String, default: null},
-                location: {
-                    name: {type: String, default: null},
-                    sector: {type: String, default: null},
-                    latitude: {type: String, default: null},
-                    longitude: {type: String, default: null},
-                    place: {type: String, default: null}
-                },
-                members: [{
-                    id: String,
-                    name: {type: String, default: null},
-                    'class': {type: String, default: null},
-                    level: {type: Number, default: 1},
-                    combat_style: {type: String, default: null},
-                    strength: {type: String, default: null},
-                    vitality: {type: String, default: null},
-                    agility: {type: String, default: null},
-                    wisdom: {type: String, default: null},
-                    current_life: {type: String, default: null},
-                    weapon: {type: String, default: null},
-                    armor: {type: String, default: null}
+    var LogSchema = mongoose.Schema({
+        text: String,
+        'type': {type: String},
+        subtype: String,
+        date: Number
+    });
+
+    //Modelo para los usuarios, coleccion Character
+    var CharacterSchema = mongoose.Schema({
+            name: String,
+            level: Number,
+            location: {
+                place_id: String,
+                sector: String,
+                latitude: Number,
+                longitude: Number
+            },
+            stats: {
+                damage: Number,
+                reduction: Number,
+                life: Number,
+                toxicity: Number,
+                perception: Number,
+                reflexes: Number,
+                stealth: Number,
+                hunger: Number,
+                fatigue: Number,
+                venom: Number,
+                healing: Number
+            },
+            score: Number,
+            talents: {
+                points: Number,
+                combat: [{
+                    talent_id: String,
+                    points: Number
                 }],
-                inventory: [{
-                    weapons: [{
-                        id: String,
-                        name: {type: String, default: null},
-                        damage: {type: Number, default: 1},
-                        precision: {type: Number, default: 1},
-                        shots: {type: Number, default: 1},
-                        'type': {type: String, default: null},
-                        in_use: Boolean
-                    }],
-                    armors: [{
-                        id: String,
-                        name: {type: String, default: null},
-                        protection: {type: Number, default: 1},
-                        'type': {type: String, default: null},
-                        in_use: Boolean
-                    }],
-                    utilities: [{
-                        id: String,
-                        name: {type: String, default: null},
-                        value: {type: Number, default: 1},
-                        'type': {type: String, default: null},
-                        in_use: Boolean
-                    }]
+                survival: [{
+                    talent_id: String,
+                    points: Number
+                }],
+                exploration: [{
+                    talent_id: String,
+                    points: Number
                 }]
             },
-            afk: Boolean,
-            last_activity: Number,
-            order: {
-                meal: {type: mongoose.Schema.Types.ObjectId, ref: 'Meal'},
-                drink: {type: mongoose.Schema.Types.ObjectId, ref: 'Drink'},
-                ito: Boolean
+            log: [LogSchema],
+            skill_slots: Number,
+            skills: [{
+                skill_id: String,
+                uses: Number
+            }],
+            inventory_slots: Number,
+            inventory: {
+                object_id: String,
+                uses: Number
             },
-            last_order: {
-                meal: {type: mongoose.Schema.Types.ObjectId, ref: 'Meal'},
-                drink: {type: mongoose.Schema.Types.ObjectId, ref: 'Drink'},
-                ito: Boolean
-            },
-            notifications: [notificationSchema]
-        }
-    }, {versionKey: false});
+            weapon: {
+                name: String,
+                ammo: Number,
+                damage: Number,
+                accuracy: Number,
+                level: Number
+            }
+        },
+        {versionKey: false});
 
     //Declaro y devuelvo el modelo
-    return mongoose.model('User', UserSchema);
+    return mongoose.model('Character', CharacterSchema);
 };
