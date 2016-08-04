@@ -7,7 +7,10 @@ module.exports = function (mongoose) {
     require('./meal')(mongoose);
     require('./drink')(mongoose);
     require('./skill')(mongoose);
-    require('./shop')(mongoose);
+    require('./talent')(mongoose);
+    require('./object')(mongoose);
+    require('./place')(mongoose);
+    // require('./shop')(mongoose);
     require('./game')(mongoose);
     require('./user')(mongoose);
     require('./admin')(mongoose);

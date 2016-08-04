@@ -10,14 +10,16 @@ module.exports = function (app) {
     require('./login')(app);
     require('./user')(app);
     require('./admin')(app);
-    require('./skill')(app);
     require('./order')(app);
     require('./profile')(app);
-    require('./equipment')(app);
-    require('./furnace')(app);
-    require('./forge')(app);
-    require('./shop')(app);
-    require('./mongoHelper')(app);
+    require('./game')(app);
+
+    // require('./skill')(app);
+    // require('./equipment')(app);
+    // require('./furnace')(app);
+    // require('./forge')(app);
+    // require('./shop')(app);
+    // require('./mongoHelper')(app);
 
     //Fichero de rutas de error
     require('./error')(app);

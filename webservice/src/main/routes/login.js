@@ -16,9 +16,9 @@ module.exports = function (app) {
     //Middleware para estas rutas
     loginRouter.use(bodyParser.urlencoded({extended: false}));
     loginRouter.use(passport.authenticate('local', {
-        session: false,
+        session: false
         //successRedirect: '/ok',
-        failureRedirect: '/error/login'
+        // failureRedirect: '/error/login'
     }));
 
     /**
