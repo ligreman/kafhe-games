@@ -12,6 +12,8 @@ module.exports = function (mongoose) {
         Meal: mongoose.model('Meal'),
         Drink: mongoose.model('Drink'),
         Skill: mongoose.model('Skill'),
-        Shop: mongoose.model('Shop')
+        Talent: mongoose.model('Talent'),
+        Object: mongoose.model('Object'),
+        Place: mongoose.model('Place')
     };
 };

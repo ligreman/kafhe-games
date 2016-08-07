@@ -2,6 +2,10 @@ errUserPassNotValid - Usuario o contraseña no válidos
 errSession - Error en la sesión
 errMongo - Error de mongo
 
+errGameDataNotFound - Error al recuperar los datos del sistema
+
+--------------------------
+
 errEquipNoItem - No he encontrado el objeto a equipar en el inventario
 errEquipNoSpace - No puedo equipar el objeto porque ya tengo equipado algo en ese hueco (arma/armadura)
 errEquipDestroyNotFound - No he encontrado el objeto a destruir

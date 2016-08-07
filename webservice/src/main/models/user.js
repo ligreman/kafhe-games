@@ -2,8 +2,30 @@
 
 //Módulo para un modelo de Mongoose. Hay que pasarle el objeto mongoose ya creado antes.
 module.exports = function (mongoose) {
-    var skillSchema = require('./skillSchema')(mongoose);
+    // var skillSchema = require('./skillSchema')(mongoose);
     var notificationSchema = require('./notificationSchema')(mongoose);
+
+    /*
+     id
+     log
+     stats
+     score: puntuación que consigue en los juegos
+     talents: copia de la plantilla modificada con lo que va el jugador subiendo etc.
+     skill_slots
+     skills
+     skill_id
+     uses
+     inventory_slots
+     inventory
+     object_id
+     uses
+     weapon
+     name
+     ammo
+     damage
+     accuracy
+     level
+     */
 
     //Modelo para los usuarios, coleccion Users
     var UserSchema = mongoose.Schema({
