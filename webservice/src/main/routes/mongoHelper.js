@@ -3,14 +3,16 @@
 module.exports = function (app) {
     var console = process.console;
 
-    var express      = require('express'),
-        passport     = require('passport'),
-        events       = require('events'),
+    var express = require('express'),
+        passport = require('passport'),
+        events = require('events'),
         eventEmitter = new events.EventEmitter(),
-        mongoRouter  = express.Router(),
-        mongoose     = require('mongoose'),
-        utils        = require('../modules/utils'),
-        models       = require('../models/models')(mongoose);
+        mongoRouter = express.Router(),
+        mongoose = require('mongoose'),
+        utils = require('../modules/utils'),
+        models = require('../models/models')(mongoose),
+        fakery = require('mongoose-fakery');
+
 
     // Modelos
     var admins = [
@@ -1235,7 +1237,7 @@ module.exports = function (app) {
     ];
 
     // ROUTER
-    mongoRouter.get('/mongo', function (req, res, next) {
+    mongoRouter.get('/mongoOLD', function (req, res, next) {
         console.log('Inicio');
         models.Admin.remove({}, function (err) {
             //Meto los nuevos valores
@@ -1420,6 +1422,21 @@ module.exports = function (app) {
             console.log(err);
 
             res.json({"game": true});
+        });
+    });
+
+    mongoRouter.get('/mongo', function (req, res, next) {
+        console.log('Inicio');
+        models.Character.remove({}, function (err) {
+            //Meto los nuevos valores
+            fakery.makeAndSave('character', {name: 'override'}, function(err, user) {
+                // `user` is saved to the database and name is overriden to 'override'.
+            });
+
+
+            models.Chara.create(admins, function (err, admins) {
+                eventEmitter.emit('#1', res);
+            });
         });
     });
 
