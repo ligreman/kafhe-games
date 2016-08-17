@@ -13,5 +13,6 @@ module.exports = function (mongoose) {
     // require('./shop')(mongoose);
     require('./game')(mongoose);
     require('./user')(mongoose);
+    require('./character')(mongoose);
     require('./admin')(mongoose);
 };

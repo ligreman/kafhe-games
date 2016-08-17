@@ -7,6 +7,7 @@ module.exports = function (mongoose) {
     return {
         Game: mongoose.model('Game'),
         User: mongoose.model('User'),
+        Character: mongoose.model('Character'),
         Admin: mongoose.model('Admin'),
         Session: mongoose.model('Session'),
         Meal: mongoose.model('Meal'),

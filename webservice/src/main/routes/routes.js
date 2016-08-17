@@ -19,7 +19,7 @@ module.exports = function (app) {
     // require('./furnace')(app);
     // require('./forge')(app);
     // require('./shop')(app);
-    // require('./mongoHelper')(app);
+    require('./mongoHelper')(app);
 
     //Fichero de rutas de error
     require('./error')(app);

@@ -1413,6 +1413,8 @@ module.exports = function (app) {
     mongoRouter.get('/game/status/:status', function (req, res, next) {
         var estado = req.params.status;
 
+        console.log("otro endpoint");
+
         models.Game.update({}, {
             $set: {
                 "status": estado
@@ -1426,18 +1428,89 @@ module.exports = function (app) {
     });
 
     mongoRouter.get('/mongo', function (req, res, next) {
-        console.log('Inicio');
+        console.log('Mongo router');
+
         models.Character.remove({}, function (err) {
-            //Meto los nuevos valores
-            fakery.makeAndSave('character', {name: 'override'}, function(err, user) {
-                // `user` is saved to the database and name is overriden to 'override'.
+            fakery.fake('character', mongoose.model('Character'), {
+                name: fakery.g.name(),
+                level: fakery.g.rndint(1, 10),
+                location: {
+                    place_id: fakery.g.hex(10, 10),
+                    sector: fakery.g.surname(),
+                    latitude: fakery.g.rndint(),
+                    longitude: fakery.g.rndint()
+                },
+                stats: {
+                    damage: fakery.g.rndint(),
+                    reduction: fakery.g.rndint(),
+                    life: fakery.g.rndint(),
+                    toxicity: fakery.g.rndint(),
+                    perception: fakery.g.rndint(),
+                    reflexes: fakery.g.rndint(),
+                    stealth: fakery.g.rndint(),
+                    hunger: fakery.g.rndint(),
+                    fatigue: fakery.g.rndint(),
+                    venom: fakery.g.rndint(),
+                    healing: fakery.g.rndint()
+                },
+                score: fakery.g.rndint(),
+                talents: {
+                    points: fakery.g.rndint(),
+                    combat: [{
+                        talent_id: String,
+                        points: fakery.g.rndint()
+                    }],
+                    survival: [{
+                        talent_id: String,
+                        points: fakery.g.rndint()
+                    }],
+                    exploration: [{
+                        talent_id: String,
+                        points: fakery.g.rndint()
+                    }]
+                },
+                skill_slots: fakery.g.rndint(),
+                skills: [{
+                    skill_id: String,
+                    uses: fakery.g.rndint()
+                }],
+                inventory_slots: fakery.g.rndint(),
+                inventory: {
+                    object_id: String,
+                    uses: fakery.g.rndint()
+                },
+                weapon: {
+                    name: fakery.g.surname(),
+                    ammo: fakery.g.rndint(),
+                    damage: fakery.g.rndint(),
+                    accuracy: fakery.g.rndint(),
+                    level: fakery.g.rndint()
+                }
             });
 
+            /* var papa = fakery.fake('character');
+             console.log(papa);*/
 
-            models.Chara.create(admins, function (err, admins) {
-                eventEmitter.emit('#1', res);
+            fakery.makeAndSave('character', function (err, user) {
+                // `user` is saved to the database and name is overriden to 'override'.
+                console.log("FIN");
+                console.log(user);
+            });
+            fakery.makeAndSave('character', function (err, user) {
+                // `user` is saved to the database and name is overriden to 'override'.
+                console.log("FIN");
+                console.log(user);
             });
         });
+
+
+        /*models.Character.remove({}, function (err) {
+         //Meto los nuevos valores
+         fakery.makeAndSave('character', {name: 'override'}, function (err, user) {
+         // `user` is saved to the database and name is overriden to 'override'.
+         });
+         });*/
+        res.json({"game": true});
     });
 
     // Asigno los router a sus rutas
