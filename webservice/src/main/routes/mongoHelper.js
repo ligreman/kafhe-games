@@ -11,13 +11,16 @@ module.exports = function (app) {
         mongoose = require('mongoose'),
         utils = require('../modules/utils'),
         models = require('../models/models')(mongoose),
-        fakery = require('mongoose-fakery');
+        fakery = require('mongoose-fakery'),
+        q = require('q');
 
 
     // Modelos
     var admins = [
         {username: "admin", password: "admin"}
     ];
+
+    var ids = {};
 
     var meals = [
         {name: 'Plátano', ito: false},
@@ -1430,87 +1433,138 @@ module.exports = function (app) {
     mongoRouter.get('/mongo', function (req, res, next) {
         console.log('Mongo router');
 
-        models.Character.remove({}, function (err) {
-            fakery.fake('character', mongoose.model('Character'), {
-                name: fakery.g.name(),
-                level: fakery.g.rndint(1, 10),
-                location: {
-                    place_id: fakery.g.hex(10, 10),
-                    sector: fakery.g.surname(),
-                    latitude: fakery.g.rndint(),
-                    longitude: fakery.g.rndint()
-                },
-                stats: {
-                    damage: fakery.g.rndint(),
-                    reduction: fakery.g.rndint(),
-                    life: fakery.g.rndint(),
-                    toxicity: fakery.g.rndint(),
-                    perception: fakery.g.rndint(),
-                    reflexes: fakery.g.rndint(),
-                    stealth: fakery.g.rndint(),
-                    hunger: fakery.g.rndint(),
-                    fatigue: fakery.g.rndint(),
-                    venom: fakery.g.rndint(),
-                    healing: fakery.g.rndint()
-                },
-                score: fakery.g.rndint(),
-                talents: {
-                    points: fakery.g.rndint(),
-                    combat: [{
-                        talent_id: String,
-                        points: fakery.g.rndint()
-                    }],
-                    survival: [{
-                        talent_id: String,
-                        points: fakery.g.rndint()
-                    }],
-                    exploration: [{
-                        talent_id: String,
-                        points: fakery.g.rndint()
-                    }]
-                },
-                skill_slots: fakery.g.rndint(),
-                skills: [{
-                    skill_id: String,
-                    uses: fakery.g.rndint()
-                }],
-                inventory_slots: fakery.g.rndint(),
-                inventory: {
-                    object_id: String,
-                    uses: fakery.g.rndint()
-                },
-                weapon: {
-                    name: fakery.g.surname(),
-                    ammo: fakery.g.rndint(),
-                    damage: fakery.g.rndint(),
-                    accuracy: fakery.g.rndint(),
-                    level: fakery.g.rndint()
-                }
-            });
+        var promises = [
+            mongoose.connection.collections['character'].drop(),
+            mongoose.connection.collections['drink'].drop(),
+            mongoose.connection.collections['game'].drop(),
+            mongoose.connection.collections['meal'].drop(),
+            mongoose.connection.collections['object'].drop(),
+            mongoose.connection.collections['place'].drop(),
+            mongoose.connection.collections['skill'].drop(),
+            mongoose.connection.collections['talent'].drop()
+        ];
 
-            /* var papa = fakery.fake('character');
-             console.log(papa);*/
+        // IDs
+        ids['talent'] = [
+            fakery.g.hex(10, 10),
+            fakery.g.hex(10, 10),
+            fakery.g.hex(10, 10),
+            fakery.g.hex(10, 10),
+            fakery.g.hex(10, 10)
+        ];
+        ids['skill'] = [
+            fakery.g.hex(10, 10),
+            fakery.g.hex(10, 10),
+            fakery.g.hex(10, 10)
+        ];
+        ids['character'] = [
+            fakery.g.hex(10, 10),
+            fakery.g.hex(10, 10),
+            fakery.g.hex(10, 10),
+            fakery.g.hex(10, 10),
+            fakery.g.hex(10, 10)
+        ];
 
-            fakery.makeAndSave('character', function (err, user) {
-                // `user` is saved to the database and name is overriden to 'override'.
-                console.log("FIN");
-                console.log(user);
-            });
-            fakery.makeAndSave('character', function (err, user) {
-                // `user` is saved to the database and name is overriden to 'override'.
-                console.log("FIN");
-                console.log(user);
+        q.all(promises).then(function (result) {
+            eventEmitter.emit('#Characters');
+            eventEmitter.emit('#MealDrink');
+            eventEmitter.emit('#Characters');
+        });
+    });
+
+
+    eventEmitter.on('#MealDrink', function (data) {
+        console.log('#MealDrink');
+        //Meto los nuevos valores
+        models.Meal.create(meals, function (err, meals) {
+            console.log("Emit #2");
+            eventEmitter.emit('#2', {
+                res: res,
+                meals: meals
             });
         });
 
+        //Meto los nuevos valores
+        models.Drink.create(drinks, function (err, drinks) {
+            //res.json({"mongo": true, meals: meals});
+            console.log("Emit #2.5");
+            eventEmitter.emit('#2.5', {
+                res: data.res,
+                meals: data.meals,
+                drinks: drinks
+            });
+        });
+    });
 
-        /*models.Character.remove({}, function (err) {
-         //Meto los nuevos valores
-         fakery.makeAndSave('character', {name: 'override'}, function (err, user) {
-         // `user` is saved to the database and name is overriden to 'override'.
-         });
-         });*/
-        res.json({"game": true});
+    eventEmitter.on('#Characters', function () {
+        console.log('#Characters');
+        fakery.fake('character', mongoose.model('Character'), {
+            name: fakery.g.name(),
+            level: fakery.g.rndint(1, 10),
+            location: {
+                place_id: fakery.g.hex(10, 10),
+                sector: fakery.g.surname(),
+                latitude: fakery.g.rndint(),
+                longitude: fakery.g.rndint()
+            },
+            stats: {
+                damage: fakery.g.rndint(),
+                reduction: fakery.g.rndint(),
+                life: fakery.g.rndint(),
+                toxicity: fakery.g.rndint(),
+                perception: fakery.g.rndint(),
+                reflexes: fakery.g.rndint(),
+                stealth: fakery.g.rndint(),
+                hunger: fakery.g.rndint(),
+                fatigue: fakery.g.rndint(),
+                venom: fakery.g.rndint(),
+                healing: fakery.g.rndint()
+            },
+            score: fakery.g.rndint(),
+            talents: {
+                points: fakery.g.rndint(),
+                combat: [{
+                    talent_id: String,
+                    points: fakery.g.rndint()
+                }],
+                survival: [{
+                    talent_id: String,
+                    points: fakery.g.rndint()
+                }],
+                exploration: [{
+                    talent_id: String,
+                    points: fakery.g.rndint()
+                }]
+            },
+            skill_slots: fakery.g.rndint(),
+            skills: [{
+                skill_id: String,
+                uses: fakery.g.rndint()
+            }],
+            inventory_slots: fakery.g.rndint(),
+            inventory: {
+                object_id: String,
+                uses: fakery.g.rndint()
+            },
+            weapon: {
+                name: fakery.g.surname(),
+                ammo: fakery.g.rndint(),
+                damage: fakery.g.rndint(),
+                accuracy: fakery.g.rndint(),
+                level: fakery.g.rndint()
+            }
+        });
+
+        fakery.makeAndSave('character', function (err, user) {
+            // `user` is saved to the database and name is overriden to 'override'.
+            console.log("FIN");
+            console.log(user);
+        });
+        fakery.makeAndSave('character', function (err, user) {
+            // `user` is saved to the database and name is overriden to 'override'.
+            console.log("FIN");
+            console.log(user);
+        });
     });
 
     // Asigno los router a sus rutas

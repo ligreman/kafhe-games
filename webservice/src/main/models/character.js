@@ -10,14 +10,14 @@ module.exports = function (mongoose) {
         'type': {type: String},
         subtype: String,
         date: Number
-    });
+    }, {versionKey: false});
 
     //Modelo para los usuarios, coleccion Character
     var CharacterSchema = mongoose.Schema({
             name: String,
             level: Number,
             location: {
-                place_id: String,
+                place: {type: mongoose.Schema.Types.ObjectId, ref: 'Place'},
                 sector: String,
                 latitude: Number,
                 longitude: Number
@@ -39,27 +39,27 @@ module.exports = function (mongoose) {
             talents: {
                 points: Number,
                 combat: [{
-                    talent_id: String,
+                    talent: {type: mongoose.Schema.Types.ObjectId, ref: 'Talent'},
                     points: Number
                 }],
                 survival: [{
-                    talent_id: String,
+                    talent: {type: mongoose.Schema.Types.ObjectId, ref: 'Talent'},
                     points: Number
                 }],
                 exploration: [{
-                    talent_id: String,
+                    talent: {type: mongoose.Schema.Types.ObjectId, ref: 'Talent'},
                     points: Number
                 }]
             },
             log: [LogSchema],
             skill_slots: Number,
             skills: [{
-                skill_id: String,
+                skill: {type: mongoose.Schema.Types.ObjectId, ref: 'Skill'},
                 uses: Number
             }],
             inventory_slots: Number,
             inventory: {
-                object_id: String,
+                object: {type: mongoose.Schema.Types.ObjectId, ref: 'Object'},
                 uses: Number
             },
             weapon: {

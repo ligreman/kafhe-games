@@ -41,55 +41,8 @@ module.exports = function (mongoose) {
             rank: Number,
             tostolares: {type: Number, default: 0},
             fame: {type: Number, default: 0},
-            team: {
-                name: {type: String, default: null},
-                location: {
-                    name: {type: String, default: null},
-                    sector: {type: String, default: null},
-                    latitude: {type: String, default: null},
-                    longitude: {type: String, default: null},
-                    place: {type: String, default: null}
-                },
-                members: [{
-                    id: String,
-                    name: {type: String, default: null},
-                    'class': {type: String, default: null},
-                    level: {type: Number, default: 1},
-                    combat_style: {type: String, default: null},
-                    strength: {type: String, default: null},
-                    vitality: {type: String, default: null},
-                    agility: {type: String, default: null},
-                    wisdom: {type: String, default: null},
-                    current_life: {type: String, default: null},
-                    weapon: {type: String, default: null},
-                    armor: {type: String, default: null}
-                }],
-                inventory: [{
-                    weapons: [{
-                        id: String,
-                        name: {type: String, default: null},
-                        damage: {type: Number, default: 1},
-                        precision: {type: Number, default: 1},
-                        shots: {type: Number, default: 1},
-                        'type': {type: String, default: null},
-                        in_use: Boolean
-                    }],
-                    armors: [{
-                        id: String,
-                        name: {type: String, default: null},
-                        protection: {type: Number, default: 1},
-                        'type': {type: String, default: null},
-                        in_use: Boolean
-                    }],
-                    utilities: [{
-                        id: String,
-                        name: {type: String, default: null},
-                        value: {type: Number, default: 1},
-                        'type': {type: String, default: null},
-                        in_use: Boolean
-                    }]
-                }]
-            },
+            character: {type: mongoose.Schema.Types.ObjectId, ref: 'Character'},
+            warehouse: [{}],
             afk: Boolean,
             last_activity: Number,
             order: {
