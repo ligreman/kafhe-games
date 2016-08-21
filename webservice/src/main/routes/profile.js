@@ -3,14 +3,14 @@
 module.exports = function (app) {
     var console = process.console;
 
-    var express       = require('express'),
-        passport      = require('passport'),
-        validator     = require('validator'),
-        utils         = require('../modules/utils'),
+    var express = require('express'),
+        passport = require('passport'),
+        validator = require('validator'),
+        utils = require('../modules/utils'),
         responseUtils = require('../modules/responseUtils'),
         profileRouter = express.Router(),
-        bodyParser    = require('body-parser'),
-        mongoose      = require('mongoose');
+        bodyParser = require('body-parser'),
+        mongoose = require('mongoose');
 
     //**************** SKILL ROUTER **********************
     //Middleware para estas rutas
@@ -28,7 +28,7 @@ module.exports = function (app) {
     profileRouter.post('/', function (req, res, next) {
         // El objeto user
         var usuario = req.user,
-            params  = req.body,
+            params = req.body,
             changes = false;
 
         // Actualizo los campos del usuario
@@ -36,7 +36,7 @@ module.exports = function (app) {
             usuario.password = params.password;
             changes = true;
         }
-        if (params.alias && validator.isValidString(params.alias) && validator.isLength(params.alias, 3, 30)) {
+        if (params.alias && validator.matches(params.alias, config.CONSTANTS.STR_VALID_REGEXP) && validator.isLength(params.alias, 3, 30)) {
             usuario.alias = params.alias;
             changes = true;
         }

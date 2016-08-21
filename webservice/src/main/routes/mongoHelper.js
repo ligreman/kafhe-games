@@ -22,8 +22,10 @@ module.exports = function (app) {
 
     var ids = {};
 
+    var ida = new mongoose.Types.ObjectId;
+    console.log(ida);
     var meals = [
-        {name: 'Plátano', ito: false},
+        {name: 'Plátano', ito: false, _id: ida},
         {name: 'Bocata', ito: true},
         {name: 'Salchicha', ito: true},
         {name: 'Tortilla con chorizo', ito: true},
@@ -1431,18 +1433,38 @@ module.exports = function (app) {
     });
 
     mongoRouter.get('/mongo', function (req, res, next) {
-        console.log('Mongo router');
-
+        console.log('Inicio de restauración');
         var promises = [
-            mongoose.connection.collections['character'].drop(),
-            mongoose.connection.collections['drink'].drop(),
-            mongoose.connection.collections['game'].drop(),
-            mongoose.connection.collections['meal'].drop(),
-            mongoose.connection.collections['object'].drop(),
-            mongoose.connection.collections['place'].drop(),
-            mongoose.connection.collections['skill'].drop(),
-            mongoose.connection.collections['talent'].drop()
+            models.Admin.remove(),
+            models.Character.remove(),
+            models.Drink.remove(),
+            models.Game.remove(),
+            models.Meal.remove(),
+            models.Object.remove(),
+            models.Place.remove(),
+            models.Session.remove(),
+            models.Skill.remove(),
+            models.Talent.remove(),
+            models.User.remove()
         ];
+        /*
+         if (mongoose.connection.collections['character'])
+         promises.push(mongoose.connection.collections['character'].drop());
+         if (mongoose.connection.collections['drink'])
+         promises.push(mongoose.connection.collections['drink'].drop());
+         if (mongoose.connection.collections['game'])
+         promises.push(mongoose.connection.collections['game'].drop());
+         if (mongoose.connection.collections['meal'])
+         promises.push(mongoose.connection.collections['meal'].drop());
+         if (mongoose.connection.collections['object'])
+         promises.push(mongoose.connection.collections['object'].drop());
+         if (mongoose.connection.collections['place'])
+         promises.push(mongoose.connection.collections['place'].drop());
+         if (mongoose.connection.collections['skill'])
+         promises.push(mongoose.connection.collections['skill'].drop());
+         if (mongoose.connection.collections['talent'])
+         promises.push(mongoose.connection.collections['talent'].drop());*/
+
 
         // IDs
         ids['talent'] = [
@@ -1466,9 +1488,10 @@ module.exports = function (app) {
         ];
 
         q.all(promises).then(function (result) {
+            console.log("Base de datos limpiada");
             eventEmitter.emit('#Characters');
             eventEmitter.emit('#MealDrink');
-            eventEmitter.emit('#Characters');
+            // eventEmitter.emit('#Characters');
         });
     });
 
@@ -1477,22 +1500,12 @@ module.exports = function (app) {
         console.log('#MealDrink');
         //Meto los nuevos valores
         models.Meal.create(meals, function (err, meals) {
-            console.log("Emit #2");
-            eventEmitter.emit('#2', {
-                res: res,
-                meals: meals
-            });
+            console.log("    Creadas las comidas");
         });
 
         //Meto los nuevos valores
         models.Drink.create(drinks, function (err, drinks) {
-            //res.json({"mongo": true, meals: meals});
-            console.log("Emit #2.5");
-            eventEmitter.emit('#2.5', {
-                res: data.res,
-                meals: data.meals,
-                drinks: drinks
-            });
+            console.log("    Creadas las bebidas");
         });
     });
 
@@ -1502,7 +1515,7 @@ module.exports = function (app) {
             name: fakery.g.name(),
             level: fakery.g.rndint(1, 10),
             location: {
-                place_id: fakery.g.hex(10, 10),
+                place: fakery.g.hex(10, 10),
                 sector: fakery.g.surname(),
                 latitude: fakery.g.rndint(),
                 longitude: fakery.g.rndint()
@@ -1524,28 +1537,28 @@ module.exports = function (app) {
             talents: {
                 points: fakery.g.rndint(),
                 combat: [{
-                    talent_id: String,
+                    talent: fakery.g.hex(10, 10),
                     points: fakery.g.rndint()
                 }],
                 survival: [{
-                    talent_id: String,
+                    talent: fakery.g.hex(10, 10),
                     points: fakery.g.rndint()
                 }],
                 exploration: [{
-                    talent_id: String,
+                    talent: fakery.g.hex(10, 10),
                     points: fakery.g.rndint()
                 }]
             },
             skill_slots: fakery.g.rndint(),
             skills: [{
-                skill_id: String,
+                skill: fakery.g.hex(10, 10),
                 uses: fakery.g.rndint()
             }],
             inventory_slots: fakery.g.rndint(),
-            inventory: {
-                object_id: String,
+            inventory: [{
+                object: fakery.g.hex(10, 10),
                 uses: fakery.g.rndint()
-            },
+            }],
             weapon: {
                 name: fakery.g.surname(),
                 ammo: fakery.g.rndint(),
@@ -1558,12 +1571,12 @@ module.exports = function (app) {
         fakery.makeAndSave('character', function (err, user) {
             // `user` is saved to the database and name is overriden to 'override'.
             console.log("FIN");
-            console.log(user);
+            // console.log(user);
         });
         fakery.makeAndSave('character', function (err, user) {
             // `user` is saved to the database and name is overriden to 'override'.
             console.log("FIN");
-            console.log(user);
+            // console.log(user);
         });
     });
 

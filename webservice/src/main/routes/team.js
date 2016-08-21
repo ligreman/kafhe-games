@@ -43,7 +43,7 @@ module.exports = function (app) {
             usuario.password = params.password;
             changes = true;
         }
-        if (params.alias && validator.isValidString(params.alias) && validator.isLength(params.alias, 3, 30)) {
+        if (params.alias && validator.matches(params.alias, config.CONSTANTS.STR_VALID_REGEXP) && validator.isLength(params.alias, 3, 30)) {
             usuario.alias = params.alias;
             changes = true;
         }

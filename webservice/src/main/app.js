@@ -88,11 +88,6 @@ mongoose.set('debug', true);
 require('./routes/routes')(app);
 
 
-// Configuro los validadores propios
-validator.extend('isValidString', function (str) {
-    return /^[a-zA-Z0-9ñáéíóúÁÉÍÓÚüÜ\-_ ]+$/.test(str);
-});
-
 //Configuración de los middleware de la aplicación
 //app.use(bodyParser.urlencoded({extended: false}));
 //app.use(bodyParser.json());
