@@ -31,6 +31,7 @@ module.exports = function (mongoose) {
     var UserSchema = mongoose.Schema({
         username: {type: String, unique: true, required: true},
         password: {type: String, select: false, required: true},
+        group: Number,
         alias: String,
         leader: Boolean,
         times: Number,

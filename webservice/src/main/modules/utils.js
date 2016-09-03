@@ -53,7 +53,6 @@ var error = function (res, code, errCode) {
         case 400:
         case 500:
             response = {
-                "data": "",
                 "error": errCode
             };
             break;

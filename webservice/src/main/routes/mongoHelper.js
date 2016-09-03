@@ -14,1232 +14,158 @@ module.exports = function (app) {
         fakery = require('mongoose-fakery'),
         q = require('q');
 
+    var finalizado = 0;
 
     // Modelos
     var admins = [
         {username: "admin", password: "admin"}
     ];
 
-    var ids = {};
-
-    var ida = new mongoose.Types.ObjectId;
-    console.log(ida);
     var meals = [
-        {name: 'Plátano', ito: false, _id: ida},
-        {name: 'Bocata', ito: true},
-        {name: 'Salchicha', ito: true},
-        {name: 'Tortilla con chorizo', ito: true},
-        {name: 'Tortilla con cebolla', ito: true},
-        {name: 'Pulga de pollo queso', ito: true},
-        {name: 'Pulga de perro asado', ito: true},
-        {name: 'Peperoni', ito: false}
+        {name: 'Plátano', ito: false, id: 'meal00'},
+        {name: 'Bocata', ito: true, id: 'meal01'},
+        {name: 'Salchicha', ito: true, id: 'meal02'},
+        {name: 'Tortilla con chorizo', ito: true, id: 'meal03'},
+        {name: 'Tortilla con cebolla', ito: true, id: 'meal04'},
+        {name: 'Pulga de pollo queso', ito: true, id: 'meal05'},
+        {name: 'Pulga de perro asado', ito: true, id: 'meal06'},
+        {name: 'Peperoni', ito: false, id: 'meal07'}
     ];
 
     var drinks = [
-        {name: 'Té con leche', ito: false},
-        {name: 'Café con leche', ito: true},
-        {name: 'Té americano', ito: true},
-        {name: 'Zumo de pera', ito: true}
-    ];
-
-    var shop = [
-        {
-            key: 'shopItemBottle',
-            price: 12,
-            icon: 'air',
-            amount: 2,
-            action: 'item001',
-            min_level: 0
-        },
-        {
-            key: 'shopItemBottle2',
-            price: 8,
-            icon: 'burn',
-            amount: 1,
-            action: 'item002',
-            min_level: 4
-        }
+        {name: 'Té con leche', ito: false, id: 'drink00'},
+        {name: 'Café con leche', ito: true, id: 'drink01'},
+        {name: 'Té americano', ito: true, id: 'drink02'},
+        {name: 'Zumo de pera', ito: true, id: 'drink03'}
     ];
 
     var skills = [
         {
-            name: 'Ataque de pértiga',
-            element: 'Salchichonio',
-            source: 'weapon',
-            uses: 3, duration: 2,
-            cost: 3, action: 'a001',
-            stats: {life: 5}
+            name: 'Ataque de pértiga', description: 'Salchichonio 86',
+            action: 'skill01', uses: 1, id: 'skill0'
         },
         {
-            name: 'Bola de patatas', element: 'fire', source: 'weapon',
-            uses: 3, duration: 2,
-            cost: 3, action: 'a002',
-            stats: {protection: 5, parry: 7}
+            name: 'Que te pego leche', description: 'Un salchipapa in the face',
+            action: 'skill02', uses: 2, id: 'skill1'
         },
         {
-            name: 'Que te pego leche', element: 'Hielo', source: 'armor',
-            uses: 3, duration: 2,
-            cost: 3, action: 'a003',
-            stats: {life: 5}
-        },
-        {
-            name: 'Ataque elemental de fuego',
-            element: 'fire',
-            source: 'weapon',
-            'class': 'bladed',
-            level: 0, // Es el nivel del tostem
-            target_number: 1,
-            uses: null,
-            duration: null,
-            cost: 2,
-            action: 'skillWeaponElementalAttack',
-            stats: {
-                precision_formula: 'round( basePrecision * (15 + (tostemLevel * 2)) / 100 )',
-                damage_formula: 'round( baseDamage * (20 + (tostemLevel * 10)) / 100 )'
-            }
-        },
-        {
-            name: 'Ataque elemental de agua',
-            element: 'water',
-            source: 'weapon',
-            'class': 'bladed',
-            level: 0, // Es el nivel del tostem
-            target_number: 1,
-            uses: null,
-            duration: null,
-            cost: 2,
-            action: 'skillWeaponElementalAttack',
-            stats: {
-                precision_formula: 'round( basePrecision * (15 + (tostemLevel * 2)) / 100 )',
-                damage_formula: 'round( baseDamage * (20 + (tostemLevel * 10)) / 100 )'
-            }
-        },
-        {
-            name: 'Ataque elemental de tierra',
-            element: 'earth',
-            source: 'weapon',
-            'class': 'bladed',
-            level: 0, // Es el nivel del tostem
-            target_number: 1,
-            uses: null,
-            duration: null,
-            cost: 2,
-            action: 'skillWeaponElementalAttack',
-            stats: {
-                precision_formula: 'round( basePrecision * (15 + (tostemLevel * 2)) / 100 )',
-                damage_formula: 'round( baseDamage * (20 + (tostemLevel * 10)) / 100 )'
-            }
-        },
-        {
-            name: 'Ataque elemental de aire',
-            element: 'air',
-            source: 'weapon',
-            'class': 'bladed',
-            level: 0, // Es el nivel del tostem
-            target_number: 1,
-            uses: null,
-            duration: null,
-            cost: 2,
-            action: 'skillWeaponElementalAttack',
-            stats: {
-                precision_formula: 'round( basePrecision * (15 + (tostemLevel * 2)) / 100 )',
-                damage_formula: 'round( baseDamage * (20 + (tostemLevel * 10)) / 100 )'
-            }
-        },
-        {
-            name: 'Mira qué te meto', element: 'Moco', source: 'weapon',
-            uses: 3, duration: 2,
-            cost: 3, action: 'a005',
-            stats: {damage: 5, fury: 10}
-        },
-        {
-            name: 'Habilidad común', element: 'Patata', source: 'common',
-            uses: 3, duration: 2,
-            cost: 3, action: 'a006',
-            stats: {damage: 5, fury: 10}
+            name: 'Ataque elemental de fuego', description: 'Fogonazo',
+            action: 'skill03', uses: 3, id: 'skill2'
         }
     ];
 
+    var talents = [
+        {
+            id: 'talent00', name: 'Talento 0', description: 'Er talento 0',
+            branch: 'combat', skills: ['skill01'], required: []
+        },
+        {
+            id: 'talent01', name: 'Talento 1', description: 'Er talento 1',
+            branch: 'exploration', skills: [], required: []
+        },
+        {
+            id: 'talent02', name: 'Talento 2', description: 'Er talento 2',
+            branch: 'exploration', skills: ['skill02'], required: ['talent01']
+        },
+        {
+            id: 'talent03', name: 'Talento 3', description: 'Er talento 3',
+            branch: 'exploration', skills: ['skill03'], required: ['talent01', 'talent02']
+        }
+    ];
+
+    var places = [
+        {
+            id: 'place00', name: 'Un lugar de la mancha', description: 'De cuyo nombre no quiero acordarme',
+            latitude: 34.00, longitude: -6.00, sector: 'swamp', type: 'surface', category: 'camp', level: 1
+        },
+        {
+            id: 'place01', name: 'Dos lugar de la mancha', description: 'De cuyo nombre no quiero acordarme 2',
+            latitude: 38.00, longitude: -16.00, sector: 'desert', type: 'dungeon', category: 'building', level: 2
+        }
+    ];
+    var objects = [
+        {id: 'object00', name: 'Objeto 0', description: 'El objeto 0', uses: 3},
+        {id: 'object01', name: 'Objeto 1', description: 'El objeto 1', uses: 4},
+        {id: 'object02', name: 'Objeto 2', description: 'El objeto 2', uses: 2}
+    ];
 
     var date = new Date();
-    var game = {
+    var userId = new mongoose.Types.ObjectId;
+
+    var game = [{
+        _id: new mongoose.Types.ObjectId,
         repeat: true,
         status: 1,
         caller: null,
-        players: null,
-        notifications: [
-            {
-                message: 'nFuryModeGame#' + JSON.stringify({"name": "Pepito"}),
-                type: 'fury',
-                timestamp: date.getTime() + 10000
-            }, {
-                message: 'nFuryModeGame#' + JSON.stringify({"name": "Pepito"}),
-                type: 'system',
-                timestamp: date.getTime() + 1000
-            }, {
-                message: 'nFuryModeGame#' + JSON.stringify({"name": "Pepito"}),
-                type: 'breakfast',
-                timestamp: date.getTime() + 100
-            }, {
-                message: 'nFuryModeGame#' + JSON.stringify({"name": "Pepito"}),
-                type: 'system',
-                timestamp: date.getTime() + 10
-            }
-        ]
-    };
+        players: [userId]
+        /*notifications: [{
+         message: 'nFuryModeGame#' + JSON.stringify({"name": "Pepito"}),
+         type: 'fury', timestamp: date.getTime() + 10000
+         }, {
+         message: 'nFuryModeGame#' + JSON.stringify({"name": "Pepito"}),
+         type: 'system', timestamp: date.getTime() + 1000
+         }, {
+         message: 'nFuryModeGame#' + JSON.stringify({"name": "Pepito"}),
+         type: 'breakfast', timestamp: date.getTime() + 100
+         }, {
+         message: 'nFuryModeGame#' + JSON.stringify({"name": "Pepito"}),
+         type: 'system', timestamp: date.getTime() + 10
+         }
+         ]*/
+    }];
+
+    var characters = [
+        {
+            _id: new mongoose.Types.ObjectId,
+            name: 'Cara 1', level: 1,
+            location: {place: 'place00', level: 0},
+            stats: {
+                damage: 10, reduction: 20, life: 30, toxicity: 15, perception: 16,
+                reflexes: 17, stealth: 18, hunger: 19, fatigue: 21, venom: 22, healing: 25
+            },
+            score: 100,
+            talents: {
+                points: 5,
+                combat: [{talent: 'talent00', level: 2}],
+                survival: [],
+                exploration: [{talent: 'talent01', points: 1}]
+            },
+            log: [{text: 'Texto de log', 'type': 'combat', subtype: null, date: date.getTime()}],
+            skill_slots: 2,
+            skills: [{skill: 'skill01', uses: 3}],
+            inventory_slots: 3,
+            inventory: {object: 'object01', uses: 2},
+            weapon: {name: 'Armacita', ammo: 10, damage: 20, accuracy: 30, level: 1}
+        }
+    ];
 
     var users = [
         {
+            _id: userId,
             username: 'pepe1',
             password: "d404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db", //1234
-            alias: 'Antoñete',
-            leader: true,
+            alias: 'Antoñete', leader: true, times: 2, calls: 50, group: 1,
             avatar: 'http://findicons.com/files/icons/1072/face_avatars/300/j01.png',
             game: {
-                gamedata: null,
-                level: 2,
-                tostolares: 1000,
-                stats: {
-                    life: 100,
-                    fury: 76,
-                    fury_mode: false,
-                    reputation: 1520,
-                    toast_points: 12
-                },
-                equipment: {
-                    weapon: 'w001',
-                    armor: null
-                },
-                inventory: {
-                    tostems: [
-                        {
-                            id: 't001',
-                            element: 'fire',
-                            level: 2,
-                            in_use: true
-                        }, {
-                            id: 't002',
-                            element: 'water',
-                            level: 3,
-                            in_use: false
-                        }, {
-                            id: 't003',
-                            element: 'earth',
-                            level: 4,
-                            in_use: false
-                        }, {
-                            id: 't004',
-                            element: 'water',
-                            level: 5,
-                            in_use: false
-                        }, {
-                            id: 't005',
-                            element: 'air',
-                            level: 6,
-                            in_use: false
-                        }
-                    ],
-                    runes: [
-                        {
-                            id: 'r001',
-                            material: 'madera',
-                            frecuency: 'common',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: true
-                        }, {
-                            id: 'r002',
-                            material: 'madera',
-                            frecuency: 'common',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: false
-                        }, {
-                            id: 'r003',
-                            material: 'madera',
-                            frecuency: 'uncommon',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: false
-                        }, {
-                            id: 'r004',
-                            material: 'mithril',
-                            frecuency: 'uncommon',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: false
-                        }
-                    ],
-                    weapons: [
-                        {
-                            id: 'w001',
-                            name: 'Ten Hedor',
-                            frecuency: 'common',
-                            level: 2,
-                            element: 'fire',
-                            'class': 'bladed',
-                            base_stats: {
-                                damage: 14,
-                                precision: 6
-                            },
-                            components: {
-                                rune: 'r001',
-                                tostem: 't001'
-                            },
-                            skills: [{
-                                id: 's001',
-                                name: 'Ataque elemental de fuego',
-                                element: 'fire',
-                                source: 'weapon',
-                                'class': 'bladed',
-                                level: 1, // Es el nivel del tostem
-                                target_number: 1,
-                                uses: 3,
-                                duration: null,
-                                cost: 2,
-                                action: 'skillWeaponElementalAttack',
-                                stats: {
-                                    damage: 20
-                                },
-                                blocked: false
-                            }],
-                            equipped: true
-                        }, {
-                            id: 'w002',
-                            name: 'Sal Chicha',
-                            frecuency: 'legendary',
-                            level: 2, base_stats: {
-                                damage: 54,
-                                precision: 64
-                            },
-                            components: {
-                                rune: 'r002',
-                                tostem: 't002'
-                            },
-                            skills: [{
-                                id: 's003',
-                                name: 'Ataque elemental de tierra',
-                                element: 'earth',
-                                source: 'weapon',
-                                'class': 'bladed',
-                                level: 1, // Es el nivel del tostem
-                                target_number: 1,
-                                uses: 3,
-                                duration: null,
-                                cost: 2,
-                                action: 'skillWeaponElementalAttack',
-                                stats: {
-                                    damage: 20
-                                },
-                                blocked: false
-                            }],
-                            equipped: false
-                        }
-                    ],
-                    armors: [{
-                        id: 'a001',
-                        name: 'Al Capa Ra',
-                        frecuency: 'common',
-                        element: 'earth',
-                        'class': 'light',
-                        level: 2, base_stats: {
-                            protection: 4,
-                            parry: 46
-                        },
-                        components: {
-                            rune: 'r003',
-                            tostem: 't003'
-                        },
-                        skills: [{
-                            id: 's002',
-                            name: 'Escudito in the back',
-                            element: 'earth',
-                            level: 2,
-                            source: 'armor', // common, weapon, armor
-                            uses: 3,
-                            cost: 1,
-                            stats: {
-                                protection: 10,
-                                parry: 5
-                            },
-                            blocked: false
-                        }],
-                        equipped: false
-                    }],
-                    stones: 23
-                },
-                afk: false,
-                last_activity: date.getTime(),
-                order: {
-                    meal: null,
-                    drink: null,
-                    ito: true
-                },
-                last_order: {
-                    meal: null,
-                    drink: null,
-                    ito: false
-                },
-                notifications: [{
-                    message: 'nForgeWeapon#' + JSON.stringify({"name": "Arma de todos los tiempos"}),
-                    type: 'forge',
-                    timestamp: date.getTime() + 10500
-                }, {
-                    message: 'nEquipDestroyArmor#' + JSON.stringify({
-                        "name": "Armadura caca",
-                        "tostem": "fuego",
-                        "tostemLvl": "3",
-                        "rune": "cebolla",
-                        "rune2": "alcachofa"
-                    }),
-                    type: 'equipment',
-                    timestamp: date.getTime() + 1500
-                }]
-            }
-        }, {
-            username: 'pepe2',
-            password: "d404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db", //paco
-            alias: 'Manolin',
-            leader: false,
-            avatar: 'http://findicons.com/files/icons/1072/face_avatars/300/j01.png',
-            game: {
-                gamedata: null,
-                level: 2,
-                tostolares: 1000,
-                stats: {
-                    life: 100,
-                    fury: 76,
-                    fury_mode: false,
-                    reputation: 23,
-                    toast_points: 12
-                },
-                equipment: {
-                    weapon: 'w001',
-                    armor: 'a001'
-                },
-                inventory: {
-                    tostems: [
-                        {
-                            id: 't001',
-                            element: 'fire',
-                            level: 2,
-                            in_use: true
-                        }, {
-                            id: 't002',
-                            element: 'water',
-                            level: 3,
-                            in_use: true
-                        }, {
-                            id: 't003',
-                            element: 'earth',
-                            level: 4,
-                            in_use: true
-                        }, {
-                            id: 't004',
-                            element: 'water',
-                            level: 5,
-                            in_use: false
-                        }, {
-                            id: 't005',
-                            element: 'light',
-                            level: 6,
-                            in_use: false
-                        }
-                    ],
-                    runes: [
-                        {
-                            id: 'r001',
-                            material: 'wood',
-                            frecuency: 'common',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: true
-                        }, {
-                            id: 'r002',
-                            material: 'iron',
-                            frecuency: 'common',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: true
-                        }, {
-                            id: 'r003',
-                            material: 'steel',
-                            frecuency: 'uncommon',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: true
-                        }, {
-                            id: 'r004',
-                            material: 'mithril',
-                            frecuency: 'common',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: false
-                        }
-                    ],
-                    weapons: [
-                        {
-                            id: 'w001',
-                            name: 'Ten Hedor',
-                            frecuency: 'common',
-                            level: 2,
-                            element: 'fire',
-                            'class': 'bladed',
-                            base_stats: {
-                                damage: 14,
-                                precision: 6
-                            },
-                            components: {
-                                rune: 'r001',
-                                tostem: 't001'
-                            },
-                            skills: [{
-                                id: 's001',
-                                name: 'Ataque elemental de fuego',
-                                element: 'fire',
-                                source: 'weapon',
-                                'class': 'bladed',
-                                level: 1, // Es el nivel del tostem
-                                target_number: 1,
-                                uses: 3,
-                                duration: null,
-                                cost: 2,
-                                action: 'skillWeaponElementalAttack',
-                                stats: {
-                                    damage: 20
-                                },
-                                blocked: false
-                            }],
-                            equipped: true
-                        }, {
-                            id: 'w002',
-                            name: 'Sal Chicha',
-                            frecuency: 'legendary',
-                            level: 2, base_stats: {
-                                damage: 54,
-                                precision: 64
-                            },
-                            components: {
-                                rune: 'r002',
-                                tostem: 't002'
-                            },
-                            skills: [{
-                                id: 's003',
-                                name: 'Ataque elemental de tierra',
-                                element: 'earth',
-                                source: 'weapon',
-                                'class': 'bladed',
-                                level: 1, // Es el nivel del tostem
-                                target_number: 1,
-                                uses: 3,
-                                duration: null,
-                                cost: 2,
-                                action: 'skillWeaponElementalAttack',
-                                stats: {
-                                    damage: 20
-                                },
-                                blocked: false
-                            }],
-                            equipped: false
-                        }
-                    ],
-                    armors: [{
-                        id: 'a001',
-                        name: 'Al Capa Ra',
-                        frecuency: 'common',
-                        'class': 'medium',
-                        element: 'earth',
-                        level: 2, base_stats: {
-                            protection: 4,
-                            parry: 46
-                        },
-                        components: {
-                            rune: 'r003',
-                            tostem: 't003'
-                        },
-                        skills: [{
-                            id: 's002',
-                            name: 'Escudito in the back',
-                            element: 'earth',
-                            level: 2,
-                            source: 'armor', // common, weapon, armor
-                            uses: 3,
-                            cost: 1,
-                            stats: {
-                                protection: 10,
-                                parry: 5
-                            },
-                            blocked: false
-                        }],
-                        equipped: false
-                    }],
-                    stones: 23
-                },
-                afk: false,
-                last_activity: date.getTime(),
-                order: {
-                    meal: null,
-                    drink: null,
-                    ito: true
-                },
-                last_order: {
-                    meal: null,
-                    drink: null,
-                    ito: false
-                }
-            }
-        }, {
-            username: 'pepe3',
-            password: "d404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db", //paco
-            alias: 'Felisuco',
-            leader: true,
-            avatar: 'http://findicons.com/files/icons/1072/face_avatars/300/j01.png',
-            game: {
-                gamedata: null,
-                level: 2,
-                tostolares: 1000,
-                stats: {
-                    life: 100,
-                    fury: 76,
-                    fury_mode: false,
-                    reputation: 23,
-                    toast_points: 12
-                },
-                equipment: {
-                    weapon: 'w001',
-                    armor: 'a001'
-                },
-                inventory: {
-                    tostems: [
-                        {
-                            id: 't001',
-                            element: 'fire',
-                            level: 2,
-                            in_use: true
-                        }, {
-                            id: 't002',
-                            element: 'water',
-                            level: 3,
-                            in_use: true
-                        }, {
-                            id: 't003',
-                            element: 'earth',
-                            level: 4,
-                            in_use: true
-                        }, {
-                            id: 't004',
-                            element: 'water',
-                            level: 5,
-                            in_use: false
-                        }, {
-                            id: 't005',
-                            element: 'light',
-                            level: 6,
-                            in_use: false
-                        }
-                    ],
-                    runes: [
-                        {
-                            id: 'r001',
-                            material: 'wood',
-                            frecuency: 'common',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: true
-                        }, {
-                            id: 'r002',
-                            material: 'iron',
-                            frecuency: 'common',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: true
-                        }, {
-                            id: 'r003',
-                            material: 'steel',
-                            frecuency: 'uncommon',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: true
-                        }, {
-                            id: 'r004',
-                            material: 'mithril',
-                            frecuency: 'common',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: false
-                        }
-                    ],
-                    weapons: [
-                        {
-                            id: 'w001',
-                            name: 'Ten Hedor',
-                            frecuency: 'common',
-                            level: 2,
-                            element: 'fire',
-                            'class': 'bladed',
-                            base_stats: {
-                                damage: 14,
-                                precision: 6
-                            },
-                            components: {
-                                rune: 'r001',
-                                tostem: 't001'
-                            },
-                            skills: [{
-                                id: 's001',
-                                name: 'Ataque elemental de fuego',
-                                element: 'fire',
-                                source: 'weapon',
-                                'class': 'bladed',
-                                level: 1, // Es el nivel del tostem
-                                target_number: 1,
-                                uses: 3,
-                                duration: null,
-                                cost: 2,
-                                action: 'skillWeaponElementalAttack',
-                                stats: {
-                                    damage: 20
-                                },
-                                blocked: false
-                            }],
-                            equipped: true
-                        }, {
-                            id: 'w002',
-                            name: 'Sal Chicha',
-                            frecuency: 'legendary',
-                            level: 2, base_stats: {
-                                damage: 54,
-                                precision: 64
-                            },
-                            components: {
-                                rune: 'r002',
-                                tostem: 't002'
-                            },
-                            skills: [{
-                                id: 's003',
-                                name: 'Ataque elemental de tierra',
-                                element: 'earth',
-                                source: 'weapon',
-                                'class': 'bladed',
-                                level: 1, // Es el nivel del tostem
-                                target_number: 1,
-                                uses: 3,
-                                duration: null,
-                                cost: 2,
-                                action: 'skillWeaponElementalAttack',
-                                stats: {
-                                    damage: 20
-                                },
-                                blocked: false
-                            }],
-                            equipped: false
-                        }
-                    ],
-                    armors: [{
-                        id: 'a001',
-                        name: 'Al Capa Ra',
-                        frecuency: 'common',
-                        level: 2, base_stats: {
-                            protection: 4,
-                            parry: 46
-                        },
-                        components: {
-                            rune: 'r003',
-                            tostem: 't003'
-                        },
-                        skills: [{
-                            id: 's002',
-                            name: 'Escudito in the back',
-                            element: 'earth',
-                            level: 2,
-                            source: 'armor', // common, weapon, armor
-                            uses: 3,
-                            cost: 1,
-                            stats: {
-                                protection: 10,
-                                parry: 5
-                            },
-                            blocked: false
-                        }],
-                        equipped: false
-                    }],
-                    stones: 23
-                },
-                afk: false,
-                last_activity: date.getTime(),
-                order: {
-                    meal: null,
-                    drink: null,
-                    ito: true
-                },
-                last_order: {
-                    meal: null,
-                    drink: null,
-                    ito: false
-                }
-            }
-        }, {
-            username: 'pepe4',
-            password: "d404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db", //paco
-            alias: 'Jolines',
-            leader: true,
-            avatar: 'http://findicons.com/files/icons/1072/face_avatars/300/j01.png',
-            game: {
-                gamedata: null,
-                level: 2,
-                tostolares: 1000,
-                stats: {
-                    life: 100,
-                    fury: 76,
-                    fury_mode: false,
-                    reputation: 23,
-                    toast_points: 12
-                },
-                equipment: {
-                    weapon: 'w001',
-                    armor: 'a001'
-                },
-                inventory: {
-                    tostems: [
-                        {
-                            id: 't001',
-                            element: 'fire',
-                            level: 2,
-                            in_use: true
-                        }, {
-                            id: 't002',
-                            element: 'water',
-                            level: 3,
-                            in_use: true
-                        }, {
-                            id: 't003',
-                            element: 'earth',
-                            level: 4,
-                            in_use: true
-                        }, {
-                            id: 't004',
-                            element: 'water',
-                            level: 5,
-                            in_use: false
-                        }, {
-                            id: 't005',
-                            element: 'light',
-                            level: 6,
-                            in_use: false
-                        }
-                    ],
-                    runes: [
-                        {
-                            id: 'r001',
-                            material: 'wood',
-                            frecuency: 'common',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: true
-                        }, {
-                            id: 'r002',
-                            material: 'iron',
-                            frecuency: 'common',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: true
-                        }, {
-                            id: 'r003',
-                            material: 'steel',
-                            frecuency: 'uncommon',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: true
-                        }, {
-                            id: 'r004',
-                            material: 'mithril',
-                            frecuency: 'common',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: false
-                        }
-                    ],
-                    weapons: [
-                        {
-                            id: 'w001',
-                            name: 'Ten Hedor',
-                            frecuency: 'common',
-                            level: 2,
-                            element: 'fire',
-                            'class': 'bladed',
-                            base_stats: {
-                                damage: 14,
-                                precision: 6
-                            },
-                            components: {
-                                rune: 'r001',
-                                tostem: 't001'
-                            },
-                            skills: [{
-                                id: 's001',
-                                name: 'Ataque elemental de fuego',
-                                element: 'fire',
-                                source: 'weapon',
-                                'class': 'bladed',
-                                level: 1, // Es el nivel del tostem
-                                target_number: 1,
-                                uses: 3,
-                                duration: null,
-                                cost: 2,
-                                action: 'skillWeaponElementalAttack',
-                                stats: {
-                                    damage: 20
-                                },
-                                blocked: false
-                            }],
-                            equipped: true
-                        }, {
-                            id: 'w002',
-                            name: 'Sal Chicha',
-                            frecuency: 'legendary',
-                            level: 2, base_stats: {
-                                damage: 54,
-                                precision: 64
-                            },
-                            components: {
-                                rune: 'r002',
-                                tostem: 't002'
-                            },
-                            skills: [{
-                                id: 's003',
-                                name: 'Ataque elemental de tierra',
-                                element: 'earth',
-                                source: 'weapon',
-                                'class': 'bladed',
-                                level: 1, // Es el nivel del tostem
-                                target_number: 1,
-                                uses: 3,
-                                duration: null,
-                                cost: 2,
-                                action: 'skillWeaponElementalAttack',
-                                stats: {
-                                    damage: 20
-                                },
-                                blocked: false
-                            }],
-                            equipped: false
-                        }
-                    ],
-                    armors: [{
-                        id: 'a001',
-                        name: 'Al Capa Ra',
-                        frecuency: 'common',
-                        level: 2, base_stats: {
-                            protection: 4,
-                            parry: 46
-                        },
-                        components: {
-                            rune: 'r003',
-                            tostem: 't003'
-                        },
-                        skills: [{
-                            id: 's002',
-                            name: 'Escudito in the back',
-                            element: 'earth',
-                            level: 2,
-                            source: 'armor', // common, weapon, armor
-                            uses: 3,
-                            cost: 1,
-                            stats: {
-                                protection: 10,
-                                parry: 5
-                            },
-                            blocked: false
-                        }],
-                        equipped: false
-                    }],
-                    stones: 23
-                },
-                afk: false,
-                last_activity: date.getTime(),
-                order: {
-                    meal: null,
-                    drink: null,
-                    ito: true
-                },
-                last_order: {
-                    meal: null,
-                    drink: null,
-                    ito: false
-                }
-            }
-        }, {
-            username: 'pepe5',
-            password: "d404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db", //paco
-            alias: 'Si tu lo dices',
-            leader: true,
-            avatar: 'http://findicons.com/files/icons/1072/face_avatars/300/j01.png',
-            game: {
-                gamedata: null,
-                level: 2,
-                tostolares: 1000,
-                stats: {
-                    life: 100,
-                    fury: 76,
-                    fury_mode: false,
-                    reputation: 23,
-                    toast_points: 12
-                },
-                equipment: {
-                    weapon: 'w001',
-                    armor: 'a001'
-                },
-                inventory: {
-                    tostems: [
-                        {
-                            id: 't001',
-                            element: 'fire',
-                            level: 2,
-                            in_use: true
-                        }, {
-                            id: 't002',
-                            element: 'water',
-                            level: 2,
-                            in_use: true
-                        }, {
-                            id: 't003',
-                            element: 'earth',
-                            level: 4,
-                            in_use: true
-                        }, {
-                            id: 't004',
-                            element: 'fire',
-                            level: 5,
-                            in_use: false
-                        }, {
-                            id: 't005',
-                            element: 'light',
-                            level: 6,
-                            in_use: false
-                        }
-                    ],
-                    runes: [
-                        {
-                            id: 'r001',
-                            material: 'woody',
-                            frecuency: 'common',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: true
-                        }, {
-                            id: 'r002',
-                            material: 'irony',
-                            frecuency: 'common',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: true
-                        }, {
-                            id: 'r003',
-                            material: 'steely',
-                            frecuency: 'uncommon',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: true
-                        }, {
-                            id: 'r004',
-                            material: 'mithrily',
-                            frecuency: 'common',
-                            stats_percentages: {
-                                damage: 12,
-                                precision: 33,
-                                protection: 56,
-                                parry: 45
-                            },
-                            in_use: false
-                        }
-                    ],
-                    weapons: [
-                        {
-                            id: 'w001',
-                            name: 'Ten Hedor',
-                            frecuency: 'common',
-                            level: 2,
-                            element: 'fire',
-                            'class': 'bladed',
-                            base_stats: {
-                                damage: 14,
-                                precision: 6
-                            },
-                            components: {
-                                rune: 'r001',
-                                tostem: 't001'
-                            },
-                            skills: [{
-                                id: 's001',
-                                name: 'Ataque elemental de fuego',
-                                element: 'fire',
-                                source: 'weapon',
-                                'class': 'bladed',
-                                level: 1, // Es el nivel del tostem
-                                target_number: 1,
-                                uses: 3,
-                                duration: null,
-                                cost: 2,
-                                action: 'skillWeaponElementalAttack',
-                                stats: {
-                                    damage: 20
-                                },
-                                blocked: false
-                            }],
-                            equipped: true
-                        }, {
-                            id: 'w002',
-                            name: 'Sal Chicha',
-                            frecuency: 'legendary',
-                            level: 2, base_stats: {
-                                damage: 54,
-                                precision: 64
-                            },
-                            components: {
-                                rune: 'r002',
-                                tostem: 't002'
-                            },
-                            skills: [{
-                                id: 's003',
-                                name: 'Ataque elemental de tierra',
-                                element: 'earth',
-                                source: 'weapon',
-                                'class': 'bladed',
-                                level: 1, // Es el nivel del tostem
-                                target_number: 1,
-                                uses: 3,
-                                duration: null,
-                                cost: 2,
-                                action: 'skillWeaponElementalAttack',
-                                stats: {
-                                    damage: 20
-                                },
-                                blocked: false
-                            }],
-                            equipped: false
-                        }
-                    ],
-                    armors: [{
-                        id: 'a001',
-                        name: 'Al Capa Ra',
-                        frecuency: 'common',
-                        level: 2, base_stats: {
-                            protection: 4,
-                            parry: 46
-                        },
-                        components: {
-                            rune: 'r003',
-                            tostem: 't003'
-                        },
-                        skills: [{
-                            id: 's002',
-                            name: 'Escudito in the back',
-                            element: 'earth',
-                            level: 2,
-                            source: 'armor', // common, weapon, armor
-                            uses: 3,
-                            cost: 1,
-                            stats: {
-                                protection: 10,
-                                parry: 5
-                            },
-                            blocked: false
-                        }],
-                        equipped: false
-                    }],
-                    stones: 23
-                },
-                afk: true,
-                last_activity: date.getTime(),
-                order: {
-                    meal: null,
-                    drink: null,
-                    ito: true
-                },
-                last_order: {
-                    meal: null,
-                    drink: null,
-                    ito: false
-                }
+                gamedata: game[0]._id, //{type: mongoose.Schema.Types.ObjectId, ref: 'Game'}
+                character: characters[0]._id, //{type: mongoose.Schema.Types.ObjectId, ref: 'Character'}
+                rank: 2, tostolares: 1000, fame: 100, afk: false, last_activity: date.getTime(),
+                warehouse: [],
+                order: {meal: null, drink: null, ito: true},
+                last_order: {meal: null, drink: null, ito: false},
+                notifications: [
+                    {
+                        message: 'nForgeWeapon#' + JSON.stringify({"name": "Arma de todos los tiempos"}),
+                        type: 'forge', timestamp: date.getTime() + 10500
+                    }, {
+                        message: 'nEquipDestroyArmor#' + JSON.stringify({"name": "Armadura caca", "tostem": "fuego"}),
+                        type: 'equipment', timestamp: date.getTime() + 1500
+                    }
+                ]
             }
         }
     ];
+
 
     // ROUTER
     mongoRouter.get('/mongoOLD', function (req, res, next) {
@@ -1465,126 +391,81 @@ module.exports = function (app) {
          if (mongoose.connection.collections['talent'])
          promises.push(mongoose.connection.collections['talent'].drop());*/
 
-
-        // IDs
-        ids['talent'] = [
-            fakery.g.hex(10, 10),
-            fakery.g.hex(10, 10),
-            fakery.g.hex(10, 10),
-            fakery.g.hex(10, 10),
-            fakery.g.hex(10, 10)
-        ];
-        ids['skill'] = [
-            fakery.g.hex(10, 10),
-            fakery.g.hex(10, 10),
-            fakery.g.hex(10, 10)
-        ];
-        ids['character'] = [
-            fakery.g.hex(10, 10),
-            fakery.g.hex(10, 10),
-            fakery.g.hex(10, 10),
-            fakery.g.hex(10, 10),
-            fakery.g.hex(10, 10)
-        ];
-
         q.all(promises).then(function (result) {
             console.log("Base de datos limpiada");
-            eventEmitter.emit('#Characters');
-            eventEmitter.emit('#MealDrink');
-            // eventEmitter.emit('#Characters');
+            finalizado = 0;
+            eventEmitter.emit('#CargaDatos', res);
         });
     });
 
 
-    eventEmitter.on('#MealDrink', function (data) {
-        console.log('#MealDrink');
+    eventEmitter.on('#CargaDatos', function (res) {
+        console.log('Cargando datos...');
+
         //Meto los nuevos valores
         models.Meal.create(meals, function (err, meals) {
             console.log("    Creadas las comidas");
+            eventEmitter.emit('#Finalizado', res);
         });
 
         //Meto los nuevos valores
         models.Drink.create(drinks, function (err, drinks) {
             console.log("    Creadas las bebidas");
+            eventEmitter.emit('#Finalizado', res);
+        });
+
+        //Meto los nuevos valores
+        models.Skill.create(skills, function (err, skills) {
+            console.log("    Creadas las habilidades");
+            eventEmitter.emit('#Finalizado', res);
+        });
+
+        //Meto los nuevos valores
+        models.Talent.create(talents, function (err, talents) {
+            console.log("    Creados los talentos");
+            eventEmitter.emit('#Finalizado', res);
+        });
+
+        //Meto los nuevos valores
+        models.Place.create(places, function (err, places) {
+            console.log("    Creados los lugares");
+            eventEmitter.emit('#Finalizado', res);
+        });
+
+        //Meto los nuevos valores
+        models.Object.create(objects, function (err, objects) {
+            console.log("    Creados los objetos");
+            eventEmitter.emit('#Finalizado', res);
+        });
+
+        //Meto los nuevos valores
+        models.Game.create(game, function (err, games) {
+            console.log("    Creado el juego");
+            eventEmitter.emit('#Finalizado', res);
+        });
+
+        //Meto los nuevos valores
+        models.Character.create(characters, function (err, chars) {
+            console.log("    Creados los characters");
+            eventEmitter.emit('#Finalizado', res);
+        });
+
+        //Meto los nuevos valores
+        models.User.create(users, function (err, users) {
+            console.log("    Creados los usuarios");
+            eventEmitter.emit('#Finalizado', res);
         });
     });
 
-    eventEmitter.on('#Characters', function () {
-        console.log('#Characters');
-        fakery.fake('character', mongoose.model('Character'), {
-            name: fakery.g.name(),
-            level: fakery.g.rndint(1, 10),
-            location: {
-                place: fakery.g.hex(10, 10),
-                sector: fakery.g.surname(),
-                latitude: fakery.g.rndint(),
-                longitude: fakery.g.rndint()
-            },
-            stats: {
-                damage: fakery.g.rndint(),
-                reduction: fakery.g.rndint(),
-                life: fakery.g.rndint(),
-                toxicity: fakery.g.rndint(),
-                perception: fakery.g.rndint(),
-                reflexes: fakery.g.rndint(),
-                stealth: fakery.g.rndint(),
-                hunger: fakery.g.rndint(),
-                fatigue: fakery.g.rndint(),
-                venom: fakery.g.rndint(),
-                healing: fakery.g.rndint()
-            },
-            score: fakery.g.rndint(),
-            talents: {
-                points: fakery.g.rndint(),
-                combat: [{
-                    talent: fakery.g.hex(10, 10),
-                    points: fakery.g.rndint()
-                }],
-                survival: [{
-                    talent: fakery.g.hex(10, 10),
-                    points: fakery.g.rndint()
-                }],
-                exploration: [{
-                    talent: fakery.g.hex(10, 10),
-                    points: fakery.g.rndint()
-                }]
-            },
-            skill_slots: fakery.g.rndint(),
-            skills: [{
-                skill: fakery.g.hex(10, 10),
-                uses: fakery.g.rndint()
-            }],
-            inventory_slots: fakery.g.rndint(),
-            inventory: [{
-                object: fakery.g.hex(10, 10),
-                uses: fakery.g.rndint()
-            }],
-            weapon: {
-                name: fakery.g.surname(),
-                ammo: fakery.g.rndint(),
-                damage: fakery.g.rndint(),
-                accuracy: fakery.g.rndint(),
-                level: fakery.g.rndint()
-            }
-        });
-
-        fakery.makeAndSave('character', function (err, user) {
-            // `user` is saved to the database and name is overriden to 'override'.
-            console.log("FIN");
-            // console.log(user);
-        });
-        fakery.makeAndSave('character', function (err, user) {
-            // `user` is saved to the database and name is overriden to 'override'.
-            console.log("FIN");
-            // console.log(user);
-        });
+    eventEmitter.on('#Finalizado', function (res) {
+        finalizado++;
+        if (finalizado === 9) {
+            res.json({"error": "false", "message": "Datos cargados"});
+        }
     });
 
     // Asigno los router a sus rutas
     app.use('/dev', mongoRouter);
-
-
-}
-;
+};
 
 //Use new Aggregate({ $match: { _id: mongoose.Schema.Types.ObjectId('00000000000000000000000a') } }); instead.

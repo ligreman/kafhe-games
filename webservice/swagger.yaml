@@ -2,7 +2,7 @@ swagger: '2.0'
 info:
   version: 1.0.0
   title: OKAPI
-  description: API de `Kafhe 4.0`
+  description: API de `Los juegos de Kafhe`
 basePath: /
 paths:
   /login:
@@ -118,6 +118,7 @@ paths:
             application/json:
               login: false
               error: Error en la sesión
+
   /order/list:
     get:
       summary: Obtiene la lista de pedidos de la partida
@@ -171,18 +172,14 @@ paths:
           schema:
             type: object
             required:
-              - data
               - error
             properties:
-              data:
-                type: string
-                default: ''
               error:
                 type: string
           examples:
             application/json:
-              data: ''
               error: Error en la sesión
+
   /order:
     post:
       summary: Añadir un pedido del usuario logueado
@@ -229,17 +226,12 @@ paths:
           schema:
             type: object
             required:
-              - data
               - error
             properties:
-              data:
-                type: string
-                default: ''
               error:
                 type: string
           examples:
             application/json:
-              data: ''
               error: Error en la sesión
         
   /order/delete:
@@ -282,17 +274,12 @@ paths:
           schema:
             type: object
             required:
-              - data
               - error
             properties:
-              data:
-                type: string
-                default: ''
               error:
                 type: string
           examples:
             application/json:
-              data: ''
               error: Error en la sesión
               
   /order/mealanddrink:
@@ -351,18 +338,14 @@ paths:
           schema:
             type: object
             required:
-              - data
               - error
             properties:
-              data:
-                type: string
-                default: ''
               error:
                 type: string
           examples:
             application/json:
-              data: ''
               error: Error en la sesión
+
   /user:
     get:
       summary: Información del usuario y partida actual
@@ -403,18 +386,14 @@ paths:
           schema:
             type: object
             required:
-              - data
               - error
             properties:
-              data:
-                type: string
-                default: ''
               error:
                 type: string
           examples:
             application/json:
-              data: ''
               error: Error en la sesión
+
   /user/list:
     get:
       summary: Obtiene la lista de usuarios de la partida
@@ -467,18 +446,14 @@ paths:
           schema:
             type: object
             required:
-              - data
               - error
             properties:
-              data:
-                type: string
-                default: ''
               error:
                 type: string
           examples:
             application/json:
-              data: ''
               error: Error en la sesión
+
   /profile:
     post:
       summary: Actualiza el perfil del usuario
@@ -525,134 +500,14 @@ paths:
           schema:
             type: object
             required:
-              - data
               - error
             properties:
-              data:
-                type: string
-                default: ''
               error:
                 type: string
           examples:
             application/json:
-              data: ''
               error: Error en la sesión
-  /equipment/equip:
-    post:
-      summary: Equipa un objeto al usuario logueado
-      description: 'Equipa al usuario actualmente identificado con el arma o armadura seleccionada. Sólo se puede equipar si no hay nada ya equipado en ese hueco actualmente.'
-      tags:
-        - equipment
-      produces:
-        - application/json
-      parameters:
-        - name: Authorization
-          in: header
-          description: Token de autorización tipo `Bearer`
-          type: string
-          required: true
-        - name: payload
-          in: body
-          description: JSON con los datos del objeto a equipar (id del inventario)
-          required: true
-          schema:
-            $ref: '#/definitions/PostDataEquipmentEquip'
-      responses:
-        '200':
-          description: Petición correcta
-          schema:
-            type: object
-            required:
-              - data
-              - error
-            properties:
-              data:
-                type: object
-                required:
-                  - user
-                properties:
-                  user:
-                    type: array
-                    items:
-                      $ref: '#/definitions/User'
-              error:
-                type: string
-                default: ''
-        '500':
-          description: Error derivado de enviar un access_token inválido
-          schema:
-            type: object
-            required:
-              - data
-              - error
-            properties:
-              data:
-                type: string
-                default: ''
-              error:
-                type: string
-          examples:
-            application/json:
-              data: ''
-              error: Error en la sesión
-  /equipment/destroy:
-    post:
-      summary: Destruye el objeto seleccionado
-      description: Destruye el objeto (arma o armadura) seleccionado por el usuario actualmente identificado. Recupera las runas y tostems empleados en el objeto, para poder usarlas de nuevo.
-      tags:
-        - equipment
-      produces:
-        - application/json
-      parameters:
-        - name: Authorization
-          in: header
-          description: Token de autorización tipo `Bearer`
-          type: string
-          required: true
-        - name: payload
-          in: body
-          description: JSON con los datos del objeto a destruir (id del inventario)
-          required: true
-          schema:
-            $ref: '#/definitions/PostDataEquipmentDestroy'
-      responses:
-        '200':
-          description: Petición correcta
-          schema:
-            type: object
-            required:
-              - data
-              - error
-            properties:
-              data:
-                type: object
-                required:
-                  - user
-                properties:
-                  user:
-                    type: array
-                    items:
-                      $ref: '#/definitions/User'
-              error:
-                type: string
-                default: ''
-        '500':
-          description: Error derivado de enviar un access_token inválido
-          schema:
-            type: object
-            required:
-              - data
-              - error
-            properties:
-              data:
-                type: string
-                default: ''
-              error:
-                type: string
-          examples:
-            application/json:
-              data: ''
-              error: Error en la sesión
+
   /skill/list:
     get:
       summary: Obtiene la lista completa de habilidades
@@ -711,14 +566,14 @@ paths:
                 type: string
           examples:
             application/json:
-              data: ''
               error: Error en la sesión
-  /skill/fury:
-    post:
-      summary: Activa el modo furia para usuario logueado
-      description: Activa el modo furia para el jugador actualmente identificado.
+
+  /game/data:
+    get:
+      summary: Obtiene los datos estáticos del juego
+      description: Obtiene los datos de las comidas, bebidas, habilidades, talentos, objetos y lugares.
       tags:
-        - skill
+        - game
       produces:
         - application/json
       parameters:
@@ -735,35 +590,80 @@ paths:
             required:
               - data
               - error
+              - session
             properties:
               data:
                 type: object
                 required:
-                  - user
+                  - skills
+                  - objects
+                  - places
+                  - talents
+                  - meals
+                  - drinks
                 properties:
-                  user:
-                    $ref: '#/definitions/User'
+                  skills:
+                    type: array
+                    items:
+                      $ref: '#/definitions/SkillList'
+                  objects:
+                    type: array
+                    items:
+                      $ref: '#/definitions/ObjectList'
+                  places:
+                    type: array
+                    items:
+                      $ref: '#/definitions/PlaceList'
+                  talents:
+                    type: array
+                    items:
+                      $ref: '#/definitions/TalentList'
+                  meals:
+                    type: array
+                    items:
+                      $ref: '#/definitions/MealList'
+                  drinks:
+                    type: array
+                    items:
+                      $ref: '#/definitions/DrinkList'
               error:
                 type: string
                 default: ''
+              session:
+                $ref: '#/definitions/Session'
+          examples:
+            application/json:
+              data:
+                skills:
+                  - _id: 561d564be99383212f76b374
+                    name: Bola de fuego
+                    element: fire
+                    equipment: weapon
         '500':
           description: Error derivado de enviar un access_token inválido
           schema:
             type: object
             required:
-              - data
               - error
             properties:
-              data:
-                type: string
-                default: ''
               error:
                 type: string
           examples:
             application/json:
-              data: ''
               error: Error en la sesión
+
 definitions:
+  Session:
+    type: object
+    required:
+      - access_token
+      - expire
+    properties:
+      access_token:
+        type: string
+      expire:
+        type: number
+
   OrderList:
     type: object
     required:
@@ -785,6 +685,7 @@ definitions:
             type: string
           ito:
             type: boolean
+
   MealAndDrink:
     type: object
     required:
@@ -798,6 +699,7 @@ definitions:
         type: string
       ito:
         type: boolean
+
   PlayerList:
     type: object
     required:
@@ -830,30 +732,127 @@ definitions:
             properties:
               reputation:
                 type: integer
+
   SkillList:
     type: object
     required:
-      - _id
+      - id
       - name
-      - element
-      - equipment
+      - description
+      - action
+      - uses
     properties:
-      _id:
+      id:
         type: string
       name:
         type: string
-      element:
+      description:
         type: string
-        enum:
-          - fire
-          - water
-          - earth
-          - wind
-      equipment:
+      action:
         type: string
-        enum:
-          - weapon
-          - armor
+      uses:
+        type: number
+
+  ObjectList:
+    type: object
+    required:
+      - id
+      - name
+      - description
+      - action
+      - uses
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      action:
+        type: string
+      uses:
+        type: number
+
+  PlaceList:
+    type: object
+    required:
+      - id
+      - name
+      - description
+      - action
+      - uses
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      action:
+        type: string
+      uses:
+        type: number
+
+  TalentList:
+    type: object
+    required:
+      - id
+      - name
+      - description
+      - action
+      - uses
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      action:
+        type: string
+      uses:
+        type: number
+
+  MealList:
+    type: object
+    required:
+      - id
+      - name
+      - description
+      - action
+      - uses
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      action:
+        type: string
+      uses:
+        type: number
+
+  DrinkList:
+    type: object
+    required:
+      - id
+      - name
+      - description
+      - action
+      - uses
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      action:
+        type: string
+      uses:
+        type: number
+
   User:
     type: object
     required:
@@ -1058,6 +1057,7 @@ definitions:
                 type: string
               ito:
                 type: boolean
+
   NotificationList:
     type: object
     properties:
@@ -1065,6 +1065,7 @@ definitions:
         type: string
       timestamp:
         type: number
+
   PostDataOrder:
     type: object
     properties:
@@ -1077,6 +1078,7 @@ definitions:
       ito:
         type: boolean
         description: 'Si es pedido ITO o no'
+
   PostDataProfile:
     type: object
     properties:
@@ -1089,15 +1091,4 @@ definitions:
       avatar:
         type: string
         description: 'ID de la imagen del usuario que estará alojada en algún servicio externo como gravatar' 
-  PostDataEquipmentEquip:
-    type: object
-    properties:
-      inventory_id:
-        type: string
-        description: ID del objeto de inventario a equipar (ha de ser arma o armadura)
-  PostDataEquipmentDestroy:
-    type: object
-    properties:
-      inventory_id:
-        type: string
-        description: ID del objeto de inventario a destruir (ha de ser arma o armadura)
+

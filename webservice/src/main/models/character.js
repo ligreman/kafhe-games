@@ -7,8 +7,8 @@ module.exports = function (mongoose) {
 
     var LogSchema = mongoose.Schema({
         text: String,
-        'type': {type: String},
-        subtype: String,
+        'type': {type: String}, // combat, exploration,
+        subtype: String, // extended
         date: Number
     }, {versionKey: false});
 
@@ -17,10 +17,8 @@ module.exports = function (mongoose) {
             name: String,
             level: Number,
             location: {
-                place: {type: mongoose.Schema.Types.ObjectId, ref: 'Place'},
-                sector: String,
-                latitude: Number,
-                longitude: Number
+                place: String,
+                level: Number // 0 superficie
             },
             stats: {
                 damage: Number,
@@ -39,27 +37,27 @@ module.exports = function (mongoose) {
             talents: {
                 points: Number,
                 combat: [{
-                    talent: {type: mongoose.Schema.Types.ObjectId, ref: 'Talent'},
-                    points: Number
+                    talent: String,
+                    level: Number
                 }],
                 survival: [{
-                    talent: {type: mongoose.Schema.Types.ObjectId, ref: 'Talent'},
-                    points: Number
+                    talent: String,
+                    level: Number
                 }],
                 exploration: [{
-                    talent: {type: mongoose.Schema.Types.ObjectId, ref: 'Talent'},
-                    points: Number
+                    talent: String,
+                    level: Number
                 }]
             },
             log: [LogSchema],
             skill_slots: Number,
             skills: [{
-                skill: {type: mongoose.Schema.Types.ObjectId, ref: 'Skill'},
+                skill: String,
                 uses: Number
             }],
             inventory_slots: Number,
             inventory: {
-                object: {type: mongoose.Schema.Types.ObjectId, ref: 'Object'},
+                object: String,
                 uses: Number
             },
             weapon: {

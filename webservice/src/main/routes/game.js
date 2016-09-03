@@ -27,8 +27,8 @@ module.exports = function (app) {
      */
     gameRouter.get('/data', function (req, res, next) {
         //Proceso y devuelvo los resultados
-        var answer = function (skills, talents, objects, places) {
-            if (!skills || !talents || !objects || !places) {
+        var answer = function (skills, talents, objects, places, meals, drinks) {
+            if (!skills || !talents || !objects || !places || !meals || !drinks) {
                 console.tag('MONGO').error(err);
                 utils.error(res, 400, 'errGameDataNotFound');
                 return;
@@ -38,7 +38,9 @@ module.exports = function (app) {
                         "skills": skills,
                         "objects": objects,
                         "places": places,
-                        "talents": talents
+                        "talents": talents,
+                        "meals": meals,
+                        "drinks": drinks
                     },
                     "session": {
                         "access_token": req.authInfo.access_token,
@@ -54,7 +56,9 @@ module.exports = function (app) {
             models.Skill.find({}).exec(),
             models.Talent.find({}).exec(),
             models.Object.find({}).exec(),
-            models.Place.find({}).exec()
+            models.Place.find({}).exec(),
+            models.Meal.find({}).exec(),
+            models.Drink.find({}).exec()
         ]).spread(answer);
     });
 

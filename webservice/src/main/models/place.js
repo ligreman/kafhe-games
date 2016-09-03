@@ -10,7 +10,7 @@ module.exports = function (mongoose) {
         description: {type: String, required: true},
         latitude: Number,
         longitude: Number,
-        zone: {type: String, enum: ['swamp', 'desert', 'jungle', 'mountain']},
+        sector: {type: String, enum: ['swamp', 'desert', 'jungle', 'mountain']},
         type: {type: String, enum: ['surface', 'dungeon']},
         category: {type: String, enum: ['building', 'camp', 'castle', 'cave']},
         level: Number
