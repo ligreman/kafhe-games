@@ -89,7 +89,7 @@ module.exports = function (app) {
                     models.User
                         .findOne({"username": sessionData.username})
                         //.select('-_id') // Si lo activo, luego no puedo hacer save
-                        .populate('game.gamedata game.order.meal game.order.drink game.lastOrder.meal game.lastOrder.drink')
+                        .populate('game.gamedata game.character game.order.meal game.order.drink game.lastOrder.meal game.lastOrder.drink')
                         .exec(function (error, user) {
                             if (error) {
                                 console.tag('PASSPORT-BEARER').error('Error obteniendo la información del usuario: ' + error);
