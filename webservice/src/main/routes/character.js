@@ -131,25 +131,27 @@ module.exports = function (app) {
                 // pongo el id del personaje creado en el usuario
                 usuario.game.character = newChar._id;
 
-                // Guardo el usuario
-                usuario.save(function (err) {
-                    if (err) {
-                        console.tag('MONGO').error(err);
-                        utils.error(res, 400, 'errMongoSave');
-                        return;
-                    } else {
-                        res.json({
-                            "data": {
-                                "user": responseUtils.censureUser(usuario)
-                            },
-                            "session": {
-                                "access_token": req.authInfo.access_token,
-                                "expire": 1000 * 60 * 60 * 24 * 30
-                            },
-                            "error": ""
-                        });
-                    }
-                });
+                responseUtils.resJson(usuario, req.authInfo.access_token, res);
+
+                /*// Guardo el usuario
+                 usuario.save(function (err) {
+                 if (err) {
+                 console.tag('MONGO').error(err);
+                 utils.error(res, 400, 'errMongoSave');
+                 return;
+                 } else {
+                 res.json({
+                 "data": {
+                 "user": responseUtils.censureUser(usuario)
+                 },
+                 "session": {
+                 "access_token": req.authInfo.access_token,
+                 "expire": 1000 * 60 * 60 * 24 * 30
+                 },
+                 "error": ""
+                 });
+                 }
+                 });*/
             }
         });
     });
@@ -185,25 +187,27 @@ module.exports = function (app) {
                         // Guardo el objeto usuario sin pj
                         usuario.game.character = null;
 
-                        // Guardo el usuario
-                        usuario.save(function (err) {
-                            if (err) {
-                                console.tag('MONGO').error(err);
-                                utils.error(res, 400, 'errMongoSave');
-                                return;
-                            } else {
-                                res.json({
-                                    "data": {
-                                        "user": responseUtils.censureUser(usuario)
-                                    },
-                                    "session": {
-                                        "access_token": req.authInfo.access_token,
-                                        "expire": 1000 * 60 * 60 * 24 * 30
-                                    },
-                                    "error": ""
-                                });
-                            }
-                        });
+                        responseUtils.resJson(usuario, req.authInfo.access_token, res);
+
+                        /*// Guardo el usuario
+                         usuario.save(function (err) {
+                         if (err) {
+                         console.tag('MONGO').error(err);
+                         utils.error(res, 400, 'errMongoSave');
+                         return;
+                         } else {
+                         res.json({
+                         "data": {
+                         "user": responseUtils.censureUser(usuario)
+                         },
+                         "session": {
+                         "access_token": req.authInfo.access_token,
+                         "expire": 1000 * 60 * 60 * 24 * 30
+                         },
+                         "error": ""
+                         });
+                         }
+                         });*/
                     }
                 });
             }

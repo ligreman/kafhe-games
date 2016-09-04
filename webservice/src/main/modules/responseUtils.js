@@ -22,55 +22,55 @@ var censureUser = function (user) {
     // Censuro la reputación
     // user.game.stats.reputation = null;
 
-    // Cambio de valores de las runas en el inventario
-    user.game.inventory.runes.forEach(function (runa) {
-        runa.stats_percentages.damage = valueToStars(runa.stats_percentages.damage, 25, 150);
-        runa.stats_percentages.precision = valueToStars(runa.stats_percentages.precision, 25, 150);
-        runa.stats_percentages.protection = valueToStars(runa.stats_percentages.protection, 25, 150);
-        runa.stats_percentages.parry = valueToStars(runa.stats_percentages.parry, 25, 150);
-    });
+    /*// Cambio de valores de las runas en el inventario
+     user.game.inventory.runes.forEach(function (runa) {
+     runa.stats_percentages.damage = valueToStars(runa.stats_percentages.damage, 25, 150);
+     runa.stats_percentages.precision = valueToStars(runa.stats_percentages.precision, 25, 150);
+     runa.stats_percentages.protection = valueToStars(runa.stats_percentages.protection, 25, 150);
+     runa.stats_percentages.parry = valueToStars(runa.stats_percentages.parry, 25, 150);
+     });
 
-    // Las habilidades de armas
-    user.game.inventory.weapons.forEach(function (weapon) {
-        // Cambio las base stats
-        weapon.base_stats.damage = valueToStars(weapon.base_stats.damage, 25, 100);
-        weapon.base_stats.precision = valueToStars(weapon.base_stats.precision, 25, 100);
+     // Las habilidades de armas
+     user.game.inventory.weapons.forEach(function (weapon) {
+     // Cambio las base stats
+     weapon.base_stats.damage = valueToStars(weapon.base_stats.damage, 25, 100);
+     weapon.base_stats.precision = valueToStars(weapon.base_stats.precision, 25, 100);
 
-        // Ahora miro las skills del arma
-        weapon.skills.forEach(function (skill) {
-            skill.stats.life = valueToStars(skill.stats.life, 0, 100);
-            skill.stats.fury = valueToStars(skill.stats.fury, 0, 1000);
-            skill.stats.damage = valueToStars(skill.stats.damage, 0, 200);
-            skill.stats.damage_formula = null;
-            skill.stats.precision = valueToStars(skill.stats.precision, 1, 25, 200);
-            skill.stats.precision_formula = null;
-            skill.stats.protection = valueToStars(skill.stats.protection, 0, 100);
-            skill.stats.protection_formula = null;
-            skill.stats.parry = valueToStars(skill.stats.parry, 0, 100);
-            skill.stats.parry_formula = null;
-        });
-    });
+     // Ahora miro las skills del arma
+     weapon.skills.forEach(function (skill) {
+     skill.stats.life = valueToStars(skill.stats.life, 0, 100);
+     skill.stats.fury = valueToStars(skill.stats.fury, 0, 1000);
+     skill.stats.damage = valueToStars(skill.stats.damage, 0, 200);
+     skill.stats.damage_formula = null;
+     skill.stats.precision = valueToStars(skill.stats.precision, 1, 25, 200);
+     skill.stats.precision_formula = null;
+     skill.stats.protection = valueToStars(skill.stats.protection, 0, 100);
+     skill.stats.protection_formula = null;
+     skill.stats.parry = valueToStars(skill.stats.parry, 0, 100);
+     skill.stats.parry_formula = null;
+     });
+     });
 
-    // Las habilidades de armadura
-    user.game.inventory.armors.forEach(function (armor) {
-        // Cambio las base stats
-        armor.base_stats.protection = valueToStars(armor.base_stats.protection, 10, 100);
-        armor.base_stats.parry = valueToStars(armor.base_stats.parry, 15, 100);
+     // Las habilidades de armadura
+     user.game.inventory.armors.forEach(function (armor) {
+     // Cambio las base stats
+     armor.base_stats.protection = valueToStars(armor.base_stats.protection, 10, 100);
+     armor.base_stats.parry = valueToStars(armor.base_stats.parry, 15, 100);
 
-        // Ahora miro las skills del arma
-        armor.skills.forEach(function (skill) {
-            skill.stats.life = valueToStars(skill.stats.life, 0, 100);
-            skill.stats.fury = valueToStars(skill.stats.fury, 0, 1000);
-            skill.stats.damage = valueToStars(skill.stats.damage, 0, 200);
-            skill.stats.damage_formula = null;
-            skill.stats.precision = valueToStars(skill.stats.precision, 1, 25, 200);
-            skill.stats.precision_formula = null;
-            skill.stats.protection = valueToStars(skill.stats.protection, 0, 100);
-            skill.stats.protection_formula = null;
-            skill.stats.parry = valueToStars(skill.stats.parry, 0, 100);
-            skill.stats.parry_formula = null;
-        });
-    });
+     // Ahora miro las skills del arma
+     armor.skills.forEach(function (skill) {
+     skill.stats.life = valueToStars(skill.stats.life, 0, 100);
+     skill.stats.fury = valueToStars(skill.stats.fury, 0, 1000);
+     skill.stats.damage = valueToStars(skill.stats.damage, 0, 200);
+     skill.stats.damage_formula = null;
+     skill.stats.precision = valueToStars(skill.stats.precision, 1, 25, 200);
+     skill.stats.precision_formula = null;
+     skill.stats.protection = valueToStars(skill.stats.protection, 0, 100);
+     skill.stats.protection_formula = null;
+     skill.stats.parry = valueToStars(skill.stats.parry, 0, 100);
+     skill.stats.parry_formula = null;
+     });
+     });*/
 
     return user;
 };
@@ -90,9 +90,38 @@ function valueToStars(value, minValue, maxValue) {
     return Math.floor(value * 10 / maxValue);
 }
 
+/**
+ * Respuesta estándar del servicio, devolviendo el objeto del usuario actualizado
+ * @param user Objeto usuario
+ * @param access_token Token
+ * @param res Objeto respuesta
+ */
+function resJson(user, access_token, res) {
+    // Guardo el usuario
+    user.save(function (err) {
+        if (err) {
+            console.tag('MONGO').error(err);
+            utils.error(res, 400, 'errMongoSave');
+            return;
+        } else {
+            res.json({
+                "data": {
+                    "user": responseUtils.censureUser(user)
+                },
+                "session": {
+                    "access_token": access_token,
+                    "expire": 1000 * 60 * 60 * 24 * 30
+                },
+                "error": ""
+            });
+        }
+    });
+}
+
 //Exporto las funciones de la librería
 module.exports = {
     censureUser: censureUser,
-    valueToStars: valueToStars
+    valueToStars: valueToStars,
+    resJson: resJson
 };
 
