@@ -15,7 +15,8 @@
         'kafhe.directives',
         'angular-growl',
         'angular-timeline',
-        'pascalprecht.translate'
+        'pascalprecht.translate',
+        'angular-toArrayFilter'
     ]);
 
     //Creo los módulos de controladores, utiles y servicios en blanco, y los iré llenando más adelante

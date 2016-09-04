@@ -30,7 +30,7 @@
                     $scope.changeLang = fnChangeLang;
                     $scope.growlNotification = fnGrowlNotification;
                     $scope.toggleProfileMenu = fnToggleProfile;
-                    $scope.pageRoute = fnPageRoute;
+                    // $scope.pageRoute = fnPageRoute;
 
                     /************* FUNCIONES *************/
                     /**
@@ -39,12 +39,15 @@
                      * @param callback: Función a ejecutar cuando se termine la actualización
                      */
                     function fnUpdateGameData(callback) {
-                        if (!$scope.global.loaded || !$scope.global.user || !$scope.global.gamedata.meals || !$scope.global.gamedata.drinks || !$scope.global.gamedata.skills) {
-                            KGame.getGameData(function (user, meals, drinks, skills) {
+                        if (!$scope.global.loaded || !$scope.global.user || !$scope.global.gamedata.meals || !$scope.global.gamedata.drinks || !$scope.global.gamedata.skills || !$scope.global.gamedata.talents || !$scope.global.gamedata.objects || !$scope.global.gamedata.places) {
+                            KGame.getGameData(function (user, meals, drinks, skills, talents, places, objects) {
                                 // Actualizo las variables de información general
                                 $scope.global.gamedata.meals = meals;
                                 $scope.global.gamedata.drinks = drinks;
                                 $scope.global.gamedata.skills = skills;
+                                $scope.global.gamedata.talents = talents;
+                                $scope.global.gamedata.places = places;
+                                $scope.global.gamedata.objects = objects;
                                 $scope.global.loaded = true;
 
                                 // Ahora actualizo y proceso los datos del usuario
@@ -67,66 +70,70 @@
                      * 2. Recoge las habilidades disponibles
                      */
                     function fnUpdateUserObject(user) {
-                        $scope.global.user = user;
 
-                        // Saco el arma equipado
-                        var selector = ':has(:root > .id:val("' + user.game.equipment.weapon + '"))';
-                        var res = JSONSelect.match(selector, user.game.inventory.weapons);
-                        if (res.length === 1) {
-                            $scope.global.equipment.weapon = res[0];
-                        } else {
-                            $scope.global.equipment.weapon = null;
-                        }
+                        //Sacar del objeto user el personaje
+                        $scope.global.character = user.game.character;
+                        user.game.character = null;
+                        /*
+                         // Saco el arma equipado
+                         var selector = ':has(:root > .id:val("' + user.game.equipment.weapon + '"))';
+                         var res = JSONSelect.match(selector, user.game.inventory.weapons);
+                         if (res.length === 1) {
+                         $scope.global.equipment.weapon = res[0];
+                         } else {
+                         $scope.global.equipment.weapon = null;
+                         }
 
-                        // Saco la armadura equipada
-                        selector = ':has(:root > .id:val("' + user.game.equipment.armor + '"))';
-                        res = JSONSelect.match(selector, user.game.inventory.armors);
-                        if (res.length === 1) {
-                            $scope.global.equipment.armor = res[0];
-                        } else {
-                            $scope.global.equipment.armor = null;
-                        }
+                         // Saco la armadura equipada
+                         selector = ':has(:root > .id:val("' + user.game.equipment.armor + '"))';
+                         res = JSONSelect.match(selector, user.game.inventory.armors);
+                         if (res.length === 1) {
+                         $scope.global.equipment.armor = res[0];
+                         } else {
+                         $scope.global.equipment.armor = null;
+                         }
 
-                        // Limpio las skills para generar el array de nuevo
-                        $scope.global.skills = [];
-                        // Ahora saco las habilidades de arma equipada
-                        if ($scope.global.equipment.weapon && $scope.global.equipment.weapon !== '') {
-                            $scope.global.equipment.weapon.skills.forEach(function (skill) {
-                                $scope.global.skills.push(skill);
-                            });
-                        }
+                         // Limpio las skills para generar el array de nuevo
+                         $scope.global.skills = [];
+                         // Ahora saco las habilidades de arma equipada
+                         if ($scope.global.equipment.weapon && $scope.global.equipment.weapon !== '') {
+                         $scope.global.equipment.weapon.skills.forEach(function (skill) {
+                         $scope.global.skills.push(skill);
+                         });
+                         }
 
-                        // Ahora saco las habilidades de armadura equipada
-                        if ($scope.global.equipment.armor && $scope.global.equipment.armor !== '') {
-                            $scope.global.equipment.armor.skills.forEach(function (skill) {
-                                $scope.global.skills.push(skill);
-                            });
-                        }
+                         // Ahora saco las habilidades de armadura equipada
+                         if ($scope.global.equipment.armor && $scope.global.equipment.armor !== '') {
+                         $scope.global.equipment.armor.skills.forEach(function (skill) {
+                         $scope.global.skills.push(skill);
+                         });
+                         }
 
-                        // El inventario del jugador
-                        $scope.global.inventory = user.game.inventory;
+                         // El inventario del jugador
+                         $scope.global.inventory = user.game.inventory;*/
 
                         // Variables para pintar en el front
                         // Reputación
                         //$scope.global.print.toastPoints = $scope.Math.floor(user.game.stats.reputation / CONFIG.constReputationToToastProportion);
                         $scope.global.print.tostolares = user.game.tostolares;
+                        $scope.global.print.fame = user.game.fame;
+                        $scope.global.print.rank = user.game.rank;
 
+                        $scope.global.user = user;
                         $scope.global.leader = user.leader;
 
-                        var cantidad = user.game.stats.reputation % CONFIG.constReputationToToastProportion;
-                        // Lo paso de (0 a config) a un valor 0-100%
-                        var proporcion = cantidad * 100 / CONFIG.constReputationToToastProportion;
-                        // Ahora, como mis grados van de 0 a 90, hago la regla de tres
-                        proporcion = proporcion * 90 / 100;
-                        // Para mí 90º es lo más bajo, por lo que tengo que invertirlo
-                        var degrees = $scope.Math.round(90 - proporcion);
-                        $scope.global.print.reputationDegreeStyle = {"transform": "rotate(" + degrees + "deg)"};
-                        // Vida
-                        $scope.global.print.lifeBarStyle = {"width": user.game.stats.life + "%"};
+                        /*var cantidad = user.game.stats.reputation % CONFIG.constReputationToToastProportion;
+                         // Lo paso de (0 a config) a un valor 0-100%
+                         var proporcion = cantidad * 100 / CONFIG.constReputationToToastProportion;
+                         // Ahora, como mis grados van de 0 a 90, hago la regla de tres
+                         proporcion = proporcion * 90 / 100;
+                         // Para mí 90º es lo más bajo, por lo que tengo que invertirlo
+                         var degrees = $scope.Math.round(90 - proporcion);
+                         $scope.global.print.reputationDegreeStyle = {"transform": "rotate(" + degrees + "deg)"};*/
 
                         // Las notificaciones, tanto de la partida como del jugador
                         var notifications = user.game.notifications;
-                        notifications = notifications.concat(user.game.gamedata.notifications);
+                        // notifications = notifications.concat(user.game.gamedata.notifications);
                         // Ahora tengo que ordenar las notificaciones por fecha
                         notifications.sort(function (a, b) {
                             if (a.timestamp > b.timestamp) {
@@ -158,44 +165,46 @@
                      */
                     function fnGoToPage(page) {
                         $scope.currentPage = page;
-                        $location.path($scope.pageRoute(page));
+                        // $location.path($scope.pageRoute(page));
+                        $location.path(ROUTES[page]);
                     }
 
                     /**
                      * Comprueba si estoy en la pagina esta
                      */
                     function fnIsCurrentPage(page) {
-                        var donde = $scope.pageRoute(page);
+                        // var donde = $scope.pageRoute(page);
+                        var donde = ROUTES[page];
                         return ($location.path() === null || $location.path() === donde);
                     }
 
                     /**
                      * Devuelve la ruta de una página
                      */
-                    function fnPageRoute(page) {
-                        var route;
-                        switch (page) {
-                            case 'home':
-                                route = ROUTES.home;
-                                break;
-                            case 'breakfast':
-                                route = ROUTES.breakfast;
-                                break;
-                            case 'team':
-                                route = ROUTES.team;
-                                break;
-                            case 'explore':
-                                route = ROUTES.explore;
-                                break;
-                            case 'login':
-                                route = ROUTES.login;
-                                break;
-                            case 'profile':
-                                route = ROUTES.profile;
-                                break;
-                        }
-                        return route;
-                    }
+                    /*function fnPageRoute(page) {
+                     var route;
+                     switch (page) {
+                     case 'home':
+                     route = ROUTES.home;
+                     break;
+                     case 'breakfast':
+                     route = ROUTES.breakfast;
+                     break;
+                     case 'team':
+                     route = ROUTES.team;
+                     break;
+                     case 'explore':
+                     route = ROUTES.explore;
+                     break;
+                     case 'login':
+                     route = ROUTES.login;
+                     break;
+                     case 'profile':
+                     route = ROUTES.profile;
+                     break;
+                     }
+                     return route;
+                     }*/
 
                     /**
                      * Función de cambio de idioma
@@ -245,11 +254,15 @@
                     function fnClearGlobalVars() {
                         $scope.global = {
                             user: {},
+                            character: {},
                             leader: false,
                             gamedata: {
                                 meals: [],
                                 drinks: [],
-                                skills: []
+                                skills: [],
+                                talents: [],
+                                places: [],
+                                objects: []
                             },
                             print: {},
                             skills: [],

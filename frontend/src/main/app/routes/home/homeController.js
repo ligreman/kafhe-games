@@ -18,8 +18,8 @@
                     $scope.isMine = fnIsMine;
 
                     // Actualizamos los datos obligatoriamente por las notificaciones
-                    $scope.getNotifications();
-                    $scope.getShopItems();
+                    // $scope.getNotifications();
+                    // $scope.getShopItems();
 
                     /**
                      * Una vez he terminado de actualizar los datos

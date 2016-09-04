@@ -5,7 +5,7 @@
     "angular-messages": "^1.5.5",
     "jshashes": "^1.0.5",
     "normalize-css": "^4.1.1",
-    "jquery": "^2.2.3",
+    "jquery": "^3.1.0",
     "ngDraggable": "^0.1.8",
     "angular-translate-interpolation-messageformat": "^2.11.0",
     "angular-timeline": "^1.6.2",
@@ -17,6 +17,7 @@
     "angular-translate-storage-cookie": "^2.11.0",
     "angular-growl-v2": "^0.7.9",
     "angular-material": "^1.0.8",
-    "angular-translate-storage-local": "^2.11.0"
+    "angular-translate-storage-local": "^2.11.0",
+    "angular-toArrayFilter": "^1.0.1"
   }
 }

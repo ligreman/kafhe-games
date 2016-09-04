@@ -14,7 +14,7 @@
 
                     // Actualizamos mis datos de partida en caso de que haga falta
                     $scope.updateGameData(function () {
-                        if ($scope.global.user.game.order && $scope.global.user.game.order.meal) {
+                        if ($scope.global.user.game.order && $scope.global.user.game.order.meal && $scope.global.user.game.order.drink) {
                             $scope.selection.meal = $scope.global.user.game.order.meal._id;
                             $scope.selection.drink = $scope.global.user.game.order.drink._id;
                             $scope.selection.ito = $scope.global.user.game.order.ito;
