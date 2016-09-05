@@ -1,15 +1,11 @@
 errUserPassNotValid - Usuario o contraseña no válidos
 errSession - Error en la sesión
 errMongo - Error de mongo
+errMongoSave - Error al salvar un objeto en Mongo
 
 errGameDataNotFound - Error al recuperar los datos del sistema
+errGameStatusNotAllowed - No se puede realizar esta acción en esta fase de la partida
 
---------------------------
-
-errEquipNoItem - No he encontrado el objeto a equipar en el inventario
-errEquipNoSpace - No puedo equipar el objeto porque ya tengo equipado algo en ese hueco (arma/armadura)
-errEquipDestroyNotFound - No he encontrado el objeto a destruir
-errMongoSave - Error al salvar un objeto en Mongo
 errLogout - Error al salir
 errOrderList - Error obteniendo la lista de usuarios con sus pedidos
 errOrderNewParams - Error al hacer nuevo pedido ya que faltan parámetros
@@ -17,31 +13,15 @@ errOrderNewUnknown - Error inesperado ya que no viene el meal o drink que se qui
 errOrderNewNotFound - No se ha encontrado el meal o drink que se quiere pedir
 errOrderAllNotFound - Error al buscar las meals o drinks en Mongo
 errOrderNotBothIto - O meal o drink no pueden ser ITO
+
+--------------------------
+
 errProfileNoValidData - No había datos válidos de perfil que actualizar
 errSkillListNotFound - Error al buscar la lista de habilidades del juego
 errSkillList - Error al recuperar habilidades
-errFuryAlreadyActive - Ya estaba activado el modo furia
-errFuryNotEnoughPoints - No tienes los puntos necesarios para activar furia
-errUserListNotFound - Error al buscar la lista de usuarios de la partida
 errAdminNewUserNoUsername - No se ha enviado el parámetro username en la petición de crear nuevo usuario
-errGameStatusNotAllowed - No se puede realizar esta acción en esta fase de la partida
+
 errMongoDuplicatedUsername - Ya existe otro usuario con ese username
-errFurnaceTostemNoTostems - No se han enviado los id de ambos tostem a meter al horno
-errFurnaceTostemNotFound - No se han encontrado en el inventario del usuario los dos tostems
-errFurnaceTostemAnyEquipped - Alguno de los tostem está equipados
-errFurnaceTostemSameTostem - Se ha enviado el mismo ID de tostem por duplicado
-
-errFurnaceRuneNoRunes - No se han enviado los id de ambas runas meter al horno
-errFurnaceRuneNotFound - No se han encontrado en el inventario del usuario las dos runas
-errFurnaceRuneAnyEquipped - Alguna de las runas está equipados
-errFurnaceRuneSameRune - Se ha enviado el mismo ID de runa por duplicado
-
-errForgeNoParams - No se han enviado los datos necesarios para forjar
-errForgeNoStonesLeft - No tengo piedras de forja suficientes
-errForgeNoClassFound - No existe esa clase de objeto a forjar
-errForgeNoTostemOrRuneFound - No se han encontrado el tostem o la runa en el inventario del usuario
-errForgeTostemOrRuneEquipped - Alguno de los componentes estaba equipado actualmente
-errForgeRuneStatsNotFound - No se han encontrado las características de la runa
 errNoFormulae - No existe alguna de las fórmulas en la habilidad
 
 errSkillNoParams - No se han enviado los parámetros necesarios
