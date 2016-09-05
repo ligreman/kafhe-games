@@ -9,7 +9,7 @@ module.exports = function (mongoose) {
         name: {type: String, required: true},
         description: {type: String, required: true},
         action: {type: String, required: true},
-        uses: {type: Number, default: 0}
+        uses: {type: Number, required: true}
     }, {versionKey: false});
 
     //Declaro y devuelvo el modelo

@@ -8,7 +8,7 @@ module.exports = function (mongoose) {
         id: {type: String, unique: true, required: true},
         name: {type: String, required: true},
         description: {type: String, required: true},
-        branch: {type: String, enum: ['combat', 'exploration', 'survival']},
+        branch: {type: String, required: true, enum: ['combat', 'exploration', 'survival']},
         skills: [String], // Array de ids de skills que otorga este talento
         required: [String] // Array de ids de talentos requeridos
     }, {versionKey: false});

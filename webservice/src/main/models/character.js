@@ -6,66 +6,66 @@ module.exports = function (mongoose) {
     // local con la versión de los datos (versión del juego)
 
     var LogSchema = mongoose.Schema({
-        text: String,
-        'type': {type: String}, // combat, exploration,
-        subtype: String, // extended
-        date: Number
+        text: {type: String, required: true},
+        'type': {type: String, enum: ['combat', 'exploration'], required: true}, // combat, exploration,
+        subtype: {type: String, enum: ['extended'], default: ''}, // extended
+        date: {type: Number, default: 0}
     }, {versionKey: false});
 
     //Modelo para los usuarios, coleccion Character
     var CharacterSchema = mongoose.Schema({
-            name: String,
-            level: Number,
+            name: {type: String, default: ''},
+            level: {type: Number, default: 1},
             location: {
-                place: String,
-                level: Number // 0 superficie
+                place: {type: String, default: ''},
+                level: {type: Number, default: 0} // 0 superficie
             },
             stats: {
-                damage: Number,
-                reduction: Number,
-                life: Number,
-                toxicity: Number,
-                perception: Number,
-                reflexes: Number,
-                stealth: Number,
-                hunger: Number,
-                fatigue: Number,
-                venom: Number,
-                healing: Number
+                damage: {type: Number, default: 0},
+                reduction: {type: Number, default: 0},
+                life: {type: Number, default: 0},
+                toxicity: {type: Number, default: 0},
+                perception: {type: Number, default: 0},
+                reflexes: {type: Number, default: 0},
+                stealth: {type: Number, default: 0},
+                hunger: {type: Number, default: 0},
+                fatigue: {type: Number, default: 0},
+                venom: {type: Number, default: 0},
+                healing: {type: Number, default: 0}
             },
-            score: Number,
+            score: {type: Number, default: 0},
             talents: {
-                points: Number,
+                points: {type: Number, default: 0},
                 combat: [{
-                    talent: String,
-                    level: Number
+                    talent: {type: String, required: true},
+                    level: {type: Number, default: 0}
                 }],
                 survival: [{
-                    talent: String,
-                    level: Number
+                    talent: {type: String, required: true},
+                    level: {type: Number, default: 0}
                 }],
                 exploration: [{
-                    talent: String,
-                    level: Number
+                    talent: {type: String, required: true},
+                    level: {type: Number, default: 0}
                 }]
             },
             log: [LogSchema],
-            skill_slots: Number,
+            skill_slots: {type: Number, default: 0},
             skills: [{
-                skill: String,
-                uses: Number
+                skill: {type: String, required: true},
+                uses: {type: Number, default: 0}
             }],
-            inventory_slots: Number,
+            inventory_slots: {type: Number, default: 0},
             inventory: {
-                object: String,
-                uses: Number
+                object: {type: String, required: true},
+                uses: {type: Number, default: 0}
             },
             weapon: {
-                name: String,
-                ammo: Number,
-                damage: Number,
-                accuracy: Number,
-                level: Number
+                name: {type: String, required: true},
+                ammo: {type: Number, default: 0},
+                damage: {type: Number, default: 0},
+                accuracy: {type: Number, default: 0},
+                level: {type: Number, default: 0}
             }
         },
         {versionKey: false});

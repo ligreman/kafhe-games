@@ -5,56 +5,34 @@ module.exports = function (mongoose) {
     // var skillSchema = require('./skillSchema')(mongoose);
     var notificationSchema = require('./notificationSchema')(mongoose);
 
-    /*
-     id
-     log
-     stats
-     score: puntuación que consigue en los juegos
-     talents: copia de la plantilla modificada con lo que va el jugador subiendo etc.
-     skill_slots
-     skills
-     skill_id
-     uses
-     inventory_slots
-     inventory
-     object_id
-     uses
-     weapon
-     name
-     ammo
-     damage
-     accuracy
-     level
-     */
-
     //Modelo para los usuarios, coleccion Users
     var UserSchema = mongoose.Schema({
         username: {type: String, unique: true, required: true},
         password: {type: String, select: false, required: true},
-        group: Number,
-        alias: String,
-        leader: Boolean,
-        times: Number,
-        calls: Number,
-        avatar: String,
+        group: {type: Number, required: true},
+        alias: {type: String, default: ''},
+        leader: {type: Boolean, default: false},
+        times: {type: Number, default: 0},
+        calls: {type: Number, default: 0},
+        avatar: {type: String, default: ''},
         game: {
-            gamedata: {type: mongoose.Schema.Types.ObjectId, ref: 'Game'},
-            rank: Number,
+            gamedata: {type: mongoose.Schema.Types.ObjectId, ref: 'Game', default: null},
+            rank: {type: Number, default: 1},
             tostolares: {type: Number, default: 0},
             fame: {type: Number, default: 0},
-            character: {type: mongoose.Schema.Types.ObjectId, ref: 'Character'},
+            character: {type: mongoose.Schema.Types.ObjectId, ref: 'Character', default: null},
             warehouse: [{}],
-            afk: Boolean,
-            last_activity: Number,
+            afk: {type: Boolean, default: false},
+            last_activity: {type: Number, default: 0},
             order: {
-                meal: {type: mongoose.Schema.Types.ObjectId, ref: 'Meal'},
-                drink: {type: mongoose.Schema.Types.ObjectId, ref: 'Drink'},
-                ito: Boolean
+                meal: {type: mongoose.Schema.Types.ObjectId, ref: 'Meal', default: null},
+                drink: {type: mongoose.Schema.Types.ObjectId, ref: 'Drink', default: null},
+                ito: {type: Boolean, default: false}
             },
             last_order: {
-                meal: {type: mongoose.Schema.Types.ObjectId, ref: 'Meal'},
-                drink: {type: mongoose.Schema.Types.ObjectId, ref: 'Drink'},
-                ito: Boolean
+                meal: {type: mongoose.Schema.Types.ObjectId, ref: 'Meal', default: null},
+                drink: {type: mongoose.Schema.Types.ObjectId, ref: 'Drink', default: null},
+                ito: {type: Boolean, default: false}
             },
             notifications: [notificationSchema]
         }

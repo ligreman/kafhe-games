@@ -6,8 +6,8 @@ module.exports = function (mongoose) {
     //Modelo para la comida, coleccion Meals
     var MealSchema = mongoose.Schema({
         id: {type: String, unique: true, required: true},
-        name: String,
-        ito: Boolean
+        name: {type: String, required: true},
+        ito: {type: Boolean, default: false}
     }, {versionKey: false});
 
     //Declaro y devuelvo el modelo

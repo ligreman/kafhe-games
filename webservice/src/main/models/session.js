@@ -7,7 +7,7 @@ module.exports = function (mongoose) {
     var SessionSchema = mongoose.Schema({
         username: {type: String, unique: true, required: true},
         token: {type: String, required: true},
-        timestamp: Number
+        timestamp: {type: Number, required: true}
     }, {versionKey: false});
 
     //Declaro y devuelvo el modelo
