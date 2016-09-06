@@ -5,7 +5,6 @@ module.exports = function (app) {
 
     var express = require('express'),
         passport = require('passport'),
-        utils = require('../modules/utils'),
         responseUtils = require('../modules/responseUtils'),
         orderRouter = express.Router(),
         bodyParser = require('body-parser'),
@@ -18,7 +17,6 @@ module.exports = function (app) {
     orderRouter.use(bodyParser.json());
     orderRouter.use(passport.authenticate('bearer', {
         session: false
-        //failureRedirect: '/error/session'
     }));
 
     /**
@@ -37,8 +35,7 @@ module.exports = function (app) {
             .exec(function (error, playerList) {
                 if (error) {
                     console.tag('MONGO').error(error);
-                    //res.redirect('/error/errOrderList');
-                    utils.error(res, 400, 'errOrderList');
+                    responseUtils.responseError(res, 400, 'errOrderList');
                     return;
                 }
 
@@ -55,16 +52,8 @@ module.exports = function (app) {
                     });
                 });
 
-                res.json({
-                    "data": {
-                        "orders": pedidos
-                    },
-                    "session": {
-                        "access_token": req.authInfo.access_token,
-                        "expire": 1000 * 60 * 60 * 24 * 30
-                    },
-                    "error": ""
-                });
+                // Respondo
+                responseUtils.responseJson(res, {"orders": pedidos}, req.authInfo.access_token);
             });
     });
 
@@ -84,7 +73,7 @@ module.exports = function (app) {
             .exec(function (error, playerList) {
                 if (error) {
                     console.tag('MONGO').error(error);
-                    utils.error(res, 400, 'errOrderList');
+                    responseUtils.responseError(res, 400, 'errOrderList');
                     return;
                 }
 
@@ -104,16 +93,8 @@ module.exports = function (app) {
                     });
                 });
 
-                res.json({
-                    "data": {
-                        "players": pedidos
-                    },
-                    "session": {
-                        "access_token": req.authInfo.access_token,
-                        "expire": 1000 * 60 * 60 * 24 * 30
-                    },
-                    "error": ""
-                });
+                // Respondo
+                responseUtils.responseJson(res, {"players": pedidos}, req.authInfo.access_token);
             });
     });
 
@@ -127,8 +108,7 @@ module.exports = function (app) {
         // Compruebo el estado de la partida, si es 1 ó 2. Si no, error
         if (user.game.gamedata.status !== 1 && user.game.gamedata.status !== 2) {
             console.tag('ORDER-DELETE').error('No se permite esta acción en el estado actual de la partida');
-            //res.redirect('/error/errGameStatusNotAllowed');
-            utils.error(res, 400, 'errGameStatusNotAllowed');
+            responseUtils.responseError(res, 400, 'errGameStatusNotAllowed');
             return;
         }
 
@@ -136,25 +116,8 @@ module.exports = function (app) {
         user.game.order.drink = null;
         user.game.order.ito = null;
 
-        user.save(function (err) {
-            if (err) {
-                console.tag('MONGO').error(err);
-                //res.redirect('/error/errMongoSave');
-                utils.error(res, 400, 'errMongoSave');
-                return;
-            } else {
-                res.json({
-                    "data": {
-                        "user": responseUtils.censureUser(user)
-                    },
-                    "session": {
-                        "access_token": req.authInfo.access_token,
-                        "expire": 1000 * 60 * 60 * 24 * 30
-                    },
-                    "error": ""
-                });
-            }
-        });
+        // Guardo el usuario y salvo
+        responseUtils.saveUserAndResponse(res, user, req.authInfo.access_token);
     });
 
     /**
@@ -169,16 +132,14 @@ module.exports = function (app) {
         // Compruebo el estado de la partida, si es 1 ó 2. Si no, error
         if (user.game.gamedata.status !== 1 && user.game.gamedata.status !== 2) {
             console.tag('ORDER-DELETE').error('No se permite esta acción en el estado actual de la partida');
-            //res.redirect('/error/errGameStatusNotAllowed');
-            utils.error(res, 400, 'errGameStatusNotAllowed');
+            responseUtils.responseError(res, 400, 'errGameStatusNotAllowed');
             return;
         }
 
         // Compruebo que los parámetros son correctos (no falta ninguno y que existen sus ids)
         if (!order.meal || !order.drink || order.ito === undefined) {
             console.tag('ORDER-NEW').error('Faltan parámetros en la petición');
-            //res.redirect('/error/errOrderNewParams');
-            utils.error(res, 400, 'errOrderNewParams');
+            responseUtils.responseError(res, 400, 'errOrderNewParams');
             return;
         }
 
@@ -196,8 +157,7 @@ module.exports = function (app) {
                     // Si uno de los dos no es itable, error
                     if (!newMeal.ito || !newDrink.ito) {
                         console.tag('ORDER-NEW').error('O la comida o la bebida no forma parte de un desayuno ITO');
-                        //res.redirect('/error/errOrderNotBothIto');
-                        utils.error(res, 400, 'errOrderNotBothIto');
+                        responseUtils.responseError(res, 400, 'errOrderNotBothIto');
                         return;
                     }
                 }
@@ -207,37 +167,16 @@ module.exports = function (app) {
                 user.game.order.drink = newDrink;
                 user.game.order.ito = order.ito;
 
-                user.save(function (err, newOrder, numAffected) {
-                    if (err) {
-                        console.tag('MONGO').error(err);
-                        //res.redirect('/error/errMongoSave');
-                        utils.error(res, 400, 'errMongoSave');
-                        return;
-                    } else {
-                        res.json({
-                            "data": {
-                                "user": responseUtils.censureUser(user)
-                            },
-                            "session": {
-                                "access_token": req.authInfo.access_token,
-                                "expire": 1000 * 60 * 60 * 24 * 30
-                            },
-                            "error": ""
-                        });
-                    }
-                });
+                // Guardo el usuario y salvo
+                responseUtils.saveUserAndResponse(res, user, req.authInfo.access_token);
             } else {
                 console.tag('ORDER-NEW').error('No ha llegado el newMeal o newDrink. Puede que no los haya encontrado en Mongo');
-                //res.redirect('/error/errOrderNewUnknown');
-                utils.error(res, 400, 'errOrderNewUnknown');
-                return;
+                responseUtils.responseError(res, 400, 'errOrderNewUnknown');
             }
 
         }, function (error) {
             console.tag('MONGO').error(error);
-            //res.redirect('/error/errOrderNewNotFound');
-            utils.error(res, 400, 'errOrderNewNotFound');
-            return;
+            responseUtils.responseError(res, 400, 'errOrderNewNotFound');
         });
     });
 
@@ -251,21 +190,11 @@ module.exports = function (app) {
             if (!meals || !drinks) {
                 console.tag('MONGO').error(err);
                 //res.redirect('/error/errOrderAllNotFound');
-                utils.error(res, 400, 'errOrderAllNotFound');
+                responseUtils.responseError(res, 400, 'errOrderAllNotFound');
                 return;
-            } else {
-                res.json({
-                    "data": {
-                        "meals": meals,
-                        "drinks": drinks
-                    },
-                    "session": {
-                        "access_token": req.authInfo.access_token,
-                        "expire": 1000 * 60 * 60 * 24 * 30
-                    },
-                    "error": ""
-                });
             }
+
+            responseUtils.responseJson(res, {"meals": meals, "drinks": drinks}, req.authInfo.access_token);
         };
 
         // Lanzo las dos consultas a Mongo

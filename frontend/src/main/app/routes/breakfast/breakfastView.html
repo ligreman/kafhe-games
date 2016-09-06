@@ -12,7 +12,7 @@
                 <md-radio-group ng-model="selection.meal">
                     <md-radio-button class=""
                                      ng-repeat="meal in global.gamedata.meals | toArray | filter: itoSelected | orderBy: 'name'"
-                                     value="{{meal.id}}">
+                                     value="{{meal._id}}">
                         {{meal.name}}
                     </md-radio-button>
                 </md-radio-group>
@@ -23,7 +23,7 @@
                 <md-radio-group ng-model="selection.drink" class="">
                     <md-radio-button class=""
                                      ng-repeat="drink in global.gamedata.drinks | toArray | filter: itoSelected | orderBy: 'name'"
-                                     value="{{drink.id}}">
+                                     value="{{drink._id}}">
                         {{drink.name}}
                     </md-radio-button>
                 </md-radio-group>

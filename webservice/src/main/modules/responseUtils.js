@@ -91,37 +91,78 @@ function valueToStars(value, minValue, maxValue) {
 }
 
 /**
- * Respuesta estándar del servicio, devolviendo el objeto del usuario actualizado
- * @param user Objeto usuario
+ * Respuesta estándar del servicio
+ * @param data Objeto con los datos a devolver
  * @param access_token Token
  * @param res Objeto respuesta
  */
-function resJson(user, access_token, res) {
+function responseJson(res, data, access_token) {
     // Guardo el usuario
+    res.json({
+        "data": data,
+        "session": {
+            "access_token": access_token,
+            "expire": 1000 * 60 * 60 * 24 * 30
+        },
+        "error": ""
+    });
+}
+
+/**
+ * Guarda el usuario y responde con los datos del mismo
+ * @param res Objeto respuesta
+ * @param user Objeto con los datos a devolver
+ * @param access_token Token
+ */
+function saveUserAndResponse(res, user, access_token) {
     user.save(function (err) {
         if (err) {
             console.tag('MONGO').error(err);
-            utils.error(res, 400, 'errMongoSave');
-            return;
+            responseError(res, 400, 'errMongoSave');
         } else {
-            res.json({
-                "data": {
-                    "user": responseUtils.censureUser(user)
-                },
-                "session": {
-                    "access_token": access_token,
-                    "expire": 1000 * 60 * 60 * 24 * 30
-                },
-                "error": ""
-            });
+            // Respondo
+            responseJson(res, {"user": censureUser(user)}, access_token);
         }
     });
 }
+
+
+/**
+ * Devuelve un error en JSON
+ * @param res
+ * @param code
+ * @param errCode
+ */
+var responseError = function (res, code, errCode) {
+    var response = {};
+
+    switch (code) {
+        case 401:
+        case 403:
+            response = {
+                "login": false,
+                "error": errCode
+            };
+            break;
+        case 400:
+        case 500:
+            response = {
+                "error": errCode
+            };
+            break;
+    }
+
+    console.error(code + ' ' + errCode);
+
+    res.status(code).json(response);
+};
 
 //Exporto las funciones de la librería
 module.exports = {
     censureUser: censureUser,
     valueToStars: valueToStars,
-    resJson: resJson
+    responseJson: responseJson,
+    saveUserAndResponse: saveUserAndResponse,
+    responseError: responseError
 };
 

@@ -8,6 +8,7 @@ module.exports = function (app) {
         bodyParser = require('body-parser'),
         Q = require('q'),
         sessionUtils = require('../modules/sessionUtils'),
+        responseUtils = require('../modules/responseUtils'),
         loginRouter = express.Router(),
         logoutRouter = express.Router();
 
@@ -17,8 +18,6 @@ module.exports = function (app) {
     loginRouter.use(bodyParser.urlencoded({extended: false}));
     loginRouter.use(passport.authenticate('local', {
         session: false
-        //successRedirect: '/ok',
-        // failureRedirect: '/error/login'
     }));
 
     /**
@@ -26,15 +25,7 @@ module.exports = function (app) {
      * Si se hace login correctamente, pasará aquí
      */
     loginRouter.post('/', function (req, res, next) {
-        res.json({
-            "login": true,
-            "session": {
-                "access_token": req.authInfo.access_token,
-                // 30 días de expiración. Le paso el tiempo que le queda al token
-                "expire": 1000 * 60 * 60 * 24 * 30
-            },
-            "error": ""
-        });
+        responseUtils.responseJson(res, {"login": true}, req.authInfo.access_token);
     });
 
     //**************** LOGOUT ROUTER **********************
@@ -56,15 +47,10 @@ module.exports = function (app) {
             })
             .then(sessionUtils.deleteSessions)
             .done(function () {
-                res.json({
-                    "logout": true,
-                    "error": ""
-                });
+                responseUtils.responseJson(res, {"logout": true}, null);
             }, function (error) {
                 console.tag('MONGO').error(error);
-                //res.redirect('/error/errLogout');
-                utils.error(res, 400, 'errLogout');
-                return;
+                responseUtils.responseError(res, 400, 'errLogout');
             });
     });
 

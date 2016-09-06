@@ -6,7 +6,6 @@ module.exports = function (app) {
     var express = require('express'),
         passport = require('passport'),
         validator = require('validator'),
-        utils = require('../modules/utils'),
         config = require('../modules/config'),
         responseUtils = require('../modules/responseUtils'),
         characterRouter = express.Router(),
@@ -37,16 +36,8 @@ module.exports = function (app) {
     characterRouter.get('/', function (req, res, next) {
         // El objeto user
         var usuario = req.user;
-        res.json({
-            "data": {
-                "character": usuario.game.character//responseUtils.censureUser(usuario)
-            },
-            "session": {
-                "access_token": req.authInfo.access_token,
-                "expire": 1000 * 60 * 60 * 24 * 30
-            },
-            "error": ""
-        });
+
+        responseUtils.responseJson(res, {"character": usuario.game.character}, req.authInfo.access_token);
     });
 
     /**
@@ -57,21 +48,24 @@ module.exports = function (app) {
         // El objeto user
         var usuario = req.user;
 
-        // Compruebo si puedo contratar
+        // Compruebo si puedo contratar por estado de la partida
+        if (usuario.game.gamedata.status === null || usuario.game.gamedata.status !== config.GAME_STATUS.WAITING) {
+            console.tag('TEAM-HIRE').error('No se puede contratar en este momento');
+            responseUtils.responseError(res, 400, 'errCharacterHireStatus');
+            return;
+        }
+
+        // Compruebo si puedo contratar por límite
         if (usuario.game.character !== null) {
             console.tag('TEAM-HIRE').error('Límite de mercenarios alcanzado');
-            utils.error(res, 400, 'errTeamMaxMercs');
+            responseUtils.responseError(res, 400, 'errTeamMaxMercs');
             return;
         }
 
         // Genero un objeto de mercenario nuevo
         var newChar = new models.Character({
-            name: String,
-            level: Number,
-            location: {
-                place: String,
-                level: Number // 0 superficie
-            },
+            name: "Manolo",
+            level: usuario.game.rank,
             stats: {
                 damage: Number,
                 reduction: Number,
@@ -84,40 +78,6 @@ module.exports = function (app) {
                 fatigue: Number,
                 venom: Number,
                 healing: Number
-            },
-            score: Number,
-            talents: {
-                points: Number,
-                combat: [{
-                    talent: String,
-                    level: Number
-                }],
-                survival: [{
-                    talent: String,
-                    level: Number
-                }],
-                exploration: [{
-                    talent: String,
-                    level: Number
-                }]
-            },
-            log: [LogSchema],
-            skill_slots: Number,
-            skills: [{
-                skill: String,
-                uses: Number
-            }],
-            inventory_slots: Number,
-            inventory: {
-                object: String,
-                uses: Number
-            },
-            weapon: {
-                name: String,
-                ammo: Number,
-                damage: Number,
-                accuracy: Number,
-                level: Number
             }
         });
 
@@ -125,34 +85,14 @@ module.exports = function (app) {
         newChar.save(function (err) {
             if (err) {
                 console.tag('MONGO').error(err);
-                utils.error(res, 400, 'errMongoSave');
+                responseUtils.responseError(res, 400, 'errMongoSave');
                 return;
-            } else {
-                // pongo el id del personaje creado en el usuario
-                usuario.game.character = newChar._id;
-
-                responseUtils.resJson(usuario, req.authInfo.access_token, res);
-
-                /*// Guardo el usuario
-                 usuario.save(function (err) {
-                 if (err) {
-                 console.tag('MONGO').error(err);
-                 utils.error(res, 400, 'errMongoSave');
-                 return;
-                 } else {
-                 res.json({
-                 "data": {
-                 "user": responseUtils.censureUser(usuario)
-                 },
-                 "session": {
-                 "access_token": req.authInfo.access_token,
-                 "expire": 1000 * 60 * 60 * 24 * 30
-                 },
-                 "error": ""
-                 });
-                 }
-                 });*/
             }
+
+            // pongo el id del personaje creado en el usuario
+            usuario.game.character = newChar._id;
+
+            responseUtils.responseJson(res, usuario, req.authInfo.access_token);
         });
     });
 
@@ -167,50 +107,30 @@ module.exports = function (app) {
         // Compruebo si puedo despedir
         if (usuario.game.character === null) {
             console.tag('TEAM-HIRE').error('Límite de mercenarios alcanzado');
-            utils.error(res, 400, 'errTeamMaxMercs');
+            responseUtils.responseError(res, 400, 'errTeamMaxMercs');
             return;
         }
 
         models.Character.findById(usuario.game.character._id, function (err, char) {
             if (err) {
                 console.tag('MONGO').error(err);
-                utils.error(res, 400, 'errMongoSave');
+                responseUtils.responseError(res, 400, 'errMongoSave');
                 return;
-            } else {
-                // Borro el pj
-                char.remove(function (err, charRemoved) {
-                    if (err) {
-                        console.tag('MONGO').error(err);
-                        utils.error(res, 400, 'errMongoSave');
-                        return;
-                    } else {
-                        // Guardo el objeto usuario sin pj
-                        usuario.game.character = null;
-
-                        responseUtils.resJson(usuario, req.authInfo.access_token, res);
-
-                        /*// Guardo el usuario
-                         usuario.save(function (err) {
-                         if (err) {
-                         console.tag('MONGO').error(err);
-                         utils.error(res, 400, 'errMongoSave');
-                         return;
-                         } else {
-                         res.json({
-                         "data": {
-                         "user": responseUtils.censureUser(usuario)
-                         },
-                         "session": {
-                         "access_token": req.authInfo.access_token,
-                         "expire": 1000 * 60 * 60 * 24 * 30
-                         },
-                         "error": ""
-                         });
-                         }
-                         });*/
-                    }
-                });
             }
+
+            // Borro el pj
+            char.remove(function (err, charRemoved) {
+                if (err) {
+                    console.tag('MONGO').error(err);
+                    responseUtils.responseError(res, 400, 'errMongoSave');
+                    return;
+                }
+
+                // Guardo el objeto usuario sin pj
+                usuario.game.character = null;
+
+                responseUtils.responseJson(res, usuario, req.authInfo.access_token);
+            });
         });
     });
 

@@ -14,6 +14,8 @@ errOrderNewNotFound - No se ha encontrado el meal o drink que se quiere pedir
 errOrderAllNotFound - Error al buscar las meals o drinks en Mongo
 errOrderNotBothIto - O meal o drink no pueden ser ITO
 
+errCharacterHireStatus - No se puede contratar en este momento
+
 --------------------------
 
 errProfileNoValidData - No había datos válidos de perfil que actualizar

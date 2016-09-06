@@ -38,10 +38,10 @@ var DEFAULTS = {
 var GAME_STATUS = {
     // fin de semana. Se pone así cuando se crea una partida nueva.
     WEEKEND: 0,
-    // durante la semana. Puedes ejecutar habilidades, usar el horno y la forja, equiparte, destruir equipo... También meter y modificar tu pedido.
-    BATTLE: 1,
-    // el viernes a las 00:00 hasta que se lanza el desayuno. Puedes comprar cosas y modificar tu pedido. Ya no puedes hacer lo de habilidades, forja...
-    BUSINESS: 2,
+    // durante la semana, tiempo de espera entre juegos. Permite contratar. También meter y modificar tu pedido.
+    WAITING: 1,
+    // durante la semana, mientras se ejecutan los juegos. También meter y modificar tu pedido.
+    BATTLE: 2,
     // una vez lanzado el desayuno, se muestran los resultados. No puedes hacer nada, ni modificar pedido, ni forja, habilidades...
     RESOLUTION: 3,
     // el viernes a las tantas se cierra la partida y se crea una nueva si era "recursiva"
