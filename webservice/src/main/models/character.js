@@ -15,6 +15,7 @@ module.exports = function (mongoose) {
     //Modelo para los usuarios, coleccion Character
     var CharacterSchema = mongoose.Schema({
             name: {type: String, default: ''},
+            name_changed: {type: Boolean, default: false},
             level: {type: Number, default: 1},
             location: {
                 place: {type: String, default: ''},

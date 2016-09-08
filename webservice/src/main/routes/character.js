@@ -62,6 +62,8 @@ module.exports = function (app) {
             return;
         }
 
+        //TODO por dinero
+
         // Genero un objeto de mercenario nuevo
         var newChar = new models.Character({
             name: "Manolo",
