@@ -9,6 +9,7 @@ module.exports = function (app) {
         BasicStrategy = require('passport-http').BasicStrategy,
         mongoose = require('mongoose'),
         sessionUtils = require('../modules/sessionUtils'),
+        responseUtils = require('../modules/responseUtils'),
         Q = require('q'),
         models = require('../models/models')(mongoose);
 
@@ -96,6 +97,9 @@ module.exports = function (app) {
                                 return done(error);
                             }
                             if (user) {
+                                // Relleno el usuario con los stats calculados en tiempo real
+                                user = responseUtils.processUser(user);
+                                
                                 return done(null, user, {"access_token": access_token});
                             } else {
                                 console.tag('PASSPORT-BEARER').error('Error al buscar la información del usuario');

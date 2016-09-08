@@ -1,6 +1,7 @@
 'use strict';
 
-var config = require('../modules/config');
+var config = require('../modules/config'),
+    math = require('mathjs');
 
 
 /**
@@ -70,7 +71,29 @@ var censureUser = function (user) {
      skill.stats.parry = valueToStars(skill.stats.parry, 0, 100);
      skill.stats.parry_formula = null;
      });
-     });*/
+     });
+
+     return user;*/
+};
+
+var processUser = function (user) {
+    var combat = user.game.character.talents.combat.level * config.CONSTANTS.MERC_STARTING_STAT_VALUE,
+        exploration = user.game.character.talents.exploration.level * config.CONSTANTS.MERC_STARTING_STAT_VALUE,
+        survival = user.game.character.talents.survival.level * config.CONSTANTS.MERC_STARTING_STAT_VALUE;
+
+    // Calculo sus stats
+    user.stats = {
+        damage: 0,
+        reduction: combat,
+        life: survival,
+        perception: exploration,
+        reflexes: combat,
+        stealth: math.median(combat * exploration),
+        hunger: exploration,
+        fatigue: math.median(combat * survival),
+        venom: math.median(survival * exploration),
+        healing: survival
+    };
 
     return user;
 };
@@ -160,6 +183,7 @@ var responseError = function (res, code, errCode) {
 //Exporto las funciones de la librería
 module.exports = {
     censureUser: censureUser,
+    processUser: processUser,
     valueToStars: valueToStars,
     responseJson: responseJson,
     saveUserAndResponse: saveUserAndResponse,

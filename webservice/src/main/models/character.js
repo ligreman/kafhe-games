@@ -21,17 +21,17 @@ module.exports = function (mongoose) {
                 level: {type: Number, default: 0} // 0 superficie
             },
             stats: {
-                damage: {type: Number, default: 0},
-                reduction: {type: Number, default: 0},
-                life: {type: Number, default: 0},
-                toxicity: {type: Number, default: 0},
-                perception: {type: Number, default: 0},
-                reflexes: {type: Number, default: 0},
-                stealth: {type: Number, default: 0},
-                hunger: {type: Number, default: 0},
-                fatigue: {type: Number, default: 0},
-                venom: {type: Number, default: 0},
-                healing: {type: Number, default: 0}
+                // damage: {type: Number, default: 0},
+                // reduction: {type: Number, default: 0},
+                // life: {type: Number, default: 0},
+                toxicity: {type: Number, default: 0}
+                // perception: {type: Number, default: 0},
+                // reflexes: {type: Number, default: 0},
+                // stealth: {type: Number, default: 0},
+                // hunger: {type: Number, default: 0},
+                // fatigue: {type: Number, default: 0},
+                // venom: {type: Number, default: 0},
+                // healing: {type: Number, default: 0}
             },
             score: {type: Number, default: 0},
             talents: {

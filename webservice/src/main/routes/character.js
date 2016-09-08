@@ -65,20 +65,7 @@ module.exports = function (app) {
         // Genero un objeto de mercenario nuevo
         var newChar = new models.Character({
             name: "Manolo",
-            level: usuario.game.rank,
-            stats: {
-                damage: Number,
-                reduction: Number,
-                life: Number,
-                toxicity: Number,
-                perception: Number,
-                reflexes: Number,
-                stealth: Number,
-                hunger: Number,
-                fatigue: Number,
-                venom: Number,
-                healing: Number
-            }
+            level: usuario.game.rank
         });
 
         // Guardo el personaje
