@@ -123,7 +123,7 @@ module.exports = function (app) {
     /**
      * POST /order/new
      * Crea un pedido nuevo para el usuario. Necesita 3 parámetros por POST-JSON:
-     * meal: id del meal; drink:idDrink; ito: boolean
+     * @params meal: id del meal; drink:idDrink; ito: boolean
      */
     orderRouter.post('/new', function (req, res, next) {
         var user = req.user,

@@ -9,7 +9,8 @@ var CENSURE_USER = true;
 var CONSTANTS = {
     STR_VALID_REGEXP: 'a-zA-Z0-9ÑñáéíóúÁÉÍÓÚüÜ\-_ ',
     MERC_TEAM_MAX: 5,
-    MERC_STARTING_STAT_VALUE: 5
+    MERC_STARTING_STAT_VALUE: 5,
+    MERC_HIRE_COST: 1000
 };
 
 /*************/

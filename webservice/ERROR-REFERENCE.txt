@@ -15,6 +15,13 @@ errOrderAllNotFound - Error al buscar las meals o drinks en Mongo
 errOrderNotBothIto - O meal o drink no pueden ser ITO
 
 errCharacterHireStatus - No se puede contratar en este momento
+errCharacterHireNoMoney - No tienes dinero para contratar
+errCharacterNotFound - No hay personaje
+errCharacterCantChangeName - No puedes cambiar el nombre del personaje más veces
+errCharacterWrongNewName - Nuevo nombre no válido
+errCharacterNameAlreadyExists - El nombre ya existe
+errCharacterNotEnoughTalentPoints - No tienes suficientes puntos de talento
+errCharacterTalentNotFound - No existe alguno de los talentos
 
 --------------------------
 
