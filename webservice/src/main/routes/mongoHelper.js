@@ -366,6 +366,7 @@ module.exports = function (app) {
             models.Drink.remove(),
             models.Game.remove(),
             models.Meal.remove(),
+            models.Order.remove(),
             models.Object.remove(),
             models.Place.remove(),
             models.Session.remove(),

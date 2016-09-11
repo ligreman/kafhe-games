@@ -1,6 +1,7 @@
 'use strict';
 
 var config = require('../modules/config'),
+    console = process.console,
     math = require('mathjs');
 
 
@@ -141,6 +142,7 @@ function saveUserAndResponse(res, user, access_token) {
     user.save(function (err) {
         if (err) {
             console.tag('MONGO').error(err);
+            // console.error(err);
             responseError(res, 400, 'errMongoSave');
         } else {
             // Respondo

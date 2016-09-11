@@ -7,6 +7,7 @@ module.exports = function (app) {
         passport = require('passport'),
         responseUtils = require('../modules/responseUtils'),
         orderRouter = express.Router(),
+        config = require('../modules/config'),
         bodyParser = require('body-parser'),
         Q = require('q'),
         mongoose = require('mongoose'),
@@ -106,7 +107,7 @@ module.exports = function (app) {
         var user = req.user;
 
         // Compruebo el estado de la partida, si es 1 ó 2. Si no, error
-        if (user.game.gamedata.status !== 1 && user.game.gamedata.status !== 2) {
+        if (user.game.gamedata.status !== config.GAME_STATUS.WAITING && user.game.gamedata.status !== config.GAME_STATUS.BATTLE) {
             console.tag('ORDER-DELETE').error('No se permite esta acción en el estado actual de la partida');
             responseUtils.responseError(res, 400, 'errGameStatusNotAllowed');
             return;
@@ -137,25 +138,22 @@ module.exports = function (app) {
         }
 
         // Compruebo que los parámetros son correctos (no falta ninguno y que existen sus ids)
-        if (!order.meal || !order.drink || order.ito === undefined) {
+        if ((!order.meal && !order.drink) || order.ito === undefined) {
             console.tag('ORDER-NEW').error('Faltan parámetros en la petición');
             responseUtils.responseError(res, 400, 'errOrderNewParams');
             return;
         }
 
-        // Transformo el texto "true" o "false" en booleano
-        //order.ito = (order.ito === 'true');
-
         // Consulto a Mongo a ver si existen
         Q.all([
-            models.Meal.findById(order.meal).exec(),
-            models.Drink.findById(order.drink).exec()
+            models.Meal.find({"id": order.meal}).exec(),
+            models.Drink.find({"id": order.drink}).exec()
         ]).spread(function (newMeal, newDrink) {
-            if (newMeal && newDrink) {
+            if (newMeal[0] || newDrink[0]) {
                 // Compruebo que si quiero hacer un pedido ito, ambos componentes son ITAbles
                 if (order.ito) {
                     // Si uno de los dos no es itable, error
-                    if (!newMeal.ito || !newDrink.ito) {
+                    if ((newMeal[0] && !newMeal[0].ito) || (newDrink[0] && !newDrink[0].ito)) {
                         console.tag('ORDER-NEW').error('O la comida o la bebida no forma parte de un desayuno ITO');
                         responseUtils.responseError(res, 400, 'errOrderNotBothIto');
                         return;
@@ -163,9 +161,11 @@ module.exports = function (app) {
                 }
 
                 // Actualizo el pedido del usuario con los nuevos objetos
-                user.game.order.meal = newMeal;
-                user.game.order.drink = newDrink;
-                user.game.order.ito = order.ito;
+                user.game.order = {
+                    meal: newMeal[0] ? newMeal[0]._id : null,
+                    drink: newDrink[0] ? newDrink[0]._id : null,
+                    ito: order.ito
+                };
 
                 // Guardo el usuario y salvo
                 responseUtils.saveUserAndResponse(res, user, req.authInfo.access_token);
@@ -173,7 +173,6 @@ module.exports = function (app) {
                 console.tag('ORDER-NEW').error('No ha llegado el newMeal o newDrink. Puede que no los haya encontrado en Mongo');
                 responseUtils.responseError(res, 400, 'errOrderNewUnknown');
             }
-
         }, function (error) {
             console.tag('MONGO').error(error);
             responseUtils.responseError(res, 400, 'errOrderNewNotFound');
