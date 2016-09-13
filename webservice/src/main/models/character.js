@@ -37,18 +37,9 @@ module.exports = function (mongoose) {
             score: {type: Number, default: 0},
             talents: {
                 points: {type: Number, default: 0},
-                combat: [{
-                    talent: {type: String, required: true},
-                    level: {type: Number, default: 0}
-                }],
-                survival: [{
-                    talent: {type: String, required: true},
-                    level: {type: Number, default: 0}
-                }],
-                exploration: [{
-                    talent: {type: String, required: true},
-                    level: {type: Number, default: 0}
-                }]
+                combat: [{type: String, required: true}],
+                survival: [{type: String, required: true}],
+                exploration: [{type: String, required: true}]
             },
             log: [LogSchema],
             skill_slots: {type: Number, default: 0},

@@ -22,6 +22,7 @@ errCharacterWrongNewName - Nuevo nombre no válido
 errCharacterNameAlreadyExists - El nombre ya existe
 errCharacterNotEnoughTalentPoints - No tienes suficientes puntos de talento
 errCharacterTalentNotFound - No existe alguno de los talentos
+errCharacterTalentDependencyFail - Ya tenías alguno de los talentos o no cumples los requisitos para adquirirlos
 
 --------------------------
 

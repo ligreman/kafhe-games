@@ -7,6 +7,7 @@ module.exports = function (app) {
         passport = require('passport'),
         validator = require('validator'),
         config = require('../modules/config'),
+        talentUtils = require('../modules/talentUtils'),
         responseUtils = require('../modules/responseUtils'),
         characterRouter = express.Router(),
         bodyParser = require('body-parser'),
@@ -154,43 +155,90 @@ module.exports = function (app) {
         }
 
         // Agrupo por talento los nuevos y sacar lista de únicos
-        var nuevos = [], idUnicos = [];
+        var nuevos = {};
         params.talents.forEach(function (newTalent) {
-            if (nuevos[newTalent]) {
-                nuevos[newTalent]++;
-            } else {
-                nuevos[newTalent] = 1;
-            }
-
-            if (idUnicos.lastIndexOf(newTalent) === -1) {
-                idUnicos.push(newTalent);
-            }
+            nuevos[newTalent] = {
+                id: newTalent,
+                type: null
+            };
         });
 
-        // Comprueba que los id de talentos existen realmente
-        models.Talent.count({"_id": {$in: idUnicos}}, function (err, count) {
-            // Si no he encontrado todos, es que alguno no existe
-            if (count !== params.talents.length) {
+        // Talentos que ya tiene el personaje
+        var charTalents = [];
+        usuario.game.character.talents.combat.forEach(function (talent) {
+            charTalents.push(talent);
+        });
+        usuario.game.character.talents.exploration.forEach(function (talent) {
+            charTalents.push(talent);
+        });
+        usuario.game.character.talents.survival.forEach(function (talent) {
+            charTalents.push(talent);
+        });
+
+        // Saco todos los talentos
+        models.Talent.find({}, function (err, talents) {
+            var sourceTalents = {};
+            // Genero un objeto de talentos
+            talents.forEach(function (thisT) {
+                sourceTalents[thisT.id] = thisT;
+            });
+
+            // Compruebo que los ids existen
+            var existen = true;
+
+            // Recorro cada uno a ver si existe
+            nuevos.forEach(function (newT) {
+                // A ver si lo encuentro
+                if (!sourceTalents[newT.id]) {
+                    existen = false;
+                } else {
+                    nuevos[newT.id].type = sourceTalents[newT.id].branch;
+                }
+            });
+
+            if (!existen) {
                 console.tag('CHAR-LEVELUP').error('No existe alguno de los talentos');
                 responseUtils.responseError(res, 400, 'errCharacterTalentNotFound');
                 return;
             }
 
-            // Suma los talentos elegidos a los del pj
-            usuario.game.character.talents.combat.forEach(function (talent) {
-                if (nuevos[talent.talent]) {
-                    talent.level += nuevos[talent.talent];
+            // Verifico si puedo adquirir esos talentos por las dependencias. Entiendo que vienen por orden de lvlup
+            var yaLosTengo = false, dependenciasCorrectas = true;
+            params.talents.forEach(function (newTalent) {
+                // Miro a ver si ya tengo alguno de esos talentos
+                if (usuario.game.character.talents.combat.indexOf(newTalent) !== -1) {
+                    yaLosTengo = true;
                 }
+                if (usuario.game.character.talents.exploration.indexOf(newTalent) !== -1) {
+                    yaLosTengo = true;
+                }
+                if (usuario.game.character.talents.survival.indexOf(newTalent) !== -1) {
+                    yaLosTengo = true;
+                }
+
+                // Los requisitos
+                var requiere = sourceTalents[newTalent].required;
+
+                // Miro cada requisito de este talento si lo cumple
+                requiere.forEach(function (requisito) {
+                    // Si no tengo ese talento
+                    if (charTalents.indexOf(requisito.talent) === -1) {
+                        dependenciasCorrectas = false;
+                    }
+                });
             });
-            usuario.game.character.talents.exploration.forEach(function (talent) {
-                if (nuevos[talent.talent]) {
-                    talent.level += nuevos[talent.talent];
-                }
-            });
-            usuario.game.character.talents.survival.forEach(function (talent) {
-                if (nuevos[talent.talent]) {
-                    talent.level += nuevos[talent.talent];
-                }
+
+            if (!dependenciasCorrectas || yaLosTengo) {
+                console.tag('CHAR-LEVELUP').error('Ya tenías alguno de los talentos o no cumples los requisitos para adquirirlos');
+                responseUtils.responseError(res, 400, 'errCharacterTalentDependencyFail');
+                return;
+            }
+
+            //++++ Está todo correcto así que guardo cambios
+
+            // Añado los talentos elegidos a los del pj
+            nuevos.forEach(function (nuevoT) {
+                usuario.game.character.talents[nuevoT.branch].push(nuevoT.id);
             });
 
             // Resta los puntos de talentos empleados
@@ -198,6 +246,41 @@ module.exports = function (app) {
 
             responseUtils.responseJson(res, usuario, req.authInfo.access_token);
         });
+
+        /*// Comprueba que los id de talentos existen realmente
+         models.Talent.count({"id": {$in: idUnicos}}, function (err, count) {
+         // Si no he encontrado todos, es que alguno no existe
+         if (count !== params.talents.length) {
+         console.tag('CHAR-LEVELUP').error('No existe alguno de los talentos');
+         responseUtils.responseError(res, 400, 'errCharacterTalentNotFound');
+         return;
+         }
+
+         // Verifico si puedo adquirir esos talentos por las dependencias
+
+
+         // Suma los talentos elegidos a los del pj
+         usuario.game.character.talents.combat.forEach(function (talent) {
+         if (nuevos[talent.talent]) {
+         talent.level += nuevos[talent.talent];
+         }
+         });
+         usuario.game.character.talents.exploration.forEach(function (talent) {
+         if (nuevos[talent.talent]) {
+         talent.level += nuevos[talent.talent];
+         }
+         });
+         usuario.game.character.talents.survival.forEach(function (talent) {
+         if (nuevos[talent.talent]) {
+         talent.level += nuevos[talent.talent];
+         }
+         });
+
+         // Resta los puntos de talentos empleados
+         usuario.game.character.talents.points -= params.talents.length;
+
+         responseUtils.responseJson(res, usuario, req.authInfo.access_token);
+         });*/
     });
 
     /**
