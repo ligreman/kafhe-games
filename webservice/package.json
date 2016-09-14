@@ -22,7 +22,8 @@
     "q": "^1.4.1",
     "scribe-js": "^2.0.4",
     "taffy": "^2.6.2",
-    "validator": "^5.5.0"
+    "validator": "^5.5.0",
+    "clone": "1.0.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
