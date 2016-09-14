@@ -10,6 +10,7 @@ module.exports = function (app) {
         talentUtils = require('../modules/talentUtils'),
         responseUtils = require('../modules/responseUtils'),
         characterRouter = express.Router(),
+        clone = require('clone'),
         bodyParser = require('body-parser'),
         mongoose = require('mongoose'),
         models = require('../models/models')(mongoose);
@@ -204,15 +205,10 @@ module.exports = function (app) {
 
             // Verifico si puedo adquirir esos talentos por las dependencias. Entiendo que vienen por orden de lvlup
             var yaLosTengo = false, dependenciasCorrectas = true;
+            var auxCharTalents = clone(charTalents, false);
             params.talents.forEach(function (newTalent) {
                 // Miro a ver si ya tengo alguno de esos talentos
-                if (usuario.game.character.talents.combat.indexOf(newTalent) !== -1) {
-                    yaLosTengo = true;
-                }
-                if (usuario.game.character.talents.exploration.indexOf(newTalent) !== -1) {
-                    yaLosTengo = true;
-                }
-                if (usuario.game.character.talents.survival.indexOf(newTalent) !== -1) {
+                if (charTalents.indexOf(newTalent) !== -1) {
                     yaLosTengo = true;
                 }
 
@@ -220,12 +216,20 @@ module.exports = function (app) {
                 var requiere = sourceTalents[newTalent].required;
 
                 // Miro cada requisito de este talento si lo cumple
+                var cumpleRequisitos = true;
                 requiere.forEach(function (requisito) {
                     // Si no tengo ese talento
-                    if (charTalents.indexOf(requisito.talent) === -1) {
+                    if (auxCharTalents.indexOf(requisito) === -1) {
                         dependenciasCorrectas = false;
+                        cumpleRequisitos = false;
                     }
                 });
+
+                // Si cumple con los requisitos, tengo en cuenta que se ha añadido este talento, para verificar
+                // las dependencias del siguiente
+                if (cumpleRequisitos) {
+                    auxCharTalents.push(newTalent);
+                }
             });
 
             if (!dependenciasCorrectas || yaLosTengo) {
@@ -246,41 +250,6 @@ module.exports = function (app) {
 
             responseUtils.responseJson(res, usuario, req.authInfo.access_token);
         });
-
-        /*// Comprueba que los id de talentos existen realmente
-         models.Talent.count({"id": {$in: idUnicos}}, function (err, count) {
-         // Si no he encontrado todos, es que alguno no existe
-         if (count !== params.talents.length) {
-         console.tag('CHAR-LEVELUP').error('No existe alguno de los talentos');
-         responseUtils.responseError(res, 400, 'errCharacterTalentNotFound');
-         return;
-         }
-
-         // Verifico si puedo adquirir esos talentos por las dependencias
-
-
-         // Suma los talentos elegidos a los del pj
-         usuario.game.character.talents.combat.forEach(function (talent) {
-         if (nuevos[talent.talent]) {
-         talent.level += nuevos[talent.talent];
-         }
-         });
-         usuario.game.character.talents.exploration.forEach(function (talent) {
-         if (nuevos[talent.talent]) {
-         talent.level += nuevos[talent.talent];
-         }
-         });
-         usuario.game.character.talents.survival.forEach(function (talent) {
-         if (nuevos[talent.talent]) {
-         talent.level += nuevos[talent.talent];
-         }
-         });
-
-         // Resta los puntos de talentos empleados
-         usuario.game.character.talents.points -= params.talents.length;
-
-         responseUtils.responseJson(res, usuario, req.authInfo.access_token);
-         });*/
     });
 
     /**
