@@ -5,8 +5,8 @@ module.exports = function (mongoose) {
 
     //Modelo para la bebida, coleccion Drinks
     var DrinkSchema = mongoose.Schema({
-        _id: {type: String},
-        // id: {type: String, unique: true, required: true},
+        // _id: {type: String},
+        id: {type: String, unique: true, required: true},
         name: {type: String, required: true},
         ito: {type: Boolean, default: false}
     }, {versionKey: false});

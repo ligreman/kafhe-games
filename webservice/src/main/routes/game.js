@@ -26,29 +26,30 @@ module.exports = function (app) {
      * Obtiene la información general del juego
      */
     gameRouter.get('/data', function (req, res, next) {
+        console.log("DATATA");
         //Proceso y devuelvo los resultados
         var answer = function (skills, talents, objects, places, meals, drinks) {
             if (!skills || !talents || !objects || !places || !meals || !drinks) {
                 console.tag('MONGO').error(err);
                 utils.error(res, 400, 'errGameDataNotFound');
                 return;
-            } else {
-                res.json({
-                    "data": {
-                        "skills": skills,
-                        "objects": objects,
-                        "places": places,
-                        "talents": talents,
-                        "meals": meals,
-                        "drinks": drinks
-                    },
-                    "session": {
-                        "access_token": req.authInfo.access_token,
-                        "expire": 1000 * 60 * 60 * 24 * 30
-                    },
-                    "error": ""
-                });
             }
+            
+            res.json({
+                "data": {
+                    "skills": skills,
+                    "objects": objects,
+                    "places": places,
+                    "talents": talents,
+                    "meals": meals,
+                    "drinks": drinks
+                },
+                "session": {
+                    "access_token": req.authInfo.access_token,
+                    "expire": 1000 * 60 * 60 * 24 * 30
+                },
+                "error": ""
+            });
         };
 
         // Lanzo las dos consultas a Mongo

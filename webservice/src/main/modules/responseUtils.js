@@ -78,22 +78,22 @@ var censureUser = function (user) {
 };
 
 var processUser = function (user) {
-    var combat = user.game.character.talents.combat.level * config.CONSTANTS.MERC_STARTING_STAT_VALUE,
-        exploration = user.game.character.talents.exploration.level * config.CONSTANTS.MERC_STARTING_STAT_VALUE,
-        survival = user.game.character.talents.survival.level * config.CONSTANTS.MERC_STARTING_STAT_VALUE;
+    var combatLevel = user.game.character.talents.combat.length * config.CONSTANTS.MERC_STARTING_STAT_VALUE,
+        explorationLevel = user.game.character.talents.exploration.length * config.CONSTANTS.MERC_STARTING_STAT_VALUE,
+        survivalLevel = user.game.character.talents.survival.length * config.CONSTANTS.MERC_STARTING_STAT_VALUE;
 
     // Calculo sus stats
     user.stats = {
         damage: 0,
-        reduction: combat,
-        life: survival,
-        perception: exploration,
-        reflexes: combat,
-        stealth: math.median(combat * exploration),
-        hunger: exploration,
-        fatigue: math.median(combat * survival),
-        venom: math.median(survival * exploration),
-        healing: survival
+        reduction: combatLevel,
+        life: survivalLevel,
+        perception: explorationLevel,
+        reflexes: combatLevel,
+        stealth: math.median(combatLevel * explorationLevel),
+        hunger: explorationLevel,
+        fatigue: math.median(combatLevel * survivalLevel),
+        venom: math.median(survivalLevel * explorationLevel),
+        healing: survivalLevel
     };
 
     return user;

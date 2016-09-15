@@ -8,7 +8,7 @@ module.exports = function (mongoose) {
     var LogSchema = mongoose.Schema({
         text: {type: String, required: true},
         'type': {type: String, enum: ['combat', 'exploration'], required: true}, // combat, exploration,
-        subtype: {type: String, enum: ['extended'], default: ''}, // extended
+        subtype: {type: String, enum: ['extended', ''], default: ''}, // extended
         date: {type: Number, default: 0}
     }, {versionKey: false});
 
@@ -37,9 +37,9 @@ module.exports = function (mongoose) {
             score: {type: Number, default: 0},
             talents: {
                 points: {type: Number, default: 0},
-                combat: [{type: String, required: true}],
-                survival: [{type: String, required: true}],
-                exploration: [{type: String, required: true}]
+                combat: [{type: String}],
+                survival: [{type: String}],
+                exploration: [{type: String}]
             },
             log: [LogSchema],
             skill_slots: {type: Number, default: 0},

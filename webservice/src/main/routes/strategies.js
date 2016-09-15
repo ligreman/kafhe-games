@@ -97,9 +97,13 @@ module.exports = function (app) {
                                 return done(error);
                             }
                             if (user) {
+                                console.tag('PASSPORT-BEARER').info('Devuelvo el usuario');
+
                                 // Relleno el usuario con los stats calculados en tiempo real
                                 user = responseUtils.processUser(user);
-                                
+
+                                console.log(user);
+
                                 return done(null, user, {"access_token": access_token});
                             } else {
                                 console.tag('PASSPORT-BEARER').error('Error al buscar la información del usuario');

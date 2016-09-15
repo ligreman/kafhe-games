@@ -120,17 +120,18 @@ module.exports = function (app) {
             name: 'Cara 1', level: 1,
             location: {place: 'place00', level: 0},
             stats: {
-                damage: 10, reduction: 20, life: 30, toxicity: 15, perception: 16,
-                reflexes: 17, stealth: 18, hunger: 19, fatigue: 21, venom: 22, healing: 25
+                toxicity: 15
+                // damage: 10, reduction: 20, life: 30, toxicity: 15, perception: 16,
+                // reflexes: 17, stealth: 18, hunger: 19, fatigue: 21, venom: 22, healing: 25
             },
             score: 100,
             talents: {
                 points: 5,
-                combat: [{talent: 'talent00', level: 2}],
+                combat: ['talent00'],
                 survival: [],
-                exploration: [{talent: 'talent01', points: 1}]
+                exploration: ['talent01']
             },
-            log: [{text: 'Texto de log', 'type': 'combat', subtype: null, date: date.getTime()}],
+            log: [{text: 'Texto de log', 'type': 'combat', subtype: '', date: date.getTime()}],
             skill_slots: 2,
             skills: [{skill: 'skill01', uses: 3}],
             inventory_slots: 3,
@@ -366,7 +367,7 @@ module.exports = function (app) {
             models.Drink.remove(),
             models.Game.remove(),
             models.Meal.remove(),
-            models.Order.remove(),
+            // models.Order.remove(),
             models.Object.remove(),
             models.Place.remove(),
             models.Session.remove(),
@@ -405,61 +406,98 @@ module.exports = function (app) {
 
         //Meto los nuevos valores
         models.Meal.create(meals, function (err, meals) {
-            console.log("    Creadas las comidas");
-            eventEmitter.emit('#Finalizado', res);
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("    Creadas las comidas");
+                eventEmitter.emit('#Finalizado', res, 'comidas');
+            }
         });
 
         //Meto los nuevos valores
         models.Drink.create(drinks, function (err, drinks) {
-            console.log("    Creadas las bebidas");
-            eventEmitter.emit('#Finalizado', res);
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("    Creadas las bebidas");
+                eventEmitter.emit('#Finalizado', res, 'bebidas');
+            }
         });
 
         //Meto los nuevos valores
         models.Skill.create(skills, function (err, skills) {
-            console.log("    Creadas las habilidades");
-            eventEmitter.emit('#Finalizado', res);
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("    Creadas las habilidades");
+                eventEmitter.emit('#Finalizado', res, 'habilidades');
+            }
         });
 
         //Meto los nuevos valores
         models.Talent.create(talents, function (err, talents) {
-            console.log("    Creados los talentos");
-            eventEmitter.emit('#Finalizado', res);
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("    Creados los talentos");
+                eventEmitter.emit('#Finalizado', res, 'talentos');
+            }
         });
 
         //Meto los nuevos valores
         models.Place.create(places, function (err, places) {
-            console.log("    Creados los lugares");
-            eventEmitter.emit('#Finalizado', res);
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("    Creados los lugares");
+                eventEmitter.emit('#Finalizado', res, 'lugares');
+            }
         });
 
         //Meto los nuevos valores
         models.Object.create(objects, function (err, objects) {
-            console.log("    Creados los objetos");
-            eventEmitter.emit('#Finalizado', res);
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("    Creados los objetos");
+                eventEmitter.emit('#Finalizado', res, 'objetos');
+            }
         });
 
         //Meto los nuevos valores
         models.Game.create(game, function (err, games) {
-            console.log("    Creado el juego");
-            eventEmitter.emit('#Finalizado', res);
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("    Creado el juego");
+                eventEmitter.emit('#Finalizado', res, 'juego');
+            }
         });
 
         //Meto los nuevos valores
         models.Character.create(characters, function (err, chars) {
-            console.log("    Creados los characters");
-            eventEmitter.emit('#Finalizado', res);
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("    Creados los characters");
+                eventEmitter.emit('#Finalizado', res, 'characters');
+            }
         });
 
         //Meto los nuevos valores
         models.User.create(users, function (err, users) {
-            console.log("    Creados los usuarios");
-            eventEmitter.emit('#Finalizado', res);
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("    Creados los usuarios");
+                eventEmitter.emit('#Finalizado', res, 'usuarios');
+            }
         });
     });
 
-    eventEmitter.on('#Finalizado', function (res) {
+    eventEmitter.on('#Finalizado', function (res, what) {
         finalizado++;
+        console.log("      ++ Ha finalizado " + what + " (" + finalizado + " de 9)");
         if (finalizado === 9) {
             res.json({"error": "false", "message": "Datos cargados"});
         }
