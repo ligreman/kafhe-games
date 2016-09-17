@@ -189,14 +189,17 @@ module.exports = function (app) {
             var existen = true;
 
             // Recorro cada uno a ver si existe
-            nuevos.forEach(function (newT) {
-                // A ver si lo encuentro
-                if (!sourceTalents[newT.id]) {
-                    existen = false;
-                } else {
-                    nuevos[newT.id].type = sourceTalents[newT.id].branch;
+            for (var id in nuevos) {
+                if (nuevos.hasOwnProperty(id)) {
+                    var newT = nuevos[id];
+
+                    if (!sourceTalents[newT.id]) {
+                        existen = false;
+                    } else {
+                        nuevos[newT.id].type = sourceTalents[newT.id].branch;
+                    }
                 }
-            });
+            }
 
             if (!existen) {
                 console.tag('CHAR-LEVELUP').error('No existe alguno de los talentos');
@@ -242,9 +245,12 @@ module.exports = function (app) {
             //++++ Está todo correcto así que guardo cambios
 
             // Añado los talentos elegidos a los del pj
-            nuevos.forEach(function (nuevoT) {
-                usuario.game.character.talents[nuevoT.branch].push(nuevoT.id);
-            });
+            for (var id2 in nuevos) {
+                if (nuevos.hasOwnProperty(id2)) {
+                    var newT2 = nuevos[id2];
+                    usuario.game.character.talents[newT2.branch].push(newT2.id);
+                }
+            }
 
             // Resta los puntos de talentos empleados
             usuario.game.character.talents.points -= params.talents.length;
