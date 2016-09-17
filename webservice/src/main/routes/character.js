@@ -86,12 +86,13 @@ module.exports = function (app) {
             }
 
             // pongo el id del personaje creado en el usuario
-            usuario.game.character = newChar._id;
+            // usuario.game.character = newChar._id;
+            usuario.game.character = newChar;
 
             // Quito dinero
             usuario.game.tostolares = usuario.game.tostolares - config.CONSTANTS.MERC_HIRE_COST;
 
-            responseUtils.responseJson(res, usuario, req.authInfo.access_token);
+            responseUtils.saveUserAndResponse(res, usuario, req.authInfo.access_token);
         });
     });
 
@@ -128,7 +129,7 @@ module.exports = function (app) {
                 // Guardo el objeto usuario sin pj
                 usuario.game.character = null;
 
-                responseUtils.responseJson(res, usuario, req.authInfo.access_token);
+                responseUtils.saveUserAndResponse(res, usuario, req.authInfo.access_token);
             });
         });
     });
@@ -248,7 +249,7 @@ module.exports = function (app) {
             // Resta los puntos de talentos empleados
             usuario.game.character.talents.points -= params.talents.length;
 
-            responseUtils.responseJson(res, usuario, req.authInfo.access_token);
+            responseUtils.saveUserAndResponse(res, usuario, req.authInfo.access_token);
         });
     });
 
@@ -260,7 +261,8 @@ module.exports = function (app) {
     characterRouter.post('/changename', function (req, res, next) {
         // El objeto user
         var usuario = req.user,
-            params = req.body;
+            params = req.body,
+            newName = params.name;
 
         // Compruebo si tengo personaje
         if (usuario.game.character === null) {
@@ -277,7 +279,7 @@ module.exports = function (app) {
         }
 
         // Compruebo que el nuevo nombre cumple los requisitos
-        if (!validator.matches(params.name, config.CONSTANTS.STR_VALID_REGEXP) || !validator.isLength(params.name, 3, 30)) {
+        if (!validator.matches(newName, config.CONSTANTS.STR_VALID_REGEXP) || !validator.isLength(newName, 3, 30)) {
             console.tag('CHAR-NAMENOTVALID').error('Nuevo nombre erróneo');
             responseUtils.responseError(res, 400, 'errCharacterWrongNewName');
             return;
@@ -294,7 +296,7 @@ module.exports = function (app) {
 
                 // A ver si existe
                 chars.forEach(function (char) {
-                    if (char.name.toLowerCase() === params.toLowerCase()) {
+                    if (char.name.toLowerCase() === newName.toLowerCase()) {
                         console.tag('CHAR-NAMEALREADYEXISTS').error('Ya existe ese nombre');
                         responseUtils.responseError(res, 400, 'errCharacterNameAlreadyExists');
                         return;
@@ -302,9 +304,10 @@ module.exports = function (app) {
 
                     // No existe así que lo guardo
                     usuario.game.character.name_changed = true;
-                    usuario.game.character.name = params;
+                    usuario.game.character.name = newName;
 
-                    responseUtils.responseJson(res, usuario, req.authInfo.access_token);
+                    // Guardo los cambios al personaje y al usuario
+                    responseUtils.saveCharacterAndUserAndResponse(res, usuario, req.authInfo.access_token);
                 });
             });
 

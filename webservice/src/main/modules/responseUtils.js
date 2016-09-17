@@ -78,23 +78,27 @@ var censureUser = function (user) {
 };
 
 var processUser = function (user) {
-    var combatLevel = user.game.character.talents.combat.length * config.CONSTANTS.MERC_STARTING_STAT_VALUE,
-        explorationLevel = user.game.character.talents.exploration.length * config.CONSTANTS.MERC_STARTING_STAT_VALUE,
-        survivalLevel = user.game.character.talents.survival.length * config.CONSTANTS.MERC_STARTING_STAT_VALUE;
 
-    // Calculo sus stats
-    user.stats = {
-        damage: 0,
-        reduction: combatLevel,
-        life: survivalLevel,
-        perception: explorationLevel,
-        reflexes: combatLevel,
-        stealth: math.median(combatLevel * explorationLevel),
-        hunger: explorationLevel,
-        fatigue: math.median(combatLevel * survivalLevel),
-        venom: math.median(survivalLevel * explorationLevel),
-        healing: survivalLevel
-    };
+    // Si tiene personaje, calculo sus stats
+    if (user.game.character) {
+        var combatLevel = user.game.character.talents.combat.length * config.CONSTANTS.MERC_STARTING_STAT_VALUE,
+            explorationLevel = user.game.character.talents.exploration.length * config.CONSTANTS.MERC_STARTING_STAT_VALUE,
+            survivalLevel = user.game.character.talents.survival.length * config.CONSTANTS.MERC_STARTING_STAT_VALUE;
+
+        // Calculo sus stats
+        user.game.character.stats = {
+            damage: 0,
+            reduction: combatLevel,
+            life: survivalLevel,
+            perception: explorationLevel,
+            reflexes: combatLevel,
+            stealth: math.median(combatLevel * explorationLevel),
+            hunger: explorationLevel,
+            fatigue: math.median(combatLevel * survivalLevel),
+            venom: math.median(survivalLevel * explorationLevel),
+            healing: survivalLevel
+        };
+    }
 
     return user;
 };
@@ -151,6 +155,23 @@ function saveUserAndResponse(res, user, access_token) {
     });
 }
 
+/**
+ * Guarda el personaje, usuario y responde con los datos del mismo
+ * @param res Objeto respuesta
+ * @param user Objeto con los datos a devolver
+ * @param access_token Token
+ */
+function saveCharacterAndUserAndResponse(res, user, access_token) {
+    user.game.character.save(function (err) {
+        if (err) {
+            console.tag('MONGO').error(err);
+            responseError(res, 400, 'errMongoSave');
+        } else {
+            // Salvo al usuario
+            saveUserAndResponse(res, user, access_token);
+        }
+    });
+}
 
 /**
  * Devuelve un error en JSON
@@ -189,6 +210,7 @@ module.exports = {
     valueToStars: valueToStars,
     responseJson: responseJson,
     saveUserAndResponse: saveUserAndResponse,
+    saveCharacterAndUserAndResponse: saveCharacterAndUserAndResponse,
     responseError: responseError
 };
 

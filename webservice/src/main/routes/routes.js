@@ -7,12 +7,13 @@ module.exports = function (app) {
     require('./strategies')(app);
 
     //Cargo los diferentes ficheros de rutas
-    require('./login')(app);
-    require('./user')(app);
     require('./admin')(app);
+    require('./character')(app);
+    require('./game')(app);
+    require('./login')(app);
     require('./order')(app);
     require('./profile')(app);
-    require('./game')(app);
+    require('./user')(app);
 
     // require('./skill')(app);
     // require('./equipment')(app);

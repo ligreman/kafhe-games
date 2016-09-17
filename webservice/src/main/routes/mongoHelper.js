@@ -150,7 +150,7 @@ module.exports = function (app) {
             game: {
                 gamedata: game[0]._id, //{type: mongoose.Schema.Types.ObjectId, ref: 'Game'}
                 character: characters[0]._id, //{type: mongoose.Schema.Types.ObjectId, ref: 'Character'}
-                rank: 2, tostolares: 1000, fame: 100, afk: false, last_activity: date.getTime(),
+                rank: 2, tostolares: 100000, fame: 100, afk: false, last_activity: date.getTime(),
                 warehouse: [],
                 order: {meal: null, drink: null, ito: true},
                 last_order: {meal: null, drink: null, ito: false},

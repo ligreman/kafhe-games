@@ -9,6 +9,9 @@ var express = require('express'),
     Q = require('q'),
     morgan = require('morgan');
 
+// Uso los promise de Q
+mongoose.Promise = require('q').Promise;
+
 var serverPort = process.env.OPENSHIFT_NODEJS_PORT || 8080,
     serverHost = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
     mongoHost = process.env.OPENSHIFT_MONGODB_DB_URL + process.env.OPENSHIFT_APP_NAME || 'mongodb://localhost/kafhe';

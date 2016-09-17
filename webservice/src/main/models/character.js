@@ -44,16 +44,16 @@ module.exports = function (mongoose) {
             log: [LogSchema],
             skill_slots: {type: Number, default: 0},
             skills: [{
-                skill: {type: String, required: true},
+                skill: {type: String},
                 uses: {type: Number, default: 0}
             }],
             inventory_slots: {type: Number, default: 0},
             inventory: {
-                object: {type: String, required: true},
+                object: {type: String, default: null},
                 uses: {type: Number, default: 0}
             },
             weapon: {
-                name: {type: String, required: true},
+                name: {type: String, default: null},
                 ammo: {type: Number, default: 0},
                 damage: {type: Number, default: 0},
                 accuracy: {type: Number, default: 0},
