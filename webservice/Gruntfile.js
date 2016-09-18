@@ -33,6 +33,20 @@ module.exports = function (grunt) {
             }
         },
 
+        shell: {
+            mongo: {
+                command: 'mongod --dbpath "D:\\Programas\\MongoDB\\data\\db"',
+                options: {
+                    async: true,
+                    stdout: false,
+                    stderr: true
+                }
+            },
+            node: {
+                command: 'node src/main/app.js'
+            }
+        },
+
         nodemon: {
             dev: {
                 script: 'app.js',
@@ -161,7 +175,9 @@ module.exports = function (grunt) {
     // Starts a development server for nodejs app
     grunt.registerTask('dev', [
         'clean:server',
-        'concurrent:dev'
+        'shell:mongo',
+        // 'concurrent:dev'
+        'shell:node'
     ]);
 
     // Test runner
