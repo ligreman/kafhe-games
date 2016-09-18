@@ -102,7 +102,7 @@ module.exports = function (app) {
                                 // Relleno el usuario con los stats calculados en tiempo real
                                 user = responseUtils.processUser(user);
 
-                                console.log(user);
+                                // console.log(user);
 
                                 return done(null, user, {"access_token": access_token});
                             } else {

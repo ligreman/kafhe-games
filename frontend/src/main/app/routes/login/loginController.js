@@ -38,14 +38,13 @@
                                 password: SHA512.hex($scope.login.password)
                             }, function (response) {
                                 //Proceso la respuesta del webservice
-                                if (response === null || !response.login) {
+                                if (response === null || !response.data.login) {
                                     // Hay un error por lo que hago logout, por si acaso
                                     KSession.logout(true);
                                 } else {
                                     // Generamos la sesión con el token y expiración que me llegan
                                     KSession.login(response.session.access_token, response.session.expire);
-                                    $log.debug('Login OK:');
-                                    $log.debug(response);
+                                    $log.debug('Login OK');
 
                                     // Guardo que estoy logueado
                                     $rootScope.kUserLogged = $scope.login.username;

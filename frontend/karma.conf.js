@@ -12,20 +12,20 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser (sources + tests)
         files: [
-			'bower_components/jquery/dist/jquery.js',
-            'src/main/js/**/*.js',
+            'bower_components/jquery/dist/jquery.js',
+            'src/main/app/**/*.js',
             'src/test/unit/**/*.js'
         ],
 
         // list of files to exclude (so they don't get tested, usually third party libs)
         exclude: [
-            'src/main/js/vendor/**/*'
+            'src/main/app/vendor/**/*'
         ],
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'src/main/js/**/*.js': ['coverage']
+            'src/main/app/**/*.js': ['coverage']
         },
 
         coverageReporter: {

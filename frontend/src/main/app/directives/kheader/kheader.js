@@ -9,10 +9,11 @@
             replace: 'true',
             scope: true,
             templateUrl: 'app/directives/kheader/kheader.html',
-            controller: ['$scope', 'API', function ($scope, API) {
+            controller: ['$scope', 'API', 'KSession', function ($scope, API, KSession) {
 
                 // Funciones publicadas
                 // $scope.btnProfileMenu = fnBtnProfileMenu;
+                $scope.logout = fnLogout;
 
 
                 /*********************************************************************/
@@ -49,6 +50,17 @@
                             }
                         });
                 };
+
+                function fnLogout() {
+                    API.session().logout(function (response) {
+                        if (response && response.data.logout) {
+                            $scope.growlNotification('success', 'Logout correcto');
+
+                            // Hago logout
+                            KSession.logout(true);
+                        }
+                    })
+                }
 
             }]
         };

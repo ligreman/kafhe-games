@@ -12,7 +12,7 @@
                 <md-radio-group ng-model="selection.meal">
                     <md-radio-button class=""
                                      ng-repeat="meal in global.gamedata.meals | toArray | filter: itoSelected | orderBy: 'name'"
-                                     value="{{meal._id}}">
+                                     value="{{meal.id}}">
                         {{meal.name}}
                     </md-radio-button>
                 </md-radio-group>
@@ -23,7 +23,7 @@
                 <md-radio-group ng-model="selection.drink" class="">
                     <md-radio-button class=""
                                      ng-repeat="drink in global.gamedata.drinks | toArray | filter: itoSelected | orderBy: 'name'"
-                                     value="{{drink._id}}">
+                                     value="{{drink.id}}">
                         {{drink.name}}
                     </md-radio-button>
                 </md-radio-group>
@@ -32,24 +32,23 @@
             <div class="btn-breakfast-list md-whiteframe-1dp md-padding kafhe-white-background align-stretch"
                  layout="column" layout-align="space-around center" flex="grow">
                 <md-button class="md-primary" ng-click="btnMakeOrder()" flex="none">
-                    <md-icon ng-show="global.user.game.order.meal === null && global.user.game.order.drink === null">
+                    <md-icon ng-show="!hasOrdered()">
                         free_breakfast
                     </md-icon>
-                    <md-icon ng-show="global.user.game.order.meal !== null || global.user.game.order.drink !== null">
+                    <md-icon ng-show="hasOrdered()">
                         sync
                     </md-icon>
-                    {{ (global.user.game.order.meal !== null || global.user.game.order.drink !== null ?
-                    'textChangeOrder' : 'textNewOrder') | translate }}
+                    {{ (hasOrdered() ? 'textChangeOrder' : 'textNewOrder') | translate }}
                 </md-button>
 
                 <md-button class="md-accent" ng-click="btnLastDayOrder()" flex="none"
-                           ng-show="global.user.game.last_order.meal !== null || global.user.game.last_order.drink !== null">
+                           ng-show="hasOrdered()">
                     <md-icon class="">event</md-icon>
                     {{ 'textLastDayOrder' | translate }}
                 </md-button>
 
                 <md-button class="md-warn" ng-click="btnRemoveOrder()" flex="none"
-                           ng-show="global.user.game.order.meal !== null || global.user.game.order.drink !== null">
+                           ng-show="hasOrdered()">
                     <md-icon>delete</md-icon>
                     {{ 'textCancelOrder' | translate }}
                 </md-button>
