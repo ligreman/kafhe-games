@@ -161,7 +161,7 @@ module.exports = function (app) {
         params.talents.forEach(function (newTalent) {
             nuevos[newTalent] = {
                 id: newTalent,
-                type: null
+                branch: null
             };
         });
 
@@ -196,7 +196,7 @@ module.exports = function (app) {
                     if (!sourceTalents[newT.id]) {
                         existen = false;
                     } else {
-                        nuevos[newT.id].type = sourceTalents[newT.id].branch;
+                        nuevos[newT.id].branch = sourceTalents[newT.id].branch;
                     }
                 }
             }
@@ -255,7 +255,7 @@ module.exports = function (app) {
             // Resta los puntos de talentos empleados
             usuario.game.character.talents.points -= params.talents.length;
 
-            responseUtils.saveUserAndResponse(res, usuario, req.authInfo.access_token);
+            responseUtils.saveCharacterAndUserAndResponse(res, usuario, req.authInfo.access_token);
         });
     });
 
