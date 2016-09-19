@@ -20,7 +20,7 @@ var User   = require(basePath + 'src/main/models/user')(mongoose),
 // A las 2am todos los días
 if
 (hora === 2) {
-    User.update({}, {"game.stats.toast_points": config.DEFAULTS.TOAST_POINTS}, {multi: true},
+    User.update({}, {"game.stats.toast_points": config.DEFAULTS.toast_points}, {multi: true},
         function (error, num) {
             if (error) {
                 console.error(error);

@@ -238,7 +238,7 @@ var takeDamage = function (user, damage) {
 
     // ¿Muere más veces?
     while (user.game.stats.life <= 0) {
-        user.game.stats.life = user.game.stats.life + config.DEFAULTS.MAX_LIFE;
+        // user.game.stats.life = user.game.stats.life + config.DEFAULTS.MAX_LIFE;
 
         // Le quito reputación
         user.game.stats.reputation -= config.REPUTATION_LOST_DEAD;
@@ -268,10 +268,10 @@ var addReputation = function (user, sourceAmount, levelDifference, causa) {
     switch (causa) {
         case config.CAUSE.skill:
             // Sumo un fijo por usar la habilidad, por cada punto de acción. Vienen en sourceAmount los ptos de acción
-            ganancia += config.REPUTATION.WIN_TOAST_POINT * sourceAmount;
+            ganancia += config.REPUTATION.win_toast_point * sourceAmount;
 
             // Por nivel de la habilidad. Viene en levelDifference el nivel de skill
-            ganancia += config.REPUTATION.WIN_SKILL_LEVEL * levelDifference;
+            ganancia += config.REPUTATION.win_skill_level * levelDifference;
             break;
         case config.CAUSE.damage:
             // La diferencia de nivel si es 0, le pongo -1 para evitar divisiones por 0 y resultados 0
@@ -303,7 +303,7 @@ var addReputation = function (user, sourceAmount, levelDifference, causa) {
             );
 
             // Gano puntos fijos por haber bloqueado un ataque con éxito
-            ganancia += config.REPUTATION.WIN_PARRY_SUCCESS;
+            ganancia += config.REPUTATION.win_parry_success;
 
             break;
     }
