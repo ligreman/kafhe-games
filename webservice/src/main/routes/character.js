@@ -23,13 +23,6 @@ module.exports = function (app) {
         //failureRedirect: '/error/session'
     }));
 
-    /*
-     G character/
-     G character/new
-     G character/delete
-     P character/equip
-     P character/levelup
-     */
 
     /**
      * GET /character/
@@ -51,7 +44,7 @@ module.exports = function (app) {
         var usuario = req.user;
 
         // Compruebo si puedo contratar por estado de la partida
-        if (usuario.game.gamedata.status === null || usuario.game.gamedata.status !== config.GAME_STATUS.WAITING) {
+        if (usuario.game.gamedata.status === null || usuario.game.gamedata.status !== config.GAME_STATUS.waiting) {
             console.tag('CHAR-HIRE').error('No se puede contratar en este momento');
             responseUtils.responseError(res, 400, 'errCharacterHireStatus');
             return;
@@ -65,7 +58,7 @@ module.exports = function (app) {
         }
 
         // Compruebo si puedo contratar por dinero
-        if (usuario.game.tostolares < config.CONSTANTS.MERC_HIRE_COST) {
+        if (usuario.game.tostolares < config.DEFAULTS.character.hire_cost) {
             console.tag('CHAR-HIRE').error('No tienes dinero para contratar');
             responseUtils.responseError(res, 400, 'errCharacterHireNoMoney');
             return;
@@ -90,7 +83,7 @@ module.exports = function (app) {
             usuario.game.character = newChar;
 
             // Quito dinero
-            usuario.game.tostolares = usuario.game.tostolares - config.CONSTANTS.MERC_HIRE_COST;
+            usuario.game.tostolares = usuario.game.tostolares - config.DEFAULTS.character.hire_cost;
 
             responseUtils.saveUserAndResponse(res, usuario, req.authInfo.access_token);
         });
@@ -134,6 +127,52 @@ module.exports = function (app) {
         });
     });
 
+
+    /**
+     * POST /character/equip
+     * Equipa algo al personaje. Si no tiene huecos libres hay que desequipar algo antes
+     * @params Body array: id_equip de lo que equipar, id_unequip de lo que desequipar, type: weapon, skill, object
+     */
+    characterRouter.post('/equip', function (req, res, next) {
+        // El objeto user
+        var usuario = req.user,
+            params = req.body;
+
+        // Compruebo el estado de la partida
+        if (usuario.game.gamedata.status !== config.GAME_STATUS.waiting) {
+            console.tag('CHAR-EQUIP').error('No se permite esta acción en el estado actual de la partida');
+            responseUtils.responseError(res, 400, 'errGameStatusNotAllowed');
+            return;
+        }
+
+        // Compruebo si puedo equiparlo, dependiendo de lo que sea
+        var canEquip = false;
+        switch (params.type) {
+            case 'weapon':
+                if (!usuario.game.character.weapon.name || params.id_unequip) {
+                    canEquip = true;
+                }
+                break;
+            case 'skill':
+                if (usuario.game.character.skill_slots > usuario.game.character.skills.length || params.id_unequip) {
+                    canEquip = true;
+                }
+                break;
+            case 'object':
+                if (usuario.game.character.inventory_slots > usuario.game.character.inventory.length || params.id_unequip) {
+                    canEquip = true;
+                }
+                break;
+        }
+
+        // Verificar que el id_equip y id_unequip corresponden ambos a elementos del mismo tipo existentes
+
+        // Verificar que lo que quiero equipar puedo hacerlo por "requisitos" del elemento a equipar
+
+        // Compruebo si tengo dinero
+    });
+
+
     /**
      * POST /character/levelup
      * Sube de nivel
@@ -143,6 +182,13 @@ module.exports = function (app) {
         // El objeto user
         var usuario = req.user,
             params = req.body;
+
+        // Compruebo el estado de la partida, si es 1 ó 2. Si no, error
+        if (usuario.game.gamedata.status !== config.GAME_STATUS.waiting) {
+            console.tag('CHAR-LEVELUP').error('No se permite esta acción en el estado actual de la partida');
+            responseUtils.responseError(res, 400, 'errGameStatusNotAllowed');
+            return;
+        }
 
         // Comprueba si tengo pj y si tengo puntos de talento disponibles
         if (usuario.game.character === null) {
@@ -285,7 +331,7 @@ module.exports = function (app) {
         }
 
         // Compruebo que el nuevo nombre cumple los requisitos
-        if (!validator.matches(newName, config.CONSTANTS.STR_VALID_REGEXP) || !validator.isLength(newName, 3, 30)) {
+        if (!validator.matches(newName, config.REGEXP.str_valid_regexp) || !validator.isLength(newName, 3, 30)) {
             console.tag('CHAR-NAMENOTVALID').error('Nuevo nombre erróneo');
             responseUtils.responseError(res, 400, 'errCharacterWrongNewName');
             return;

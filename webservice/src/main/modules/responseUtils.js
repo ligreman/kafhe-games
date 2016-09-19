@@ -15,7 +15,7 @@ var config = require('../modules/config'),
  * @returns {*}
  */
 var censureUser = function (user) {
-    if (!config.CENSURE_USER) {
+    if (!config.SERVER.censure_user) {
         return user;
     }
 
@@ -81,9 +81,9 @@ var processUser = function (user) {
 
     // Si tiene personaje, calculo sus stats
     if (user.game.character) {
-        var combatLevel = user.game.character.talents.combat.length * config.CONSTANTS.MERC_STARTING_STAT_VALUE,
-            explorationLevel = user.game.character.talents.exploration.length * config.CONSTANTS.MERC_STARTING_STAT_VALUE,
-            survivalLevel = user.game.character.talents.survival.length * config.CONSTANTS.MERC_STARTING_STAT_VALUE;
+        var combatLevel = user.game.character.talents.combat.length * config.DEFAULTS.character.stats_starting_value,
+            explorationLevel = user.game.character.talents.exploration.length * config.DEFAULTS.character.stats_starting_value,
+            survivalLevel = user.game.character.talents.survival.length * config.DEFAULTS.character.stats_starting_value;
 
         // Calculo sus stats
         user.game.character.stats = {

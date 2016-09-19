@@ -30,21 +30,21 @@ if (hora !== 1) {
 }
 dia = 6;
 switch (dia) {
-    case 1: // Los lunes pongo las partidas en estado batalla, las que están en estado WEEKEND
-        Game.update({"status": config.GAME_STATUS.WEEKEND}, {"status": config.GAME_STATUS.BATTLE}, {multi: true},
+    case 1: // Los lunes pongo las partidas en estado batalla, las que están en estado weekend
+        Game.update({"status": config.GAME_STATUS.weekend}, {"status": config.GAME_STATUS.battle}, {multi: true},
             function (error, num) {
                 if (error) {
                     console.error(error);
                     salir();
                 }
 
-                console.log('Partidas en estado WEEKEND después del fin de semana se ponen en BATALLA.');
+                console.log('Partidas en estado weekend después del fin de semana se ponen en BATALLA.');
                 salir();
             }
         );
         break;
     case 5: //viernes pongo las partidas en negociacion
-        Game.update({"status": config.GAME_STATUS.BATTLE}, {"status": config.GAME_STATUS.BUSINESS}, {multi: true},
+        Game.update({"status": config.GAME_STATUS.battle}, {"status": config.GAME_STATUS.BUSINESS}, {multi: true},
             function (error, num) {
                 if (error) {
                     console.error(error);
@@ -101,8 +101,8 @@ function givePlayersTostolares() {
                     }
 
                     jugadores.forEach(function (jugador) {
-                        jugador.game.tostolares = Math.round(jugador.game.stats.reputation / config.DEFAULTS.REPUTATION_TO_TOSTOLARES_CONVERSION);
-                        jugador.game.stats.reputation -= jugador.game.tostolares * config.DEFAULTS.REPUTATION_TO_TOSTOLARES_CONVERSION;
+                        jugador.game.tostolares = Math.round(jugador.game.stats.reputation / config.DEFAULTS.reputation_to_tostolares_conversion);
+                        jugador.game.stats.reputation -= jugador.game.tostolares * config.DEFAULTS.reputation_to_tostolares_conversion;
 
                         promises.push(jugador.save());
                     });
@@ -134,7 +134,7 @@ function givePlayersTostolares() {
  * notificaciones, cambio el pedido actual y el anterior, y el objeto game.
  */
 function gameFridayCloseAndCreate() {
-    Game.find({"status": config.GAME_STATUS.RESOLUTION})
+    Game.find({"status": config.GAME_STATUS.resolution})
         .exec(function (error, games) {
             if (error) {
                 console.error(error);
@@ -146,7 +146,7 @@ function gameFridayCloseAndCreate() {
             games.forEach(function (game) {
                 // Si es recursivo lo reseteo
                 if (game.repeat) {
-                    game.status = config.GAME_STATUS.WEEKEND;
+                    game.status = config.GAME_STATUS.weekend;
                     game.caller = null;
                     game.notifications = [];
 
@@ -154,7 +154,7 @@ function gameFridayCloseAndCreate() {
                     jugadoresReset.concat(game.players);
                 } else {
                     // Si no lo cierro y punto
-                    game.status = config.GAME_STATUS.CLOSED;
+                    game.status = config.GAME_STATUS.closed;
 
                     // Jugadores a limpiar
                     jugadoresClean.concat(game.players);
@@ -186,7 +186,7 @@ function gameFridayCloseAndCreate() {
                             fury: 0,
                             fury_mode: 0,
                             reputation: 0,
-                            action_points: config.DEFAULTS.TOAST_POINTS
+                            action_points: config.DEFAULTS.toast_points
                         };
                         jugador.game.conditions = [];
                         jugador.game.afk = false;
@@ -220,7 +220,7 @@ function gameFridayCloseAndCreate() {
                             fury: 0,
                             fury_mode: 0,
                             reputation: 0,
-                            action_points: config.DEFAULTS.TOAST_POINTS
+                            action_points: config.DEFAULTS.toast_points
                         };
                         jugador.game.conditions = [];
                         jugador.game.afk = false;
@@ -261,14 +261,14 @@ function gameFridayCloseAndCreate() {
  * Las partidas en estado 2 se ponen a 0. De momento no reseteo reputaciones y demás
  */
 eventEmitter.on('gameFridayContinue', function () {
-    Game.update({"status": config.GAME_STATUS.BUSINESS}, {"status": config.GAME_STATUS.WEEKEND}, {multi: true},
+    Game.update({"status": config.GAME_STATUS.BUSINESS}, {"status": config.GAME_STATUS.weekend}, {multi: true},
         function (error, num) {
             if (error) {
                 console.error(error);
                 salir();
             }
 
-            console.log('Partidas en estado NEGOCIACIONES no se cerraron y pasan a WEEKEND para continuar la semana que viene.');
+            console.log('Partidas en estado NEGOCIACIONES no se cerraron y pasan a weekend para continuar la semana que viene.');
             salir();
         }
     );
@@ -285,7 +285,7 @@ eventEmitter.on('gameFridayContinue', function () {
 
      games.forEach(function (game) {
      // Lo cierro y creo uno nuevo si es que era recursivo
-     game.status = config.GAME_STATUS.WEEKEND;
+     game.status = config.GAME_STATUS.weekend;
      promises.push(game.save());
      });
      });*/
