@@ -85,7 +85,7 @@ module.exports = function (app) {
             usuario.game.character = newChar;
 
             // Quito dinero
-            usuario.game.tostolares = usuario.game.tostolares - config.DEFAULTS.character.hire_cost;
+            usuario.game.tostolares -= config.DEFAULTS.character.hire_cost;
 
             responseUtils.saveUserAndResponse(res, usuario, req.authInfo.access_token);
         });
@@ -235,6 +235,9 @@ module.exports = function (app) {
                     return;
                 }
             }
+
+            // Resto dinero
+            usuario.game.tostolares -= equip.price;
 
             // equipo lo nuevo
             switch (params.type) {
