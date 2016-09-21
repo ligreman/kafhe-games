@@ -9,6 +9,7 @@ module.exports = function (mongoose) {
     require('./skill')(mongoose);
     require('./talent')(mongoose);
     require('./object')(mongoose);
+    require('./weapon')(mongoose);
     require('./place')(mongoose);
     // require('./shop')(mongoose);
     require('./game')(mongoose);

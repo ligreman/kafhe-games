@@ -9,8 +9,10 @@ module.exports = function (app) {
         config = require('../modules/config'),
         talentUtils = require('../modules/talentUtils'),
         responseUtils = require('../modules/responseUtils'),
+        characterUtils = require('../modules/characterUtils'),
         characterRouter = express.Router(),
         clone = require('clone'),
+        Q = require('q'),
         bodyParser = require('body-parser'),
         mongoose = require('mongoose'),
         models = require('../models/models')(mongoose);
@@ -146,32 +148,125 @@ module.exports = function (app) {
         }
 
         // Compruebo si puedo equiparlo, dependiendo de lo que sea
-        var canEquip = false;
+        var canEquip = false, consultas = [];
         switch (params.type) {
             case 'weapon':
                 if (!usuario.game.character.weapon.name || params.id_unequip) {
                     canEquip = true;
+                    consultas.push(models.Weapon.find({"id": params.id_equip}).exec());
+
+                    if (params.id_unequip) {
+                        consultas.push(models.Weapon.find({"id": params.id_unequip}).exec());
+                    }
                 }
                 break;
             case 'skill':
                 if (usuario.game.character.skill_slots > usuario.game.character.skills.length || params.id_unequip) {
                     canEquip = true;
+                    consultas.push(models.Skill.find({"id": params.id_equip}).exec());
+
+                    if (params.id_unequip) {
+                        consultas.push(models.Skill.find({"id": params.id_unequip}).exec());
+                    }
                 }
                 break;
             case 'object':
                 if (usuario.game.character.inventory_slots > usuario.game.character.inventory.length || params.id_unequip) {
                     canEquip = true;
+                    consultas.push(models.Object.find({"id": params.id_equip}).exec());
+
+                    if (params.id_unequip) {
+                        consultas.push(models.Object.find({"id": params.id_unequip}).exec());
+                    }
                 }
                 break;
         }
 
         // Verificar que el id_equip y id_unequip corresponden ambos a elementos del mismo tipo existentes
+        Q.allSettled(consultas).then(function (results) {
+            var resultado = true, equip = null, unequip = null, reason = null;
 
-        // Verificar que lo que quiero equipar puedo hacerlo por "requisitos" del elemento a equipar
+            // La petición de equip
+            if (results[0].state !== "fulfilled") {
+                resultado = false;
+                reason = results[0].reason;
+            } else {
+                equip = results[0].value;
+            }
+            // La petición de unequip
+            if (resultado && params.id_unequip && results[1].state === "fulfilled") {
+                unequip = results[1].value;
+            } else if (resultado && params.id_unequip && results[1].state !== "fulfilled") {
+                resultado = false;
+                reason = results[1].reason;
+            }
 
-        // Compruebo si tengo dinero
+            if (!resultado) {
+                console.tag('CHAR-EQUIP').error('Error al recuperar el equipo: ' + reason);
+                responseUtils.responseError(res, 400, 'errCharacterWrongEquip');
+                return;
+            }
+
+            // Todo ha ido bien hasta aquí
+            // Compruebo si ambos elementos los he encontrado (indirectamente comprueba que son del mismo tipo con el switch previo)
+            if (equip.length !== 1 || (params.id_unequip && unequip.length !== 1)) {
+                console.tag('CHAR-EQUIP').error('No se ha encontrado el equipo');
+                responseUtils.responseError(res, 400, 'errCharacterEquipNotFound');
+                return;
+            }
+
+            // Compruebo si tengo dinero
+            if (usuario.game.tostolares < equip.price) {
+                console.tag('CHAR-HIRE').error('No tienes dinero para comprar');
+                responseUtils.responseError(res, 400, 'errWeaponNoMoney');
+                return;
+            }
+
+            //TODO Verificar que lo que quiero equipar puedo hacerlo por "requisitos" del elemento a equipar
+
+            // Todas las comprobaciones correctas
+            // Elimino equipo
+            if (unequip) {
+                usuario = characterUtils.unequip(usuario, unequip, params.type);
+
+                if (usuario === false) {
+                    console.tag('CHAR-HIRE').error('Error desequipando ' + param.type);
+                    responseUtils.responseError(res, 400, 'errCharacterWrongUnequip');
+                    return;
+                }
+            }
+
+            // equipo lo nuevo
+            switch (params.type) {
+                case 'weapon':
+                    usuario.game.character.weapon.name = equip.name;
+                    usuario.game.character.weapon.ammo = equip.ammo;
+                    usuario.game.character.weapon.damage = equip.damage;
+                    usuario.game.character.weapon.accuracy = equip.accuracy;
+                    usuario.game.character.weapon.level = equip.level;
+                    break;
+                case 'skill':
+                    usuario.game.character.skills.push({
+                        skill: equip.id,
+                        uses: equip.uses
+                    });
+                    usuario.game.character.skill_slots--;
+                    break;
+                case 'object':
+                    usuario.game.character.objects.push({
+                        object: equip.id,
+                        uses: equip.uses
+                    });
+                    usuario.game.character.inventory_slots--;
+                    break;
+            }
+
+            // Salvamos
+            responseUtils.saveCharacterAndUserAndResponse(res, usuario, req.authInfo.access_token);
+        });
     });
 
+    //TODO upgrade weapon
 
     /**
      * POST /character/levelup
