@@ -48,10 +48,10 @@ module.exports = function (mongoose) {
                 uses: {type: Number, default: 0}
             }],
             inventory_slots: {type: Number, default: 0},
-            inventory: {
+            inventory: [{
                 object: {type: String, default: null},
                 uses: {type: Number, default: 0}
-            },
+            }],
             weapon: {
                 name: {type: String, default: null},
                 ammo: {type: Number, default: 0},

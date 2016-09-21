@@ -4,14 +4,17 @@
 module.exports = function (mongoose) {
 
     //Modelo para los usuarios, coleccion Users
-    var ObjectSchema = mongoose.Schema({
+    var WeaponSchema = mongoose.Schema({
         id: {type: String, unique: true, required: true},
         name: {type: String, required: true},
         description: {type: String, required: true},
-        uses: {type: Number, required: true},
+        ammo: {type: Number, default: 0},
+        damage: {type: Number, default: 0},
+        accuracy: {type: Number, default: 0},
+        level: {type: Number, default: 0},
         price: {type: Number, default: 0}
     }, {versionKey: false});
 
     //Declaro y devuelvo el modelo
-    return mongoose.model('Object', ObjectSchema);
+    return mongoose.model('Weapon', WeaponSchema);
 };
