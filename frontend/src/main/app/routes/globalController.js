@@ -4,8 +4,8 @@
     //Controlador principal de todo el sistema.
     angular.module('kafhe.controllers')
         .controller('GlobalController',
-            ['$scope', '$rootScope', '$translate', '$location', '$cookies', 'CONFIG', 'ROUTES', 'growl', 'KGame',
-                function ($scope, $rootScope, $translate, $location, $cookies, CONFIG, ROUTES, growl, KGame) {
+            ['$scope', '$rootScope', '$translate', '$location', '$cookies', 'CONFIG', 'ROUTES', 'growl', 'KGame', '$log',
+                function ($scope, $rootScope, $translate, $location, $cookies, CONFIG, ROUTES, growl, KGame, $log) {
                     // Objeto que almacena la información básica. Lo inicializo
                     $scope.global = {};
                     fnClearGlobalVars();
@@ -39,6 +39,10 @@
                      * @param callback: Función a ejecutar cuando se termine la actualización
                      */
                     function fnUpdateGameData(callback) {
+                        $log.debug("Updating game data...");
+
+                        //TODO chekeo de versión de datos del juego
+
                         if (!$scope.global.loaded || !$scope.global.user || !$scope.global.gamedata.meals || !$scope.global.gamedata.drinks || !$scope.global.gamedata.skills || !$scope.global.gamedata.talents || !$scope.global.gamedata.objects || !$scope.global.gamedata.places) {
                             KGame.getGameData(function (user, meals, drinks, skills, talents, places, objects) {
                                 // Actualizo las variables de información general
@@ -53,11 +57,15 @@
                                 // Ahora actualizo y proceso los datos del usuario
                                 fnUpdateUserObject(user);
 
+                                $log.debug("...updated.");
+
                                 if (typeof callback === 'function') {
                                     callback();
                                 }
                             });
                         } else {
+                            $log.debug("...don't need it.");
+
                             if (typeof callback === 'function') {
                                 callback();
                             }
@@ -73,6 +81,7 @@
                         //Sacar del objeto user el personaje
                         $scope.global.character = user.game.character;
                         user.game.character = null;
+
                         /*
                          // Saco el arma equipado
                          var selector = ':has(:root > .id:val("' + user.game.equipment.weapon + '"))';

@@ -10,6 +10,8 @@
                     $scope.toggle = fnBuildToggler;
                     $scope.close = fnClose;
 
+                    // Actualizo los datos del juego si hace falta
+                    $scope.updateGameData();
 
                     /**
                      * Build handler to open/close a SideNav
@@ -27,16 +29,8 @@
                         $mdSidenav(side).close();
                     }
                 }])
-        .controller('LeftCtrl', function ($scope, $timeout, $mdSidenav, $log) {
-
-        })
-        .controller('RightCtrl', function ($scope, $timeout, $mdSidenav, $log) {
-            $scope.close = function () {
-                // Component lookup should always be available since we are not using `ng-if`
-                $mdSidenav('right').close()
-                    .then(function () {
-                        $log.debug("close RIGHT is done");
-                    });
-            };
-        });
+        .controller('LeftCtrl', ['$scope', '$log', function ($scope, $log) {
+        }])
+        .controller('RightCtrl', ['$scope', '$log', function ($scope, $log) {
+        }]);
 })();

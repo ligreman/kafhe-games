@@ -18,6 +18,8 @@
     "angular-growl-v2": "^0.7.9",
     "angular-material": "^1.0.8",
     "angular-translate-storage-local": "^2.11.0",
-    "angular-toArrayFilter": "^1.0.1"
+    "angular-toArrayFilter": "^1.0.1",
+    "vis": "^4.16.1",
+    "c3": "^0.4.11"
   }
 }
