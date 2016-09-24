@@ -70,7 +70,6 @@
                      * 2. Recoge las habilidades disponibles
                      */
                     function fnUpdateUserObject(user) {
-
                         //Sacar del objeto user el personaje
                         $scope.global.character = user.game.character;
                         user.game.character = null;

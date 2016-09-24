@@ -24,7 +24,6 @@ errCharacterNotEnoughTalentPoints - No tienes suficientes puntos de talento
 errCharacterTalentNotFound - No existe alguno de los talentos
 errCharacterTalentDependencyFail - Ya tenías alguno de los talentos o no cumples los requisitos para adquirirlos
 errCharacterEquipNotFound - No se ha encontrado el equipo
-errCharacterWrongEquip - Error al recuperar el equipo
 errCharacterWrongUnequip - Error desequipando un elemento (object o skill)
 
 errWeaponNoMoney - No tienes dinero para comprar

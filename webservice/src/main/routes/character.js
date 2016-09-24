@@ -201,19 +201,24 @@ module.exports = function (app) {
                 reason = results[1].reason;
             }
 
-            if (!resultado) {
+            if (!resultado || equip.length !== 1 || (params.id_unequip && unequip.length !== 1)) {
                 console.tag('CHAR-EQUIP').error('Error al recuperar el equipo: ' + reason);
-                responseUtils.responseError(res, 400, 'errCharacterWrongEquip');
+                responseUtils.responseError(res, 400, 'errCharacterEquipNotFound');
                 return;
             }
 
             // Todo ha ido bien hasta aquí
-            // Compruebo si ambos elementos los he encontrado (indirectamente comprueba que son del mismo tipo con el switch previo)
-            if (equip.length !== 1 || (params.id_unequip && unequip.length !== 1)) {
-                console.tag('CHAR-EQUIP').error('No se ha encontrado el equipo');
-                responseUtils.responseError(res, 400, 'errCharacterEquipNotFound');
-                return;
+            equip = equip[0];
+            if (unequip) {
+                unequip = unequip[0];
             }
+
+            // Compruebo si ambos elementos los he encontrado (indirectamente comprueba que son del mismo tipo con el switch previo)
+            /*if (equip.length !== 1 || (params.id_unequip && unequip.length !== 1)) {
+             console.tag('CHAR-EQUIP').error('No se ha encontrado el equipo');
+             responseUtils.responseError(res, 400, 'errCharacterEquipNotFound');
+             return;
+             }*/
 
             // Compruebo si tengo dinero
             if (usuario.game.tostolares < equip.price) {
@@ -242,7 +247,7 @@ module.exports = function (app) {
             // equipo lo nuevo
             switch (params.type) {
                 case 'weapon':
-                    usuario.game.character.weapon.name = equip.name;
+                    usuario.game.character.weapon.weapon = equip.id;
                     usuario.game.character.weapon.ammo = equip.ammo;
                     usuario.game.character.weapon.damage = equip.damage;
                     usuario.game.character.weapon.accuracy = equip.accuracy;

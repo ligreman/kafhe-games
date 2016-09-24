@@ -7,32 +7,28 @@
             ['$scope', '$translate', 'API', '$mdSidenav', '$log',
                 function ($scope, $translate, API, $mdSidenav, $log) {
 
-                    $scope.toggleLeft = fnBuildToggler('left');
-                    $scope.toggleRight = fnBuildToggler('right');
+                    $scope.toggle = fnBuildToggler;
+                    $scope.close = fnClose;
+
 
                     /**
                      * Build handler to open/close a SideNav
                      */
                     function fnBuildToggler(navID) {
-                        return function () {
-                            // Component lookup should always be available since we are not using `ng-if`
-                            $mdSidenav(navID)
-                                .toggle()
-                                .then(function () {
-                                    $log.debug("toggle " + navID + " is done");
-                                });
-                        }
+                        // Component lookup should always be available since we are not using `ng-if`
+                        $mdSidenav(navID).toggle();
+                    }
+
+                    /**
+                     * Cierra el panel
+                     */
+                    function fnClose(side) {
+                        // Component lookup should always be available since we are not using `ng-if`
+                        $mdSidenav(side).close();
                     }
                 }])
         .controller('LeftCtrl', function ($scope, $timeout, $mdSidenav, $log) {
-            $scope.close = function () {
-                // Component lookup should always be available since we are not using `ng-if`
-                $mdSidenav('left').close()
-                    .then(function () {
-                        $log.debug("close LEFT is done");
-                    });
 
-            };
         })
         .controller('RightCtrl', function ($scope, $timeout, $mdSidenav, $log) {
             $scope.close = function () {

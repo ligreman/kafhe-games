@@ -53,7 +53,7 @@ module.exports = function (mongoose) {
                 uses: {type: Number, default: 0}
             }],
             weapon: {
-                name: {type: String, default: null},
+                weapon: {type: String, default: null},
                 ammo: {type: Number, default: 0},
                 damage: {type: Number, default: 0},
                 accuracy: {type: Number, default: 0},

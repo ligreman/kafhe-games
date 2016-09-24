@@ -114,6 +114,13 @@ module.exports = function (app) {
          ]*/
     }];
 
+    var weapons = [
+        {
+            id: 'weapon01', name: 'Armacita', description: 'Mata mucho', ammo: 100,
+            damage: 20, accuracy: 40, level: 1, price: 200
+        }
+    ];
+
     var characters = [
         {
             _id: new mongoose.Types.ObjectId,
@@ -135,8 +142,7 @@ module.exports = function (app) {
             skill_slots: 2,
             skills: [{skill: 'skill01', uses: 3}],
             inventory_slots: 3,
-            inventory: {object: 'object01', uses: 2},
-            weapon: {name: 'Armacita', ammo: 10, damage: 20, accuracy: 30, level: 1}
+            inventory: {object: 'object01', uses: 2}
         }
     ];
 
@@ -367,7 +373,7 @@ module.exports = function (app) {
             models.Drink.remove(),
             models.Game.remove(),
             models.Meal.remove(),
-            // models.Order.remove(),
+            models.Weapon.remove(),
             models.Object.remove(),
             models.Place.remove(),
             models.Session.remove(),
@@ -493,12 +499,22 @@ module.exports = function (app) {
                 eventEmitter.emit('#Finalizado', res, 'usuarios');
             }
         });
+
+        //Meto los nuevos valores
+        models.Weapon.create(weapons, function (err, weapons) {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("    Creadas las armas");
+                eventEmitter.emit('#Finalizado', res, 'armas');
+            }
+        });
     });
 
     eventEmitter.on('#Finalizado', function (res, what) {
         finalizado++;
         console.log("      ++ Ha finalizado " + what + " (" + finalizado + " de 9)");
-        if (finalizado === 9) {
+        if (finalizado === 10) {
             res.json({"error": "false", "message": "Datos cargados"});
         }
     });

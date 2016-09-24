@@ -1,12 +1,15 @@
 <section layout="row" flex>
-    <md-sidenav
-            class="md-sidenav-left"
-            md-component-id="left"
-            md-is-locked-open="$mdMedia('gt-md')"
-            md-whiteframe="4">
-
-        <md-toolbar class="">
-            <h1 class="md-toolbar-tools">Sidenav Left</h1>
+    <md-sidenav class="md-sidenav-left md-whiteframe-1dp"
+                md-component-id="left"
+                md-is-locked-open="$mdMedia('gt-md')">
+        <md-toolbar class="md-primary md-hue-3">
+            <div class="md-toolbar-tools">
+                <h2>Actividad</h2>
+                <span flex></span>
+                <md-button ng-click="close('left')" class="md-icon-button" hide-gt-md flex="none">
+                    <md-icon>clear</md-icon>
+                </md-button>
+            </div>
         </md-toolbar>
         <md-content layout-padding ng-controller="LeftCtrl">
             <p>
@@ -14,34 +17,32 @@
                 narrow your display.
             </p>
         </md-content>
-
     </md-sidenav>
 
-    <md-content class="grey" flex layout="row" layout-align="center start" ng-cloak>
-        <div class="md-padding" flex="90">
-            <p>Hola vecinito</p>
-            <a ng-click="toggleLeft()">Left</a>
-            <a ng-click="toggleRight()">Right</a>
+    <md-content flex layout="row" layout-align="center start" ng-cloak>
+        <div class="md-padding" flex>
+            <p>Mapa</p>
+            <a ng-click="toggle('left')">Left</a>
+            <a ng-click="toggle('right')">Right</a>
         </div>
     </md-content>
 
-    <md-sidenav
-            class="md-sidenav-right md-whiteframe-4dp"
-            md-component-id="right"
-            md-is-locked-open="$mdMedia('gt-md')">
-
-        <md-toolbar class="md-theme-indigo">
-            <h1 class="md-toolbar-tools">Sidenav Left</h1>
+    <md-sidenav class="md-sidenav-right md-whiteframe-1dp"
+                md-component-id="right"
+                md-is-locked-open="$mdMedia('gt-md')">
+        <md-toolbar class="md-primary md-hue-3">
+            <div class="md-toolbar-tools">
+                <h2>Personaje</h2>
+                <span flex></span>
+                <md-button ng-click="close('right')" class="md-icon-button" hide-gt-md flex="none">
+                    <md-icon>clear</md-icon>
+                </md-button>
+            </div>
         </md-toolbar>
-        <md-content layout-padding ng-controller="RightCtrl">
-            <md-button ng-click="close()" class="md-primary" hide-gt-md>
-                Close Sidenav Left
-            </md-button>
-            <p hide show-gt-md>
-                This sidenav is locked open on your device. To go back to the default behavior,
-                narrow your display.
-            </p>
+        <md-content layout="column" layout-padding ng-controller="RightCtrl">
+            <div class="md-whiteframe-1dp kafhe-white-background" layout-margin>
+                <p class="character-name">Nombre: {{ global.character.name }}</p>
+            </div>
         </md-content>
-
     </md-sidenav>
 </section>
