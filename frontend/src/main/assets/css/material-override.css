@@ -1,0 +1,4 @@
+/* Sobrescribimos material */
+md-dialog {
+    background: #dddddd !important;
+}

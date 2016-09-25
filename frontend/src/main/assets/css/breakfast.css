@@ -1,0 +1,15 @@
+/* DESAYUNO */
+
+#meal-drink h2 {
+    border-right: 1px solid #616161;
+    padding-right: 5px;
+    writing-mode: vertical-lr;
+}
+
+#meal-drink md-radio-button {
+    font-weight: bold;
+}
+
+#meal-drink md-radio-button.md-checked {
+    color: #FDD835;
+}

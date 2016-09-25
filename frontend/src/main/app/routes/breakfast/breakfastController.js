@@ -79,6 +79,12 @@
 
                                 // Mensaje growl de OK
                                 $scope.growlNotification('success', 'textOrderChanged');
+
+                                $scope.selection = {
+                                    meal: '',
+                                    drink: '',
+                                    ito: false
+                                }
                             }
                         });
                     };
