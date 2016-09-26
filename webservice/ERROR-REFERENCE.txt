@@ -28,6 +28,8 @@ errCharacterWrongUnequip - Error desequipando un elemento (object o skill)
 
 errWeaponNoMoney - No tienes dinero para comprar
 
+errRetrievingSystemData - Error al obtener los datos del sistema
+
 --------------------------
 
 errProfileNoValidData - No había datos válidos de perfil que actualizar

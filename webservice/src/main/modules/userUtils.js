@@ -1,13 +1,13 @@
 'use strict';
 
-var console       = process.console,
-    TAFFY         = require('taffy'),
-    Q             = require('q'),
-    math          = require('mathjs'),
-    utils         = require('./utils'),
-    config        = require('./config'),
-    formulas      = require('./formulas'),
-    gameResources = require('./gameResources');
+var console = process.console,
+    TAFFY = require('taffy'),
+    Q = require('q'),
+    math = require('mathjs'),
+    utils = require('./utils'),
+    config = require('./config'),
+    formulas = require('./formulas');
+// gameResources = require('./gameResources');
 
 
 /**
@@ -141,7 +141,7 @@ var updateSkill = function (user, idSkill, source, changes) {
         source = 'armors';
     }
 
-    var skills    = getSkills(user, source),
+    var skills = getSkills(user, source),
         newSkills = [];
 
     // Actualizo el listado de skills

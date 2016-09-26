@@ -11,7 +11,7 @@ module.exports = function (mongoose) {
     require('./object')(mongoose);
     require('./weapon')(mongoose);
     require('./place')(mongoose);
-    // require('./shop')(mongoose);
+    require('./system')(mongoose);
     require('./game')(mongoose);
     require('./user')(mongoose);
     require('./character')(mongoose);

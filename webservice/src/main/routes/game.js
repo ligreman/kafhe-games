@@ -34,22 +34,15 @@ module.exports = function (app) {
                 utils.error(res, 400, 'errGameDataNotFound');
                 return;
             }
-            
-            res.json({
-                "data": {
-                    "skills": skills,
-                    "objects": objects,
-                    "places": places,
-                    "talents": talents,
-                    "meals": meals,
-                    "drinks": drinks
-                },
-                "session": {
-                    "access_token": req.authInfo.access_token,
-                    "expire": 1000 * 60 * 60 * 24 * 30
-                },
-                "error": ""
-            });
+
+            responseUtils.responseJson(res, {
+                "skills": skills,
+                "objects": objects,
+                "places": places,
+                "talents": talents,
+                "meals": meals,
+                "drinks": drinks
+            }, req.authInfo.access_token);
         };
 
         // Lanzo las dos consultas a Mongo
@@ -61,6 +54,28 @@ module.exports = function (app) {
             models.Meal.find({}).exec(),
             models.Drink.find({}).exec()
         ]).spread(answer);
+    });
+
+    /**
+     * GET /game/version
+     * Devuelve la versión de juego
+     */
+    gameRouter.get('/version', function (req, res, next) {
+        models.System
+            .findOne()
+            .exec(function (error, system) {
+                if (error) {
+                    console.tag('MONGO').error(error);
+                    utils.error(res, 400, 'errRetrievingSystemData');
+                    return;
+                }
+
+                responseUtils.responseJson(res, {
+                    "major": system.major,
+                    "minor": system.minor,
+                    "fix": system.fix
+                }, req.authInfo.access_token);
+            });
     });
 
     // Asigno los router a sus rutas

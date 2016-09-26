@@ -3,13 +3,13 @@
 module.exports = function (app) {
     var console = process.console;
 
-    var express       = require('express'),
-        passport      = require('passport'),
-        utils         = require('../modules/utils'),
+    var express = require('express'),
+        passport = require('passport'),
+        utils = require('../modules/utils'),
         responseUtils = require('../modules/responseUtils'),
-        userRouter    = express.Router(),
-        mongoose      = require('mongoose'),
-        models        = require('../models/models')(mongoose);
+        userRouter = express.Router(),
+        mongoose = require('mongoose'),
+        models = require('../models/models')(mongoose);
 
     //**************** USER ROUTER **********************
     //Middleware para estas rutas
@@ -23,16 +23,7 @@ module.exports = function (app) {
      * Obtiene la información del usuario
      */
     userRouter.get('/', function (req, res, next) {
-        res.json({
-            "data": {
-                "user": responseUtils.censureUser(req.user)
-            },
-            "session": {
-                "access_token": req.authInfo.access_token,
-                "expire": 1000 * 60 * 60 * 24 * 30
-            },
-            "error": ""
-        });
+        responseUtils.responseJson(res, {"user": responseUtils.censureUser(req.user)}, req.authInfo.access_token);
     });
 
     /**
@@ -55,16 +46,7 @@ module.exports = function (app) {
                     return;
                 }
 
-                res.json({
-                    "data": {
-                        "players": playerList
-                    },
-                    "session": {
-                        "access_token": req.authInfo.access_token,
-                        "expire": 1000 * 60 * 60 * 24 * 30
-                    },
-                    "error": ""
-                });
+                responseUtils.responseJson(res, {"players": playerList}, req.authInfo.access_token);
             });
     });
 

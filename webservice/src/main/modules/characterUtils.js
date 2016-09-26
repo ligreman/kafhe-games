@@ -6,8 +6,7 @@ var console = process.console,
     math = require('mathjs'),
     utils = require('./utils'),
     config = require('./config'),
-    formulas = require('./formulas'),
-    gameResources = require('./gameResources');
+    formulas = require('./formulas');
 
 /**
  * Elimina el equipo (objeto o habilidades) del usuario

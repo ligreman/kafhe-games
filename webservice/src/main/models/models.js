@@ -16,6 +16,7 @@ module.exports = function (mongoose) {
         Talent: mongoose.model('Talent'),
         Object: mongoose.model('Object'),
         Weapon: mongoose.model('Weapon'),
+        System: mongoose.model('System'),
         Place: mongoose.model('Place')
     };
 };
