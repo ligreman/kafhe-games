@@ -107,6 +107,18 @@ md-tooltip {
     /*min-width: auto;*/
 }
 
+::-webkit-scrollbar {
+    width: 16px;
+}
+
+::-webkit-scrollbar-track {
+    background: #9E9E9E;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1B5E20;
+}
+
 /***************************** HOME ******************************/
 
 .shopTitle {

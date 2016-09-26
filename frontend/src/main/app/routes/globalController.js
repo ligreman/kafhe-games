@@ -4,8 +4,10 @@
     //Controlador principal de todo el sistema.
     angular.module('kafhe.controllers')
         .controller('GlobalController',
-            ['$scope', '$rootScope', '$translate', '$location', '$cookies', 'CONFIG', 'ROUTES', 'growl', 'KGame', '$log',
-                function ($scope, $rootScope, $translate, $location, $cookies, CONFIG, ROUTES, growl, KGame, $log) {
+            ['$scope', '$rootScope', '$translate', '$location', '$cookies',
+                'CONFIG', 'ROUTES', 'growl', 'KGame', '$log', 'API',
+                function ($scope, $rootScope, $translate, $location, $cookies,
+                          CONFIG, ROUTES, growl, KGame, $log, API) {
                     // Objeto que almacena la información básica. Lo inicializo
                     $scope.global = {};
                     fnClearGlobalVars();
@@ -46,11 +48,12 @@
                         var nextVersion = null;
 
                         //TODO chekeo de versión de datos del juego
-                        API.system().version({}, function (response) {
+                        API.game().version({}, function (response) {
                             if (response) {
-                                nextVersion = response.major + '.' + response.minor + '.' + response.fix;
+                                nextVersion = response.data.version;
 
                                 if (nextVersion !== $scope.version) {
+                                    $log.debug("...new version of data...");
                                     $scope.global.loaded = false;
                                 }
 

@@ -5,11 +5,7 @@ module.exports = function (mongoose) {
 
     //Modelo para los usuarios, coleccion Admins
     var SystemSchema = mongoose.Schema({
-        version: {
-            major: Number,
-            minor: Number,
-            fix: Number
-        }
+        version: {type: String, required: true}
     }, {versionKey: false});
 
     //Declaro y devuelvo el modelo

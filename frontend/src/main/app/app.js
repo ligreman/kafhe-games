@@ -98,17 +98,17 @@
             })
             .accentPalette('myAccent', {
                 'default': '500',
-                'hue-1': '50',
+                'hue-1': '200',
                 'hue-2': '700',
                 // Amarillo
                 'hue-3': 'A700'
             })
             .warnPalette('red', {
-                'default': '500',
+                'default': 'A700',
                 'hue-1': 'A100',
-                'hue-2': '700',
+                'hue-2': '900',
                 // Morado
-                'hue-3': 'A700'
+                'hue-3': '500'
             });
     }]);
 })();

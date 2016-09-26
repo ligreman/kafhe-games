@@ -70,11 +70,7 @@ module.exports = function (app) {
                     return;
                 }
 
-                responseUtils.responseJson(res, {
-                    "major": system.major,
-                    "minor": system.minor,
-                    "fix": system.fix
-                }, req.authInfo.access_token);
+                responseUtils.responseJson(res, {"version": system.version}, req.authInfo.access_token);
             });
     });
 

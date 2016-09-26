@@ -512,11 +512,7 @@ module.exports = function (app) {
         });
 
         //Meto los nuevos valores
-        models.System.create([{
-            major: 2,
-            minor: 7,
-            fix: 10
-        }], function (err, systems) {
+        models.System.create([{version: '2.5.6'}], function (err, systems) {
             if (err) {
                 console.error(err);
             } else {
@@ -528,7 +524,7 @@ module.exports = function (app) {
 
     eventEmitter.on('#Finalizado', function (res, what) {
         finalizado++;
-        console.log("      ++ Ha finalizado " + what + " (" + finalizado + " de 9)");
+        console.log("      ++ Ha finalizado " + what + " (" + finalizado + " de 11)");
         if (finalizado === 11) {
             res.json({"error": "false", "message": "Datos cargados"});
         }
