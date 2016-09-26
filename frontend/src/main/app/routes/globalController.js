@@ -10,6 +10,9 @@
                     $scope.global = {};
                     fnClearGlobalVars();
 
+                    // Versión actual
+                    $scope.version = null;
+
                     //Idioma seleccionado por el usuario
                     $scope.lang = $translate.use();
 
@@ -40,36 +43,50 @@
                      */
                     function fnUpdateGameData(callback) {
                         $log.debug("Updating game data...");
+                        var nextVersion = null;
 
                         //TODO chekeo de versión de datos del juego
+                        API.system().version({}, function (response) {
+                            if (response) {
+                                nextVersion = response.major + '.' + response.minor + '.' + response.fix;
 
-                        if (!$scope.global.loaded || !$scope.global.user || !$scope.global.gamedata.meals || !$scope.global.gamedata.drinks || !$scope.global.gamedata.skills || !$scope.global.gamedata.talents || !$scope.global.gamedata.objects || !$scope.global.gamedata.places) {
-                            KGame.getGameData(function (user, meals, drinks, skills, talents, places, objects) {
-                                // Actualizo las variables de información general
-                                $scope.global.gamedata.meals = meals;
-                                $scope.global.gamedata.drinks = drinks;
-                                $scope.global.gamedata.skills = skills;
-                                $scope.global.gamedata.talents = talents;
-                                $scope.global.gamedata.places = places;
-                                $scope.global.gamedata.objects = objects;
-                                $scope.global.loaded = true;
-
-                                // Ahora actualizo y proceso los datos del usuario
-                                fnUpdateUserObject(user);
-
-                                $log.debug("...updated.");
-
-                                if (typeof callback === 'function') {
-                                    callback();
+                                if (nextVersion !== $scope.version) {
+                                    $scope.global.loaded = false;
                                 }
-                            });
-                        } else {
-                            $log.debug("...don't need it.");
 
-                            if (typeof callback === 'function') {
-                                callback();
+                                // Cargo los datos
+                                if (!$scope.global.loaded || !$scope.global.user || !$scope.global.gamedata.meals || !$scope.global.gamedata.drinks || !$scope.global.gamedata.skills || !$scope.global.gamedata.talents || !$scope.global.gamedata.objects || !$scope.global.gamedata.places) {
+                                    KGame.getGameData(function (user, meals, drinks, skills, talents, places, objects) {
+                                        // Actualizo las variables de información general
+                                        $scope.global.gamedata.meals = meals;
+                                        $scope.global.gamedata.drinks = drinks;
+                                        $scope.global.gamedata.skills = skills;
+                                        $scope.global.gamedata.talents = talents;
+                                        $scope.global.gamedata.places = places;
+                                        $scope.global.gamedata.objects = objects;
+                                        $scope.global.loaded = true;
+
+                                        // Ahora actualizo y proceso los datos del usuario
+                                        fnUpdateUserObject(user);
+
+                                        $log.debug("...updated.");
+
+                                        // Pongo la versión
+                                        $scope.version = nextVersion;
+
+                                        if (typeof callback === 'function') {
+                                            callback();
+                                        }
+                                    });
+                                } else {
+                                    $log.debug("...don't need it.");
+
+                                    if (typeof callback === 'function') {
+                                        callback();
+                                    }
+                                }
                             }
-                        }
+                        });
                     }
 
                     /**

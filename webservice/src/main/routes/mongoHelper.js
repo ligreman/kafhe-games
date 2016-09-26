@@ -379,7 +379,8 @@ module.exports = function (app) {
             models.Session.remove(),
             models.Skill.remove(),
             models.Talent.remove(),
-            models.User.remove()
+            models.User.remove(),
+            models.System.remove()
         ];
         /*
          if (mongoose.connection.collections['character'])
@@ -509,12 +510,26 @@ module.exports = function (app) {
                 eventEmitter.emit('#Finalizado', res, 'armas');
             }
         });
+
+        //Meto los nuevos valores
+        models.System.create([{
+            major: 2,
+            minor: 7,
+            fix: 10
+        }], function (err, systems) {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("    Creados los datos del sistema");
+                eventEmitter.emit('#Finalizado', res, 'sistema');
+            }
+        });
     });
 
     eventEmitter.on('#Finalizado', function (res, what) {
         finalizado++;
         console.log("      ++ Ha finalizado " + what + " (" + finalizado + " de 9)");
-        if (finalizado === 10) {
+        if (finalizado === 11) {
             res.json({"error": "false", "message": "Datos cargados"});
         }
     });
