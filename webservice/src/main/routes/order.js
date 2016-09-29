@@ -59,6 +59,44 @@ module.exports = function (app) {
     });
 
     /**
+     * GET /order/last
+     * Obtiene la información de los pedidos de usuarios de la partida anterior
+     */
+    orderRouter.get('/last', function (req, res, next) {
+        // Saco la lista de jugadores de la partida
+        var players = req.user.game.gamedata.players;
+
+        // Hago una búsqueda de esa lista de usuarios
+        models.User
+            .find({"_id": {"$in": players}})
+            .select('game.last_order alias avatar')
+            .populate('game.last_order.meal game.last_order.drink')
+            .exec(function (error, playerList) {
+                if (error) {
+                    console.tag('MONGO').error(error);
+                    responseUtils.responseError(res, 400, 'errOrderList');
+                    return;
+                }
+
+                var pedidos = [];
+
+                // Recorro la lista de usuarios y extraigo sus pedidos
+                playerList.forEach(function (player) {
+                    pedidos.push({
+                        alias: player.alias,
+                        avatar: player.avatar,
+                        meal: player.game.last_order.meal,
+                        drink: player.game.last_order.drink,
+                        ito: player.game.last_order.ito
+                    });
+                });
+
+                // Respondo
+                responseUtils.responseJson(res, {"orders": pedidos}, req.authInfo.access_token);
+            });
+    });
+
+    /**
      * GET /order/status
      * Obtiene la lista de usuarios que han metido ya el desayuno y los que no
      */

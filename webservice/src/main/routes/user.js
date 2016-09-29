@@ -37,7 +37,7 @@ module.exports = function (app) {
         // Hago una búsqueda de esa lista de usuarios
         models.User
             .find({"_id": {"$in": players}})
-            .select('username alias avatar game.afk game.stats.reputation game.level')
+            .select('username alias avatar leader game.afk game.stats.fame game.rank')
             .exec(function (error, playerList) {
                 if (error) {
                     console.tag('MONGO').error(error);

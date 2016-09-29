@@ -47,7 +47,7 @@
                         $log.debug("Updating game data...");
                         var nextVersion = null;
 
-                        //TODO chekeo de versión de datos del juego
+                        // chekeo de versión de datos del juego
                         API.game().version({}, function (response) {
                             if (response) {
                                 nextVersion = response.data.version;
